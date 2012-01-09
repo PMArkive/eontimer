@@ -1,4 +1,4 @@
-﻿namespace ToastTimer
+﻿namespace EonTimer
 {
     partial class MainTimer
     {
@@ -298,7 +298,7 @@
             // tabSet
             // 
             this.tabSet.BackColor = System.Drawing.Color.GhostWhite;
-            this.tabSet.BackgroundImage = global::ToastTimer.Properties.Resources.TabGlac;
+            this.tabSet.BackgroundImage = global::EonTimer.Properties.Resources.TabGlac;
             this.tabSet.Controls.Add(this.labelTransp);
             this.tabSet.Controls.Add(this.trackTransp);
             this.tabSet.Controls.Add(this.labelMode);
@@ -489,7 +489,7 @@
             // tabGen3
             // 
             this.tabGen3.BackColor = System.Drawing.Color.GhostWhite;
-            this.tabGen3.BackgroundImage = global::ToastTimer.Properties.Resources.TabGlac;
+            this.tabGen3.BackgroundImage = global::EonTimer.Properties.Resources.TabGlac;
             this.tabGen3.Controls.Add(this.checkGBA);
             this.tabGen3.Controls.Add(this.checkUnknownTarget);
             this.tabGen3.Controls.Add(this.labelHit3);
@@ -634,7 +634,7 @@
             // tabGen4
             // 
             this.tabGen4.BackColor = System.Drawing.Color.GhostWhite;
-            this.tabGen4.BackgroundImage = global::ToastTimer.Properties.Resources.TabGlac;
+            this.tabGen4.BackgroundImage = global::EonTimer.Properties.Resources.TabGlac;
             this.tabGen4.Controls.Add(this.textHit4);
             this.tabGen4.Controls.Add(this.textTSec4);
             this.tabGen4.Controls.Add(this.textTDelay4);
@@ -753,7 +753,7 @@
             // tabGen5
             // 
             this.tabGen5.BackColor = System.Drawing.Color.GhostWhite;
-            this.tabGen5.BackgroundImage = global::ToastTimer.Properties.Resources.TabGlac;
+            this.tabGen5.BackgroundImage = global::EonTimer.Properties.Resources.TabGlac;
             this.tabGen5.ContextMenuStrip = this.contextMenuStrip1;
             this.tabGen5.Controls.Add(this.labelHL);
             this.tabGen5.Controls.Add(this.textHLCal);
@@ -922,7 +922,7 @@
             // 
             // tabCustom
             // 
-            this.tabCustom.BackgroundImage = global::ToastTimer.Properties.Resources.TabGlac;
+            this.tabCustom.BackgroundImage = global::EonTimer.Properties.Resources.TabGlac;
             this.tabCustom.Controls.Add(this.listCustomStages);
             this.tabCustom.Controls.Add(this.buttonClear);
             this.tabCustom.Controls.Add(this.buttonAddCustomStage);
@@ -996,7 +996,7 @@
             this.AcceptButton = this.buttonStart;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.BackgroundImage = global::ToastTimer.Properties.Resources.glaceonbg;
+            this.BackgroundImage = global::EonTimer.Properties.Resources.glaceonbg;
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
             this.ClientSize = new System.Drawing.Size(392, 293);
             this.ContextMenuStrip = this.contextMenuStrip1;

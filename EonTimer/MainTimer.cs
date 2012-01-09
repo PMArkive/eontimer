@@ -10,7 +10,7 @@ using System.Media;
 using Microsoft.Win32;
 using System.IO;
 
-namespace ToastTimer
+namespace EonTimer
 {
     public partial class MainTimer : Form
     {
@@ -21,9 +21,9 @@ namespace ToastTimer
         TimerSettings settings;
         List<Double> customStages;
 
-        Image[] helpImage = {ToastTimer.Properties.Resources.helpbutton, ToastTimer.Properties.Resources.helpbutton2};
-        Image[] minimizeImage = { ToastTimer.Properties.Resources._button, ToastTimer.Properties.Resources._button2 };
-        Image[] closeImage = { ToastTimer.Properties.Resources.xbutton, ToastTimer.Properties.Resources.xbutton2 };
+        Image[] helpImage = {EonTimer.Properties.Resources.helpbutton, EonTimer.Properties.Resources.helpbutton2};
+        Image[] minimizeImage = { EonTimer.Properties.Resources._button, EonTimer.Properties.Resources._button2 };
+        Image[] closeImage = { EonTimer.Properties.Resources.xbutton, EonTimer.Properties.Resources.xbutton2 };
 
         Boolean drag = false;
         Point start_point = new Point(0, 0);
@@ -241,16 +241,16 @@ namespace ToastTimer
             switch (comboSounds.SelectedIndex)
             {
                 case 0:
-                    sound = ToastTimer.Properties.Resources.beep;
+                    sound = EonTimer.Properties.Resources.beep;
                     break;
                 case 1:
-                    sound = ToastTimer.Properties.Resources.tick;
+                    sound = EonTimer.Properties.Resources.tick;
                     break;
                 case 2:
-                    sound = ToastTimer.Properties.Resources.pop;
+                    sound = EonTimer.Properties.Resources.pop;
                     break;
                 case 3:
-                    sound = ToastTimer.Properties.Resources.ding;
+                    sound = EonTimer.Properties.Resources.ding;
                     break;
             }
 
@@ -514,13 +514,13 @@ namespace ToastTimer
 
             if (miniToolStripMenuItem.Checked)
             {
-                this.BackgroundImage = ToastTimer.Properties.Resources.glaceonmini;
+                this.BackgroundImage = EonTimer.Properties.Resources.glaceonmini;
                 this.Height = 148;
                 this.Width = 246;
             }
             else
             {
-                this.BackgroundImage = ToastTimer.Properties.Resources.glaceonbg;
+                this.BackgroundImage = EonTimer.Properties.Resources.glaceonbg;
                 this.Height = 293;
                 this.Width = 392;
             }

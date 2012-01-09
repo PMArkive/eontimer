@@ -5,7 +5,7 @@ using System.Windows.Forms;
 using System.Drawing;
 using System.Threading;
 
-namespace ToastTimer
+namespace EonTimer
 {
     class VisualAction : CountdownAction
     {

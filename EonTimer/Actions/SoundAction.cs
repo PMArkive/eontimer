@@ -5,7 +5,7 @@ using System.Media;
 using System.IO;
 using System.Threading;
 
-namespace ToastTimer
+namespace EonTimer
 {
     class SoundAction : CountdownAction
     {
