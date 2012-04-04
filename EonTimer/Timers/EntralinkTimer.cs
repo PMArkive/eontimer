@@ -1,35 +1,26 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using EonTimer.Utilities.Reference;
 
-namespace EonTimer
+namespace EonTimer.Timers
 {
     class EntralinkTimer : DelayTimer
     {
-        Int32 sCal;
-
-        //Constructor Entralink
-        public EntralinkTimer(Int32 entralinkCalibration, Int32 calibration, Int32 targetDelay, Int32 targetSecond, TimerSettings settings) : base(calibration, targetDelay, targetSecond, settings)
-        {
-            this.sCal = entralinkCalibration;
-        }
+        public Int32 SecondaryCalibration { get; set; }
 
         //overriden methods
-        public override Int32 GetLength(int index)
+        public override TimeSpan GetLength(Int32 stage)
         {
-            Int32 milliseconds = -1;
-            
-            switch (index)
+            switch (stage)
             {
                 case 0:
-                    milliseconds = base.GetLength(0) + 250;
-                    break;
+                    return base.GetStage(0).Add(new TimeSpan(0, 0, 0, 0, 250));
                 case 1:
-                    milliseconds = base.GetLength(1) - (Int32)(sCal * 1000 / 59.8261);
-                    break;
+                    return base.GetStage(1).Subtract(new TimeSpan(0, 0, 0, 0, SecondaryCalibration));
+                default:
+                    return TimerConstants.NULL_TIMESPAN;
             }
-
-            return milliseconds;
         }
     }
 }

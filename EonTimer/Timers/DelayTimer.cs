@@ -1,86 +1,40 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Windows.Forms;
+using EonTimer.Utilities.Helpers;
+using EonTimer.Utilities.Reference;
 
-namespace EonTimer
+namespace EonTimer.Timers
 {
-    class DelayTimer : RNGTimer
+    public class DelayTimer : ITimer
     {
-        private Int32 calibration, tDelay, tSec;
+        public Int32 TargetDelay { get; set; }
+        public Int32 TargetSecond { get; set; }
+        /// <summary>Calibration in milliseconds</summary>
+        public Int32 Calibration { get; set; }
 
-        //Constructors (4th Gen, C-Gear)
-        public DelayTimer(Int32 calibratedDelay, Int32 calibratedSecond, Int32 targetDelay, Int32 targetSecond, TimerSettings settings)
+        //interface methods
+        public TimeSpan GetStage(Int32 stage)
         {
-            this.calibration = (Int32)(59.8261 * calibratedSecond) - calibratedDelay;
-            this.tDelay = targetDelay;
-            this.tSec = targetSecond;
-            this.TimerSettings = settings;
-            FixTarget();
-        }
-        public DelayTimer(Int32 calibration, Int32 targetDelay, Int32 targetSecond, TimerSettings settings)
-        {
-            this.calibration = -calibration;
-            this.tDelay = targetDelay;
-            this.tSec = targetSecond;
-            this.TimerSettings = settings;
-            FixTarget();
-        }
-        
-        //DelayTimer-specific function
-        private void FixTarget()
-        {
-            while (GetLength(0) < this.TimerSettings.Minimum * 1000)
-                tSec += 60;
-        }
-        public Int32 SuggestSecond()
-        {
-            return TimerSettings.Minimum + ((GetLength(1) + 1000) / 1000);
-        }
-
-
-        //Override Methods
-        public override Int32 GetLength(Int32 index)
-        {
-            Int32 milliseconds = -1;
-
-            switch (index)
+            switch (stage)
             {
                 case 0:
-                    milliseconds = (Int32)((tSec * 1000) - ((tDelay + calibration) * (1000 / 59.8261)));
-                    break;
+                    return new TimeSpan((Int64)((TargetSecond * 1000) - (CalibrationHelper.ConvertToMillis(TargetDelay, ConsoleType.NDS) + Calibration * TimerConstants.NDS_FRAMERATE) + 200));
                 case 1:
-                    milliseconds = (Int32)((tDelay + calibration) * (1000 / 59.8261));
-                    break;
+                    return new TimeSpan((Int64)(CalibrationHelper.ConvertToMillis(TargetDelay, ConsoleType.NDS) + Calibration));
+                default:
+                    return TimerConstants.NULL_TIMESPAN;
             }
-
-            return milliseconds;
         }
-        public override Int32 UpdateCalibration(Int32 hit)
+        /// <returns>Offset in delays</returns>
+        public Int32 Calibrate(Int32 result)
         {
-            Int32 offset = hit - tDelay;
+            Int32 offset = result - TargetDelay;
 
-            if (Math.Abs(offset) <= 10)
-                offset = (Int32)(.75 * offset);
+            if (Math.Abs(offset) <= TimerConstants.CLOSE_THRESHOLD)
+                offset = (Int32)(TimerConstants.CLOSE_UPDATE_FACTOR * offset);
+            else
+                offset *= (Int32)TimerConstants.UPDATE_FACTOR;
 
             return offset;
-        }
-
-        //Properties
-        public Int32 Calibration
-        {
-            get { return calibration; }
-            set { calibration = value; }
-        }
-        public Int32 TargetDelay
-        {
-            get { return tDelay; }
-            set { tDelay = value; }
-        }
-        public Int32 TargetSecond
-        {
-            get { return tSec; }
-            set { tSec = value; }
         }
     }
 }

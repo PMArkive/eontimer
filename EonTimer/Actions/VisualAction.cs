@@ -4,19 +4,14 @@ using System.Text;
 using System.Windows.Forms;
 using System.Drawing;
 using System.Threading;
+using EonTimer.Utilities;
 
 namespace EonTimer
 {
-    class VisualAction : CountdownAction
+    public class VisualAction : ICountdownAction
     {
-        Color color;
-        Control control;
-
-        public VisualAction(Color color, Control control)
-        {
-            this.color = color;
-            this.control = control;
-        }
+        public Color Color { get; set; }
+        public Control Control { get; set; }
 
         public void Action()
         {
@@ -26,11 +21,11 @@ namespace EonTimer
 
         private void ColorFlash()
         {
-            GUIUpdater.SetControlPropertyThreadSafe(control, "BackColor", color);
+            GUIUpdater.SetControlBackColor(Control, Color);
 
             Thread.Sleep(50);
 
-            GUIUpdater.SetControlPropertyThreadSafe(control, "BackColor", Color.Transparent);
+            GUIUpdater.SetControlBackColor(Control, Color.Transparent);
         }
     }
 }

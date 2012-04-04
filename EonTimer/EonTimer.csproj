@@ -68,6 +68,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
+    <Reference Include="System.configuration" />
     <Reference Include="System.Data" />
     <Reference Include="System.Deployment" />
     <Reference Include="System.Drawing" />
@@ -75,16 +76,25 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Actions\CountdownAction.cs" />
-    <Compile Include="CustomTimer.cs" />
-    <Compile Include="Timers\GBAAltTimer.cs" />
-    <Compile Include="Timers\EntralinkTimer.cs" />
-    <Compile Include="Timers\GBATimer.cs" />
-    <Compile Include="GUIUpdater.cs" />
-    <Compile Include="Actions\MultiAction.cs" />
-    <Compile Include="Actions\SoundAction.cs" />
-    <Compile Include="Timers\StandardSeedTimer.cs" />
+    <Compile Include="Actions\ICountdownAction.cs" />
+    <Compile Include="Handlers\ActionHandler.cs" />
+    <Compile Include="Handlers\DisplayHandler.cs" />
+    <Compile Include="Timers1\CustomTimer.cs" />
+    <Compile Include="Timers1\GBAAltTimer.cs" />
+    <Compile Include="Timers1\EntralinkTimer.cs" />
+    <Compile Include="Timers1\GBATimer.cs" />
     <Compile Include="Timers\DelayTimer.cs" />
+    <Compile Include="Timers\EntralinkTimer.cs" />
+    <Compile Include="Timers\FrameTimer.cs" />
+    <Compile Include="Timers\SimpleTimer.cs" />
+    <Compile Include="Timers\VariableTargetFrameTimer.cs" />
+    <Compile Include="Timers\ITimer.cs" />
+    <Compile Include="Utilities\Helpers\CalibrationHelper.cs" />
+    <Compile Include="Utilities\Reference\ConsoleType.cs" />
+    <Compile Include="Utilities\Helpers\GUIHelper.cs" />
+    <Compile Include="Actions\SoundAction.cs" />
+    <Compile Include="Timers1\StandardSeedTimer.cs" />
+    <Compile Include="Timers1\DelayTimer.cs" />
     <Compile Include="MainTimer.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -93,8 +103,12 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Timers\RNGTimer.cs" />
-    <Compile Include="TimerSettings.cs" />
+    <Compile Include="Timers1\RNGTimer.cs" />
+    <Compile Include="Handlers\ITimerEventHandler.cs" />
+    <Compile Include="Utilities\ITimerMonitor.cs" />
+    <Compile Include="Utilities\Helpers\RegistryMigrationHelper.cs" />
+    <Compile Include="Utilities\Reference\TimerConstants.cs" />
+    <Compile Include="Utilities\TimerMonitor.cs" />
     <Compile Include="Actions\VisualAction.cs" />
     <EmbeddedResource Include="MainTimer.resx">
       <DependentUpon>MainTimer.cs</DependentUpon>
@@ -109,6 +123,7 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
+    <None Include="app.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>

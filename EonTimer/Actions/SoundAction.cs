@@ -1,33 +1,21 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Media;
 using System.IO;
-using System.Threading;
+using System.Media;
 
 namespace EonTimer
 {
-    class SoundAction : CountdownAction
+    public class SoundAction : ICountdownAction
     {
-        SoundPlayer soundPlayer;
+        public SoundPlayer SoundPlayer { get; set; }
 
         public SoundAction()
         {
-            soundPlayer = new SoundPlayer();
-        }
-
-        public SoundAction(Stream sound, Boolean playSound)
-        {
-            soundPlayer = new SoundPlayer(sound);
-            if (playSound)
-                soundPlayer.Play();
-            else
-                soundPlayer.LoadAsync();
+            SoundPlayer = new SoundPlayer();
         }
 
         public void Action()
         {
-            soundPlayer.Play();
+            SoundPlayer.Play();
         }
     }
 }

@@ -1,14 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
-using System.Text;
-using System.Windows.Forms;
-using System.Threading;
-using System.Media;
-using Microsoft.Win32;
 using System.IO;
+using System.Windows.Forms;
+using EonTimer.Utilities.Helpers;
 
 namespace EonTimer
 {
@@ -17,91 +12,36 @@ namespace EonTimer
         Color color = Color.Aqua;
         Boolean showWarning = true;
         Boolean isStartup;
-        RNGTimer timer;
-        TimerSettings settings;
         List<Double> customStages;
 
-        Image[] helpImage = {EonTimer.Properties.Resources.helpbutton, EonTimer.Properties.Resources.helpbutton2};
-        Image[] minimizeImage = { EonTimer.Properties.Resources._button, EonTimer.Properties.Resources._button2 };
-        Image[] closeImage = { EonTimer.Properties.Resources.xbutton, EonTimer.Properties.Resources.xbutton2 };
-
-        Boolean drag = false;
-        Point start_point = new Point(0, 0);
-
+        #region Setup
         public MainTimer()
         {
-            isStartup = true;
+            //migrates settings if necessary
+            RegistryMigrationHelper.Migrate();
 
+            //Build form
             InitializeComponent();
-
-            //set event handlers
+            InitializeCustom();
+        }
+        private void InitializeCustom()
+        {
+            //attach handlers
             this.MouseDown += new MouseEventHandler(Form_MouseDown);
             this.MouseUp += new MouseEventHandler(Form_MouseUp);
             this.MouseMove += new MouseEventHandler(Form_MouseMove);
 
             //set images
-            pictureHelp.Image = helpImage[0];
-            pictureClose.Image = closeImage[0];
-            pictureMinimize.Image = minimizeImage[0];
-
-            //default settings
-            settings = new TimerSettings(new VisualAction(color, labelTime), 1000, 5, 15);
-            comboMode.SelectedIndex = 0;
-            comboSounds.SelectedIndex = 0;
-
-            //load registry keys
-            RegistryKey registryKey = Registry.CurrentUser.OpenSubKey("EonTimer", true);
-
-            try
-            {
-                textCal.Text = (String)registryKey.GetValue("gen5cal");
-                textHLCal.Text = (String)registryKey.GetValue("hlcal");
-                textCDelay.Text = (String)registryKey.GetValue("gen4cd");
-                textCSec.Text = (String)registryKey.GetValue("gen4cs");
-                textFactor.Text = (String)registryKey.GetValue("gen3factor");
-                textLag.Text = (String)registryKey.GetValue("gen3lag");
-                textInitial.Text = (String)registryKey.GetValue("gen3init");
-                color = Color.FromArgb((Int32)registryKey.GetValue("color"));
-                textMin.Text = (String)registryKey.GetValue("min");
-                numBeeps.Value = Convert.ToInt32(registryKey.GetValue("beepNo"));
-                numFreq.Value = Convert.ToDecimal(registryKey.GetValue("beepFreq"));
-                comboSounds.SelectedIndex = (Int32)registryKey.GetValue("sound");
-                comboMode.SelectedIndex = (Int32)registryKey.GetValue("mode");
-                textTDelay4.Text = (String)registryKey.GetValue("gen4TDelay");
-                textTDelay5.Text = (String)registryKey.GetValue("gen5TDelay");
-                textTSec4.Text = (String)registryKey.GetValue("gen4TSec");
-                textTSec5.Text = (String)registryKey.GetValue("gen5TSec");
-                textFrame.Text = (String)registryKey.GetValue("gen3TFrame");
-                saveOnQuitToolStripMenuItem.Checked = Convert.ToBoolean(registryKey.GetValue("saveQuit"));
-                AskOnQuitToolStripMenuItem.Checked = Convert.ToBoolean(registryKey.GetValue("askQuit"));
-                alwaysOnTopToolStripMenuItem.Checked = Convert.ToBoolean(registryKey.GetValue("onTop"));
-            }
-            catch (Exception)
-            { }
-            finally
-            {
-                if(registryKey != null)
-                    registryKey.Close();
-            }
-
-            CreateTimer();
-            UpdateDisplay();
-            customStages = new List<Double>();
-
-            isStartup = false;
+            pictureHelp.Image = helpButton.Basic;
+            pictureClose.Image = closeButton.Basic;
+            pictureMinimize.Image = minimizeButton.Basic;
         }
+        #endregion
 
-        //Checks for numeric input only
-        private void numeric_KeyPress(object sender, KeyPressEventArgs e)
-        {
-            if (!(Char.IsNumber(e.KeyChar) || Char.IsControl(e.KeyChar) || e.KeyChar == '-'))
-                e.Handled = true;
-        }
 
         //generic event to be called when display updating is required
         private void updateDisplayEvent(object sender, EventArgs e)
         {
-            CreateTimer();
             UpdateDisplay();
 
             if (tabMenu.SelectedTab.Equals(tabSet))
@@ -225,7 +165,7 @@ namespace EonTimer
                     settings.Action = new VisualAction(color, labelTime);
                     break;
                 case 2:
-                    CountdownAction[] actions = { new VisualAction(color, labelTime), GetSoundAction() };
+                    ICountdownAction[] actions = { new VisualAction(color, labelTime), GetSoundAction() };
                     settings.Action = new MultiAction(actions);
                     break;
             }
@@ -337,117 +277,16 @@ namespace EonTimer
             { }
         }
 
-        //Save Button
-        private void save_Click(object sender, EventArgs e)
+
+        private void Load()
         {
-            save();
         }
-        private void save()
+        private void Save()
         {
-            RegistryKey registryKey = Registry.CurrentUser.CreateSubKey("EonTimer");
-
-            //Add Keys
-            registryKey.SetValue("gen5cal", textCal.Text);
-            registryKey.SetValue("hlcal", textHLCal.Text);
-            registryKey.SetValue("gen4cd", textCDelay.Text);
-            registryKey.SetValue("gen4cs", textCSec.Text);
-            registryKey.SetValue("gen3factor", textFactor.Text);
-            registryKey.SetValue("gen3lag", textLag.Text);
-            registryKey.SetValue("gen3init", textInitial.Text);
-            registryKey.SetValue("color", color.ToArgb());
-            registryKey.SetValue("min", textMin.Text);
-            registryKey.SetValue("beepNo", numBeeps.Value);
-            registryKey.SetValue("beepFreq", numFreq.Value);
-            registryKey.SetValue("sound", comboSounds.SelectedIndex);
-            registryKey.SetValue("mode", comboMode.SelectedIndex);
-            registryKey.SetValue("gen4TDelay", textTDelay4.Text);
-            registryKey.SetValue("gen5TDelay", textTDelay5.Text);
-            registryKey.SetValue("gen4TSec", textTSec4.Text);
-            registryKey.SetValue("gen5TSec", textTSec5.Text);
-            registryKey.SetValue("gen3TFrame", textFrame.Text);
-            registryKey.SetValue("saveQuit", saveOnQuitToolStripMenuItem.Checked);
-            registryKey.SetValue("askQuit", AskOnQuitToolStripMenuItem.Checked);
-            registryKey.SetValue("onTop", alwaysOnTopToolStripMenuItem.Checked);
-
-            registryKey.Close();
 
             MessageBox.Show("Saved.");
         }
 
-        #region Standard buttons
-
-        //Close Button
-        private void pictureClose_MouseEnter(object sender, EventArgs e)
-        {
-            pictureClose.Image = closeImage[1];
-        }
-        private void pictureClose_MouseLeave(object sender, EventArgs e)
-        {
-            pictureClose.Image = closeImage[0];
-        }
-        private void buttonClose_Click(object sender, EventArgs e)
-        {
-            if (timer != null)
-                timer.CancelRun();
-            this.Close();
-        }
-        private void Form1_FormClosing(object sender, FormClosingEventArgs e)
-        {
-            if (saveOnQuitToolStripMenuItem.Checked)
-                save();
-            else if (AskOnQuitToolStripMenuItem.Checked)
-            {
-                DialogResult result = MessageBox.Show("Store input?", "Save values?", MessageBoxButtons.YesNoCancel);
-
-                if (result == System.Windows.Forms.DialogResult.Yes)
-                    save();
-                else if (result == System.Windows.Forms.DialogResult.Cancel)
-                    e.Cancel = true;
-            }
-        }
-
-        //Minimize Button
-        private void pictureMinimize_MouseEnter(object sender, EventArgs e)
-        {
-            pictureMinimize.Image = minimizeImage[1];
-        }
-        private void pictureMinimize_MouseLeave(object sender, EventArgs e)
-        {
-            pictureMinimize.Image = minimizeImage[0];
-        }
-        private void buttonMinimize_Click(object sender, EventArgs e)
-        {
-            this.WindowState = FormWindowState.Minimized;
-        }
-
-        //Help Button
-        private void pictureHelp_MouseEnter(object sender, EventArgs e)
-        {
-            pictureHelp.Image = helpImage[1];
-        }
-        private void pictureHelp_MouseLeave(object sender, EventArgs e)
-        {
-            pictureHelp.Image = helpImage[0];
-        }
-        private void buttonSite_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                System.Diagnostics.Process.Start("http://www.smogon.com/forums/showpost.php?p=3087342&postcount=1");
-            }
-            catch (Exception)
-            {
-                MessageBox.Show("Sorry, this doesn't work on your computer.");
-            }
-        }
-
-        #endregion
-
-        //Always on top
-        private void alwaysOnTopToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            this.TopMost = alwaysOnTopToolStripMenuItem.Checked;
-        }
 
         //Unknown target check event
         private void checkUnknownTarget_CheckedChanged(object sender, EventArgs e)
@@ -461,53 +300,74 @@ namespace EonTimer
             CreateTimer();
             UpdateDisplay();
         }
-
-        //custom timer events
-        private void buttonAddCustomStage_Click(object sender, EventArgs e)
+        /// <summary>Closing handler</summary>
+        private void Form1_FormClosing(object sender, FormClosingEventArgs e)
         {
-            Double stage;
-
-            if (timer is CustomTimer && Double.TryParse(textCustom.Text, out stage))
+            if (saveOnQuitToolStripMenuItem.Checked)
             {
-                customStages.Add(stage);
-                ((CustomTimer)timer).Stages = customStages;
-                listCustomStages.Items.Add(String.Format("Stage {0}: {1}" , (listCustomStages.Items.Count + 1).ToString("D2"), stage));
+                Save();
             }
-
-            textCustom.Text = "";
-            UpdateDisplay();
-        }
-        private void buttonClear_Click(object sender, EventArgs e)
-        {
-            if (timer is CustomTimer)
+            else if (AskOnQuitToolStripMenuItem.Checked)
             {
-                customStages.Clear();
-                ((CustomTimer)timer).Stages = customStages;
-                listCustomStages.Items.Clear();
+                DialogResult result = MessageBox.Show("Store input?", "Save values?", MessageBoxButtons.YesNoCancel);
+
+                if (result == System.Windows.Forms.DialogResult.Yes)
+                    Save();
+                else if (result == System.Windows.Forms.DialogResult.Cancel)
+                    e.Cancel = true;
             }
-
-            UpdateDisplay();
-        }
-        private void listCustomStages_KeyDown(object sender, KeyEventArgs e)
-        {
-            if (timer is CustomTimer && e.KeyCode == Keys.Delete)
-            {
-                customStages.RemoveAt(listCustomStages.SelectedIndex);
-                ((CustomTimer)timer).Stages = customStages;
-
-                listCustomStages.Items.Clear();
-                foreach (Double stage in customStages)
-                    listCustomStages.Items.Add(String.Format("Stage {0}: {1}", (listCustomStages.Items.Count + 1).ToString("D2"), stage));
-            }
-
-            UpdateDisplay();
         }
 
-        //gimmicks
+        #region Form Change Events
+
+        //Checks for numeric input only
+        private void numeric_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (!(Char.IsNumber(e.KeyChar) || Char.IsControl(e.KeyChar) || e.KeyChar == '-'))
+                e.Handled = true;
+        }
+
+        #endregion
+
+        #region Form Control Events
+        /// <summary>Saves Data</summary>
+        private void save_Click(object sender, EventArgs e)
+        {
+            Save();
+        }
+        /// <summary>Closes the Program</summary>
+        private void buttonClose_Click(object sender, EventArgs e)
+        {
+            this.Close();
+        }
+        /// <summary>Minimizes</summary>
+        private void buttonMinimize_Click(object sender, EventArgs e)
+        {
+            this.WindowState = FormWindowState.Minimized;
+        }
+        /// <summary>Go To Help Forum</summary>
+        private void buttonSite_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                System.Diagnostics.Process.Start("http://www.smogon.com/forums/showpost.php?p=3087342&postcount=1");
+            }
+            catch (Exception)
+            {
+                MessageBox.Show("Sorry, this doesn't work on your computer.");
+            }
+        }
+        /// <summary>Always On Top</summary>
+        private void alwaysOnTopToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            this.TopMost = alwaysOnTopToolStripMenuItem.Checked;
+        }
+        /// <summary>Controls Opacity</summary>
         private void trackTransp_Scroll(object sender, EventArgs e)
         {
             this.Opacity = trackTransp.Value / 100.0;
         }
+        /// <summary>Controls Mini-Mode</summary>
         private void miniToolStripMenuItem_CheckedChanged(object sender, EventArgs e)
         {
             tabMenu.Visible = buttonUpdate.Visible = buttonSave.Visible = !miniToolStripMenuItem.Checked;
@@ -525,8 +385,66 @@ namespace EonTimer
                 this.Width = 392;
             }
         }
+        #endregion
 
-        #region movement handlers
+        #region Image Button Support
+        /// <summary>Holds Images For Button States</summary>
+        private class EonButton
+        {
+            public Image Basic { get; set; }
+            public Image Hover { get; set; }
+        }
+        EonButton helpButton = new EonButton
+        {
+            Basic = EonTimer.Properties.Resources.helpbutton,
+            Hover = EonTimer.Properties.Resources.helpbutton2
+        };
+        EonButton minimizeButton = new EonButton
+        {
+            Basic = EonTimer.Properties.Resources._button,
+            Hover = EonTimer.Properties.Resources._button2
+        };
+        EonButton closeButton = new EonButton
+        {
+            Basic = EonTimer.Properties.Resources.xbutton,
+            Hover = EonTimer.Properties.Resources.xbutton2
+        };
+
+        //Close Button
+        private void pictureClose_MouseEnter(object sender, EventArgs e)
+        {
+            pictureClose.Image = closeButton.Hover;
+        }
+        private void pictureClose_MouseLeave(object sender, EventArgs e)
+        {
+            pictureClose.Image = closeButton.Basic;
+        }
+
+        //Minimize Button
+        private void pictureMinimize_MouseEnter(object sender, EventArgs e)
+        {
+            pictureMinimize.Image = minimizeButton.Hover;
+        }
+        private void pictureMinimize_MouseLeave(object sender, EventArgs e)
+        {
+            pictureMinimize.Image = minimizeButton.Basic;
+        }
+
+        //help
+        private void pictureHelp_MouseEnter(object sender, EventArgs e)
+        {
+            pictureHelp.Image = helpButton.Hover;
+        }
+        private void pictureHelp_MouseLeave(object sender, EventArgs e)
+        {
+            pictureHelp.Image = helpButton.Basic;
+        }
+        #endregion
+
+        #region Form Drag Support
+
+        Boolean drag = false;
+        Point start_point = new Point(0, 0);
 
         protected override void OnControlAdded(ControlEventArgs e)
         {

@@ -22,5 +22,281 @@ namespace EonTimer.Properties {
                 return defaultInstance;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("-95")]
+        public int Calibration_5_Basic {
+            get {
+                return ((int)(this["Calibration_5_Basic"]));
+            }
+            set {
+                this["Calibration_5_Basic"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("256")]
+        public int Calibration_5_Entralink {
+            get {
+                return ((int)(this["Calibration_5_Entralink"]));
+            }
+            set {
+                this["Calibration_5_Entralink"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("500")]
+        public int Calibration_4_Delay {
+            get {
+                return ((int)(this["Calibration_4_Delay"]));
+            }
+            set {
+                this["Calibration_4_Delay"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("14")]
+        public int Calibration_4_Second {
+            get {
+                return ((int)(this["Calibration_4_Second"]));
+            }
+            set {
+                this["Calibration_4_Second"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public int Calibration_3_Lag {
+            get {
+                return ((int)(this["Calibration_3_Lag"]));
+            }
+            set {
+                this["Calibration_3_Lag"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("1")]
+        public decimal Calibration_3_Factor {
+            get {
+                return ((decimal)(this["Calibration_3_Factor"]));
+            }
+            set {
+                this["Calibration_3_Factor"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("5")]
+        public int Target_3_Initial {
+            get {
+                return ((int)(this["Target_3_Initial"]));
+            }
+            set {
+                this["Target_3_Initial"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("1000")]
+        public int Target_3_Frame {
+            get {
+                return ((int)(this["Target_3_Frame"]));
+            }
+            set {
+                this["Target_3_Frame"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("50")]
+        public int Target_4_Second {
+            get {
+                return ((int)(this["Target_4_Second"]));
+            }
+            set {
+                this["Target_4_Second"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("600")]
+        public int Target_4_Delay {
+            get {
+                return ((int)(this["Target_4_Delay"]));
+            }
+            set {
+                this["Target_4_Delay"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("50")]
+        public int Target_5_Second {
+            get {
+                return ((int)(this["Target_5_Second"]));
+            }
+            set {
+                this["Target_5_Second"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("1200")]
+        public int Target_5_Delay {
+            get {
+                return ((int)(this["Target_5_Delay"]));
+            }
+            set {
+                this["Target_5_Delay"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("Aqua")]
+        public global::System.Drawing.Color Setting_Action_Color {
+            get {
+                return ((global::System.Drawing.Color)(this["Setting_Action_Color"]));
+            }
+            set {
+                this["Setting_Action_Color"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("500")]
+        public int Setting_Action_Interval {
+            get {
+                return ((int)(this["Setting_Action_Interval"]));
+            }
+            set {
+                this["Setting_Action_Interval"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("6")]
+        public int Setting_Action_Count {
+            get {
+                return ((int)(this["Setting_Action_Count"]));
+            }
+            set {
+                this["Setting_Action_Count"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public int Setting_Action_Sound {
+            get {
+                return ((int)(this["Setting_Action_Sound"]));
+            }
+            set {
+                this["Setting_Action_Sound"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public int Setting_Action_Mode {
+            get {
+                return ((int)(this["Setting_Action_Mode"]));
+            }
+            set {
+                this["Setting_Action_Mode"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool Setting_Form_AskSave {
+            get {
+                return ((bool)(this["Setting_Form_AskSave"]));
+            }
+            set {
+                this["Setting_Form_AskSave"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool Setting_Form_OnTop {
+            get {
+                return ((bool)(this["Setting_Form_OnTop"]));
+            }
+            set {
+                this["Setting_Form_OnTop"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool Setting_Form_AutoSave {
+            get {
+                return ((bool)(this["Setting_Form_AutoSave"]));
+            }
+            set {
+                this["Setting_Form_AutoSave"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("100")]
+        public int Setting_Form_Opacity {
+            get {
+                return ((int)(this["Setting_Form_Opacity"]));
+            }
+            set {
+                this["Setting_Form_Opacity"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool Setting_Form_Mini {
+            get {
+                return ((bool)(this["Setting_Form_Mini"]));
+            }
+            set {
+                this["Setting_Form_Mini"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("14")]
+        public int Setting_Timer_Minimum {
+            get {
+                return ((int)(this["Setting_Timer_Minimum"]));
+            }
+            set {
+                this["Setting_Timer_Minimum"] = value;
+            }
+        }
     }
 }

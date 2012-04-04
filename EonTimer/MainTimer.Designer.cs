@@ -531,6 +531,7 @@
             this.checkUnknownTarget.TabIndex = 10;
             this.checkUnknownTarget.Text = "Unknown Target";
             this.checkUnknownTarget.UseVisualStyleBackColor = false;
+            this.checkUnknownTarget.Visible = false;
             this.checkUnknownTarget.CheckedChanged += new System.EventHandler(this.checkUnknownTarget_CheckedChanged);
             // 
             // labelHit3
@@ -943,7 +944,6 @@
             this.listCustomStages.Name = "listCustomStages";
             this.listCustomStages.Size = new System.Drawing.Size(161, 134);
             this.listCustomStages.TabIndex = 5;
-            this.listCustomStages.KeyDown += new System.Windows.Forms.KeyEventHandler(this.listCustomStages_KeyDown);
             // 
             // buttonClear
             // 
@@ -953,7 +953,6 @@
             this.buttonClear.TabIndex = 4;
             this.buttonClear.Text = "Reset";
             this.buttonClear.UseVisualStyleBackColor = true;
-            this.buttonClear.Click += new System.EventHandler(this.buttonClear_Click);
             // 
             // buttonAddCustomStage
             // 
@@ -963,7 +962,6 @@
             this.buttonAddCustomStage.TabIndex = 3;
             this.buttonAddCustomStage.Text = "Add";
             this.buttonAddCustomStage.UseVisualStyleBackColor = true;
-            this.buttonAddCustomStage.Click += new System.EventHandler(this.buttonAddCustomStage_Click);
             // 
             // labelCustom
             // 

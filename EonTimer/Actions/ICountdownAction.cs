@@ -4,7 +4,7 @@ using System.Text;
 
 namespace EonTimer
 {
-    interface CountdownAction
+    public interface ICountdownAction
     {
         void Action();
     }
