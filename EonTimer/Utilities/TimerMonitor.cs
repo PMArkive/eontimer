@@ -5,29 +5,36 @@ using System.Windows.Forms;
 using EonTimer.Timers;
 using EonTimer.Handlers;
 using System.Threading;
+using EonTimer.Utilities.Reference;
 
 namespace EonTimer.Utilities
 {
     public class TimeMonitor : ITimerMonitor
     {
         //public properties
-        public List<ITimerEventHandler> Handlers
+        public List<ITimerEventHandler> Handlers { get { return handlers; } }
+        public ITimer Timer
         {
-            get;
+            get { return timer; }
             set
             {
-                foreach (ITimerEventHandler h in Handlers)
-                    h.Register(this);
+                timer = value;
+                foreach (var handler in Handlers)
+                    handler.NotifySetup();
             }
         }
-        public ITimer Timer { get; set; }
+        public Int32 SleepInterval { get; set; }
 
         //private
         private Thread thread;
+        private ITimer timer;
+        private List<ITimerEventHandler> handlers;
 
-        public TimeMonitor()
+        public TimeMonitor(ITimer timer, Int32 sleepInterval = 8)
         {
-            Handlers = new List<ITimerEventHandler>();
+            handlers = new List<ITimerEventHandler>();
+            Timer = timer;
+            SleepInterval = sleepInterval;
         }
 
         public void Run()
@@ -43,120 +50,69 @@ namespace EonTimer.Utilities
             foreach (ITimerEventHandler h in Handlers)
                 h.NotifyStart();
 
-            Int32 stage = 0;
-            while (Timer.GetStage(stage) != TimerConstants.NULL_TIMESPAN)
-            {
+            for(Int32 stage = 0; stage < Timer.Stages.Count; stage++)
                 RunStage(stage);
-                stage++;
-            }
 
             foreach (ITimerEventHandler h in Handlers)
                 h.NotifyEnd();
         }
         private void RunStage(Int32 stage)
         {
-            DateTime endTime = DateTime.Now.Add(Timer.GetStage(stage));
-            Int32 sleepPeriod = 8;
+            DateTime start = DateTime.Now;
+
+            PauseWhileNull(stage);
+
+            //stage length is committed at this point
+            DateTime endTime = start.Add(Timer.Stages[stage]);
             TimeSpan remaining = (endTime - DateTime.Now);
+
 
             foreach (ITimerEventHandler h in Handlers)
                 h.NotifyStageStart(stage);
 
+            //main timer loop
             while (remaining.TotalMilliseconds > 0)
             {
-                Thread.Sleep(sleepPeriod);
+                Thread.Sleep(SleepInterval);
                 remaining = (endTime - DateTime.Now);
 
                 foreach (ITimerEventHandler h in Handlers)
                     h.NotifyUpdate(remaining);
             }
 
+
             foreach (ITimerEventHandler h in Handlers)
                 h.NotifyStageEnd(stage);
         }
+
+        public void Cancel()
+        {
+            foreach(var handler in Handlers)
+                handler.NotifyEnd();
+
+            if(IsRunning())
+                thread.Abort();
+        }
+        public Boolean IsRunning()
+        {
+            return (thread != null && thread.IsAlive);
+        }
+
+        public void AddHandler(ITimerEventHandler handler)
+        {
+            handler.Register(this);
+            handlers.Add(handler);
+        }
+        public void ClearHandlers()
+        {
+            handlers.Clear();
+        }
+
+        //Acts as a pause for variable-target timers
+        private void PauseWhileNull(Int32 stage)
+        {
+            while (Timer.Stages[stage] == TimerConstants.NULL_TIMESPAN)
+                Thread.Sleep(SleepInterval);
+        }
     }
-
-    /*public class TimerMonitor : ITimerEventHandler
-    {
-        //public properties
-        public IList<Control> TimeDisplayControls { get; set; }
-        public IList<Control> SecondaryTimeDisplayControls { get; set; }
-        public IList<Control> ActionDisplayControls { get; set; }
-        public IList<Control> StatusDisplayControls { get; set; }
-
-        public IList<ICountdownAction> CountdownActions { get; set; }
-        public Int32 ActionFrequency { get; set; }
-        public Int32 ActionCount { get; set; }
-        public Int32 MinimumLength { get; set; }
-
-        //private members
-        private Int32 nextAction;
-        private RNGTimer timer;
-
-        //constructor
-        public TimerMonitor()
-        {
-            Reset();
-        }
-
-        //interface methods
-        public void Register(RNGTimer t)
-        {
-            timer = t;
-            UpdateDisplay(t.GetStage(0));
-        }
-        public void NotifyStart()
-        {
-            UpdateStatus("Cancel");
-        }
-        public void NotifyStageStart()
-        {
-            //Nothing for now
-        }
-        public void NotifyUpdate()
-        {
-            if (timer == null)
-                return;
-
-            UpdateDisplay(timer.Remaining);
-
-            if(timer.Remaining.TotalMilliseconds < nextAction)
-            {
-                TriggerAction();
-                nextAction -= ActionFrequency;
-            }
-        }
-        public void NotifyStageEnd()
-        {
-            TriggerAction();
-            Reset();
-        }
-        public void NotifyEnd()
-        {
-            UpdateStatus("Start");
-        }
-
-        //private methods
-        private void UpdateStatus(String status)
-        {
-            foreach (Control c in StatusDisplayControls)
-                GUIUpdater.SetControlText(c, status);
-        }
-        private void UpdateDisplay(TimeSpan remaining)
-        {
-            String current = String.Format("{0}:{1}", (remaining.TotalMilliseconds / 1000), (remaining.TotalMilliseconds % 1000));
-
-            foreach (Control c in TimeDisplayControls)
-                GUIUpdater.SetControlText(c, current);
-        }
-        private void TriggerAction()
-        {
-            foreach (ICountdownAction a in CountdownActions)
-                a.Action();
-        }
-        private void Reset()
-        {
-            nextAction = (ActionCount - 1) * ActionFrequency;
-        }
-    }*/
 }

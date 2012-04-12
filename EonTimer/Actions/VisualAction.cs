@@ -1,10 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Windows.Forms;
-using System.Drawing;
+﻿using System.Drawing;
 using System.Threading;
-using EonTimer.Utilities;
+using System.Windows.Forms;
+using EonTimer.Utilities.Helpers;
 
 namespace EonTimer
 {
@@ -12,6 +9,17 @@ namespace EonTimer
     {
         public Color Color { get; set; }
         public Control Control { get; set; }
+
+        public VisualAction(Control control)
+        {
+            Control = control;
+            Color = Color.Black;
+        }
+        public VisualAction(Control control, Color color)
+        {
+            Control = control;
+            Color = color;
+        }
 
         public void Action()
         {
@@ -21,11 +29,11 @@ namespace EonTimer
 
         private void ColorFlash()
         {
-            GUIUpdater.SetControlBackColor(Control, Color);
+            GUIHelper.SetControlBackColor(Control, Color);
 
             Thread.Sleep(50);
 
-            GUIUpdater.SetControlBackColor(Control, Color.Transparent);
+            GUIHelper.SetControlBackColor(Control, Color.Transparent);
         }
     }
 }

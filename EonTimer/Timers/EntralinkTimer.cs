@@ -5,12 +5,21 @@ using EonTimer.Utilities.Reference;
 
 namespace EonTimer.Timers
 {
-    class EntralinkTimer : DelayTimer
+    public class EntralinkTimer : DelayTimer
     {
         public Int32 SecondaryCalibration { get; set; }
 
+        public EntralinkTimer(Int32 calibration, Int32 secondaryCalibration, Int32 targetDelay, Int32 targetSecond, ConsoleType consoleType, Int32 minLength) : base(calibration, targetDelay, targetSecond, consoleType, minLength)
+        {
+            SecondaryCalibration = secondaryCalibration;
+
+            Stages = new List<TimeSpan>();
+            for (Int32 i = 0; GetStage(i) != TimerConstants.NULL_TIMESPAN; i++)
+                Stages.Add(GetStage(i));
+        }
+
         //overriden methods
-        public override TimeSpan GetLength(Int32 stage)
+        protected TimeSpan GetStage(Int32 stage)
         {
             switch (stage)
             {

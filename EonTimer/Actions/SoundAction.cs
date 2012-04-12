@@ -11,6 +11,12 @@ namespace EonTimer
         public SoundAction()
         {
             SoundPlayer = new SoundPlayer();
+            SoundPlayer.LoadAsync();
+        }
+        public SoundAction(Stream sound)
+        {
+            SoundPlayer = new SoundPlayer(sound);
+            SoundPlayer.LoadAsync();
         }
 
         public void Action()

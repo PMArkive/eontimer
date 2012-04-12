@@ -4,15 +4,22 @@ using System.Drawing;
 using System.IO;
 using System.Windows.Forms;
 using EonTimer.Utilities.Helpers;
+using EonTimer.Utilities;
+using EonTimer.Utilities.Reference;
+using EonTimer.Handlers;
+using EonTimer.Timers;
+using Settings = EonTimer.Properties.Settings;
+using Resources = EonTimer.Properties.Resources;
 
 namespace EonTimer
 {
     public partial class MainTimer : Form
     {
-        Color color = Color.Aqua;
-        Boolean showWarning = true;
-        Boolean isStartup;
-        List<Double> customStages;
+        private ITimerMonitor monitor;
+        private DisplayHandler displayHandler;
+        private ActionHandler actionHandler;
+
+        
 
         #region Setup
         public MainTimer()
@@ -23,6 +30,10 @@ namespace EonTimer
             //Build form
             InitializeComponent();
             InitializeCustom();
+            PrepareTimeMonitor();
+            AddSettings();
+
+            CreateTimer();
         }
         private void InitializeCustom()
         {
@@ -32,321 +43,252 @@ namespace EonTimer
             this.MouseMove += new MouseEventHandler(Form_MouseMove);
 
             //set images
-            pictureHelp.Image = helpButton.Basic;
             pictureClose.Image = closeButton.Basic;
             pictureMinimize.Image = minimizeButton.Basic;
+            pictureMini.Image = Settings.Default.Setting_Form_Mini ? miniButton.Active : miniButton.Basic;
+            pictureSettings.Image = settingsButton.Basic;
+
+            //fill combo boxes
+            combo_mode_5.Items.AddRange(GenerationModes.FIVE_STRINGS);
+            combo_mode_4.Items.AddRange(GenerationModes.FOUR_STRINGS);
+            combo_mode_3.Items.AddRange(GenerationModes.THREE_STRINGS);
+        }
+        private void PrepareTimeMonitor()
+        {
+            monitor = new TimeMonitor(new NullTimer(), Settings.Default.Setting_Timer_SleepInterval);
+
+            //create DisplayHandler
+            displayHandler = new DisplayHandler();
+            displayHandler.CurrentDisplays.Add(displayCurrent);
+            displayHandler.NextStageDisplays.Add(displayNextStage);
+            displayHandler.StatusDisplays.Add(buttonStart);
+            displayHandler.MinutesBeforeDisplays.Add(displayMinsBefore);
+
+            //create ActionHandler
+            actionHandler = new ActionHandler
+            {
+                ActionCount = Settings.Default.Setting_Action_Count,
+                Interval = new TimeSpan(0, 0, 0, 0, Settings.Default.Setting_Action_Interval)
+            };
+            SetHandlers();
         }
         #endregion
 
-
-        //generic event to be called when display updating is required
-        private void updateDisplayEvent(object sender, EventArgs e)
+        #region Update Methods
+        private void SetHandlers()
         {
-            UpdateDisplay();
+            CreateCountdownActions();
+            monitor.ClearHandlers();
+            monitor.AddHandler(displayHandler);
+            monitor.AddHandler(actionHandler);
+        }
+        private void CreateCountdownActions()
+        {
+            actionHandler.Actions.Clear();
 
-            if (tabMenu.SelectedTab.Equals(tabSet))
+            switch ((ActionType)Settings.Default.Setting_Action_Mode)
             {
-                buttonUpdate.Enabled = false;
-                buttonStart.Enabled = false;
-            }
-            else if (tabMenu.SelectedTab.Equals(tabCustom))
-            {
-                buttonStart.Enabled = true;
-                buttonUpdate.Enabled = false;
-            }
-            else
-            {
-                buttonUpdate.Enabled = true;
-                buttonStart.Enabled = true;
-            }
-
-        }
-        private void UpdateDisplay()
-        {
-            try
-            {
-                if(tabMenu.SelectedTab.Equals(tabGen5) || tabMenu.SelectedTab.Equals(tabGen4))
-                    labelMinsBefore.Text = ((timer.GetLength(0) + timer.GetLength(1)) / 60000).ToString();
-
-                labelTime.Text = String.Format("{0:0:00}", timer.GetLength(0) / 10);
-                labelSecondTime.Text = String.Format("{0:0:00}", timer.GetLength(1) / 10);
-            }
-            catch (Exception)
-            { }
-        }
-        private void CreateTimer()
-        {
-            try
-            {
-                if (timer != null && timer.IsRunning())
-                    return;
-                if (tabMenu.SelectedTab.Equals(tabGen5) && checkHL.Checked)
-                    timer = new EntralinkTimer(Int32.Parse(textHLCal.Text), Int32.Parse(textCal.Text), Int32.Parse(textTDelay5.Text), Int32.Parse(textTSec5.Text), settings);
-                else if (tabMenu.SelectedTab.Equals(tabGen5) && checkCGear.Checked)
-                    timer = new DelayTimer(Int32.Parse(textCal.Text), Int32.Parse(textTDelay5.Text), Int32.Parse(textTSec5.Text), settings);
-                else if (tabMenu.SelectedTab.Equals(tabGen5))
-                    timer = new StandardSeedTimer(Int32.Parse(textCal.Text), Int32.Parse(textTSec5.Text), settings);
-                else if (tabMenu.SelectedTab.Equals(tabGen4))
-                    timer = new DelayTimer(Int32.Parse(textCDelay.Text), Int32.Parse(textCSec.Text), Int32.Parse(textTDelay4.Text), Int32.Parse(textTSec4.Text), settings);
-                else if (tabMenu.SelectedTab.Equals(tabGen3))
-                {
-                    if (checkUnknownTarget.Checked)
-                        timer = new GBAAltTimer(settings, checkGBA.Checked);
-                    else
-                        timer = new GBATimer(Int32.Parse(textInitial.Text), Int32.Parse(textLag.Text), Int32.Parse(textFrame.Text), settings, checkGBA.Checked);
-                }
-                else if (tabMenu.SelectedTab.Equals(tabCustom))
-                {
-                    timer = new CustomTimer(settings);
-                    ((CustomTimer)timer).Stages = customStages;
-                }
-
-                timer.DisplayControl = labelTime;
-                timer.StartStopControl = buttonStart;
-            }
-            catch (Exception)
-            { }
-        }
-
-        //Gen 5 Events
-        private void checkCGear_CheckedChanged(object sender, EventArgs e)
-        {
-            checkHL.Enabled = checkCGear.Checked;
-            textTDelay5.Enabled = checkCGear.Checked;
-            labelTDelay5.Enabled = checkCGear.Checked;
-            if (!checkCGear.Checked)
-                checkHL.Checked = false;
-
-            CreateTimer();
-            UpdateDisplay();
-        }
-        private void checkHL_CheckedChanged(object sender, EventArgs e)
-        {
-            textHLCal.Visible = checkHL.Checked;
-            labelHL.Visible = checkHL.Checked;
-
-            if (showWarning)
-            {
-                MessageBox.Show("Warning:\n\nThis mode assumes that you have already properly calibrated your cgear timer.\n\nThe update function will only update the Entralink calibration. This message will only appear once per startup.");
-                showWarning = false;
-            }
-
-            CreateTimer();
-            UpdateDisplay();
-        }
-
-        //Settings Events
-        private void buttonColor_Click(object sender, EventArgs e)
-        {
-            ColorDialog dialog = new ColorDialog();
-            dialog.ShowDialog();
-            color = dialog.Color;
-        }
-        private void textMin_TextChanged(object sender, EventArgs e)
-        {
-            UpdateMinimum();
-        }
-        private void numFreq_ValueChanged(object sender, EventArgs e)
-        {
-            UpdateAction();
-        }
-        private void sounds_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            UpdateAction();
-        }
-        private void UpdateAction()
-        {
-            switch (comboMode.SelectedIndex)
-            {
-                case 0:
-                    settings.Action = GetSoundAction();
+                case ActionType.Audio:
+                    actionHandler.Actions.Add(GetSoundAction());
                     break;
-                case 1:
-                    settings.Action = new VisualAction(color, labelTime);
+                case ActionType.Visual:
+                    actionHandler.Actions.Add(GetVisualAction());
                     break;
-                case 2:
-                    ICountdownAction[] actions = { new VisualAction(color, labelTime), GetSoundAction() };
-                    settings.Action = new MultiAction(actions);
+                case ActionType.Dual:
+                    actionHandler.Actions.Add(GetSoundAction());
+                    actionHandler.Actions.Add(GetVisualAction());
                     break;
             }
-
-            settings.Frequency = (Int32)(1000 / numFreq.Value);
-            settings.ActionCount = (Int32)numBeeps.Value;
-            UpdateMinimum();
         }
         private SoundAction GetSoundAction()
         {
-            Stream sound = null;
-
-            switch (comboSounds.SelectedIndex)
+            switch ((SoundType)Settings.Default.Setting_Action_Sound)
             {
-                case 0:
-                    sound = EonTimer.Properties.Resources.beep;
-                    break;
-                case 1:
-                    sound = EonTimer.Properties.Resources.tick;
-                    break;
-                case 2:
-                    sound = EonTimer.Properties.Resources.pop;
-                    break;
-                case 3:
-                    sound = EonTimer.Properties.Resources.ding;
-                    break;
-            }
-
-            return new SoundAction(sound, !isStartup);
-        }
-        private void UpdateMinimum()
-        {
-            try
-            {
-                settings.Minimum = Int32.Parse(textMin.Text);
-            }
-            catch (Exception)
-            {
+                case SoundType.Beep:
+                    return new SoundAction(Resources.beep);
+                case SoundType.Ding:
+                    return new SoundAction(Resources.ding);
+                case SoundType.Pop:
+                    return new SoundAction(Resources.pop);
+                case SoundType.Tick:
+                    return new SoundAction(Resources.tick);
+                default:
+                    return new SoundAction();
             }
         }
-
-        //suggestion
-        private void timingToolStripMenuItem_Click(object sender, EventArgs e)
+        private VisualAction GetVisualAction()
         {
-            if (tabMenu.SelectedTab.Equals(tabGen5) && checkCGear.Checked)
-                textTSec5.Text = ((DelayTimer)timer).SuggestSecond().ToString();
-
-            if (tabMenu.SelectedTab.Equals(tabGen4))
-                textTSec4.Text = ((DelayTimer)timer).SuggestSecond().ToString();
+            return new VisualAction(displayCurrent, Settings.Default.Setting_Action_Color);
         }
-
-        //start button
-        private void start_Click(object sender, EventArgs e)
+        public void AddSettings()
         {
-            if (!timer.IsRunning())
-            {
-                timer.Run();
-            }
+            //gen 5 settings
+            combo_mode_5.SelectedIndex = Settings.Default.Mode_5;
+            text_calibration_5.Text = Settings.Default.Calibration_5_Basic.ToString();
+            text_target_delay_5.Text = Settings.Default.Target_5_Delay.ToString();
+            text_target_second_5.Text = Settings.Default.Target_5_Second.ToString();
+            text_calibration_entralink_5.Text = Settings.Default.Calibration_5_Entralink.ToString();
+            text_target_standard_5.Text = Settings.Default.Target_5_SecondaryEntralink.ToString();
+
+            //gen 4 settings
+            combo_mode_4.SelectedIndex = Settings.Default.Mode_4;
+            text_calibration_delay_4.Text = Settings.Default.Calibration_4_Delay.ToString();
+            text_calibration_second_4.Text = Settings.Default.Calibration_4_Second.ToString();
+            text_target_delay_4.Text = Settings.Default.Target_4_Delay.ToString();
+            text_target_second_4.Text = Settings.Default.Target_4_Second.ToString();
+
+            //gen 3 settings
+            combo_mode_3.SelectedIndex = Settings.Default.Mode_3;
+            text_calibration_lag_3.Text = Settings.Default.Calibration_3_Lag.ToString();
+            text_calibration_factor_3.Text = Settings.Default.Calibration_3_Factor.ToString();
+            text_target_initial_3.Text = Settings.Default.Target_3_Initial.ToString();
+            text_target_frame_3.Text = Settings.Default.Target_3_Frame.ToString();
+        }
+        public void UpdateSettings()
+        {
+            //gen 5 settings
+            Settings.Default.Mode_5 = combo_mode_5.SelectedIndex;
+            Settings.Default.Calibration_5_Basic = SetInt(text_calibration_5.Text, Settings.Default.Calibration_5_Basic);
+            Settings.Default.Target_5_Delay = SetInt(text_target_delay_5.Text, Settings.Default.Target_5_Delay);
+            Settings.Default.Target_5_Second = SetInt(text_target_second_5.Text, Settings.Default.Target_5_Second);
+            Settings.Default.Calibration_5_Entralink = SetInt(text_calibration_entralink_5.Text, Settings.Default.Calibration_5_Entralink);
+            Settings.Default.Target_5_SecondaryEntralink = SetInt(text_target_standard_5.Text, Settings.Default.Target_5_SecondaryEntralink);
+
+            //gen 4 settings
+            Settings.Default.Mode_4 = combo_mode_4.SelectedIndex;
+            Settings.Default.Calibration_4_Delay = SetInt(text_calibration_delay_4.Text, Settings.Default.Calibration_4_Delay);
+            Settings.Default.Calibration_4_Second = SetInt(text_calibration_second_4.Text, Settings.Default.Calibration_4_Second);
+            Settings.Default.Target_4_Delay = SetInt(text_target_delay_4.Text, Settings.Default.Target_4_Delay);
+            Settings.Default.Target_4_Second = SetInt(text_target_second_4.Text, Settings.Default.Target_4_Second);
+
+            //gen 3 settings
+            Settings.Default.Mode_3 = combo_mode_3.SelectedIndex;
+            Settings.Default.Calibration_3_Lag = SetInt(text_calibration_lag_3.Text, Settings.Default.Calibration_3_Lag);
+            Settings.Default.Calibration_3_Factor = SetDecimal(text_calibration_factor_3.Text, Settings.Default.Calibration_3_Factor);
+            Settings.Default.Target_3_Initial = SetInt(text_target_initial_3.Text, Settings.Default.Target_3_Initial);
+            Settings.Default.Target_3_Frame = SetInt(text_target_frame_3.Text, Settings.Default.Target_3_Frame);
+        }
+        private Int32 SetInt(String toParse, Int32 defaultResult)
+        {
+            Int32 result = 0;
+            if (Int32.TryParse(toParse, out result))
+                return result;
             else
+                return defaultResult;
+        }
+        private Decimal SetDecimal(String toParse, Decimal defaultResult)
+        {
+            Decimal result = 0;
+            if(Decimal.TryParse(toParse, out result))
+                return result;
+            else
+                return defaultResult;
+        }
+
+        private void CreateTimer()
+        {
+            if (monitor.IsRunning())
+                return;
+
+            var type = (ConsoleType)Settings.Default.Setting_Timer_Console;
+            var min = Settings.Default.Setting_Timer_Minimum;
+
+            if (tabMenu.SelectedTab.Equals(tabGen5))
             {
-                timer.CancelRun();
-                UpdateDisplay();
+                var calibration = Settings.Default.Setting_Timer_PreciseCalibration ? Settings.Default.Calibration_5_Basic : CalibrationHelper.ConvertToMillis(Settings.Default.Calibration_5_Basic, type);
+                var elCal = Settings.Default.Setting_Timer_PreciseCalibration ? Settings.Default.Calibration_5_Entralink : CalibrationHelper.ConvertToMillis(Settings.Default.Calibration_5_Entralink, type);
+
+                switch (Settings.Default.Mode_5)
+                {
+                    case (Int32)GenerationModes.Five.Standard:
+                        monitor.Timer = new SimpleTimer(calibration, Settings.Default.Target_5_Second, type, min);
+                        break;
+                    case (Int32)GenerationModes.Five.CGear:
+                        monitor.Timer = new DelayTimer(calibration, Settings.Default.Target_5_Delay, Settings.Default.Target_5_Second, type, min);
+                        break;
+                    case (Int32)GenerationModes.Five.Entralink:
+                        monitor.Timer = new EntralinkTimer(calibration, elCal, Settings.Default.Target_5_Delay, Settings.Default.Target_5_Second, type, min);
+                        break;
+                    case (Int32)GenerationModes.Five.EntralinkPlus:
+                        monitor.Timer = new EnhancedEntralinkTimer(calibration, elCal, Settings.Default.Target_5_SecondaryEntralink, Settings.Default.Target_5_Delay, Settings.Default.Target_5_Second, type, min);
+                        break;
+                    default:
+                        monitor.Timer = new NullTimer();
+                        break;
+                }
+            }
+            else if (tabMenu.SelectedTab.Equals(tabGen4))
+            {
+                switch (Settings.Default.Mode_4)
+                {
+                    case (Int32)GenerationModes.Four.Standard:
+                        monitor.Timer = new DelayTimer(CalibrationHelper.CreateCalibration(Settings.Default.Calibration_4_Delay, Settings.Default.Calibration_4_Second, type), Settings.Default.Target_4_Delay, Settings.Default.Target_4_Second, type, min);
+                        break;    
+                    default:
+                        monitor.Timer = new NullTimer();
+                        break;
+                }
+            }
+            else if (tabMenu.SelectedTab.Equals(tabGen3))
+            {
+                switch(Settings.Default.Mode_3)
+                {
+                    case (Int32)GenerationModes.Three.Standard:
+                        monitor.Timer = new FrameTimer(Settings.Default.Calibration_3_Lag, Settings.Default.Target_3_Initial, Settings.Default.Target_3_Frame, type);
+                        break;
+                    case (Int32) GenerationModes.Three.VariableTarget:
+                        monitor.Timer = new VariableTargetFrameTimer(type);
+                        break;
+                    default:
+                        monitor.Timer = new NullTimer();
+                        break;
+                }
             }
         }
+        #endregion
 
-        //Update Button Event
-        private void update_Click(object sender, EventArgs e)
-        {
-            //try block in case any text boxes are empty
-            try
-            {
-                Int32 update = 0;
-
-                //pull update box
-                if (tabMenu.SelectedTab.Equals(tabGen5))
-                    update = Int32.Parse(textHit5.Text);
-                else if (tabMenu.SelectedTab.Equals(tabGen4))
-                    update = Int32.Parse(textHit4.Text);
-                else if (tabMenu.SelectedTab.Equals(tabGen3))
-                {
-                    if (checkUnknownTarget.Checked)
-                        update = Int32.Parse(textFrame.Text);
-                    else
-                        update = Int32.Parse(textHit3.Text);
-                }
-
-                //set update to the relative amount
-                update = timer.UpdateCalibration(update);
-
-                //update the calibration with the relative number
-                if (tabMenu.SelectedTab.Equals(tabGen5))
-                {
-                    textCal.Text = (Int32.Parse(textCal.Text) + update).ToString();
-                    textHit5.Text = "";
-                }
-                else if (tabMenu.SelectedTab.Equals(tabGen4))
-                {
-                    textCDelay.Text = (Int32.Parse(textCDelay.Text) + update).ToString();
-                    textHit4.Text = "";
-                }
-                else if (tabMenu.SelectedTab.Equals(tabGen3))
-                {
-                    textLag.Text = (Int32.Parse(textLag.Text) + update).ToString();
-                    textHit3.Text = "";
-                }
-
-            }
-            catch (Exception)
-            { }
-        }
-
-
-        private void Load()
-        {
-        }
         private void Save()
         {
-
-            MessageBox.Show("Saved.");
-        }
-
-
-        //Unknown target check event
-        private void checkUnknownTarget_CheckedChanged(object sender, EventArgs e)
-        {
-            textLag.Enabled = textInitial.Enabled = textHit3.Enabled = !checkUnknownTarget.Checked;
-            CreateTimer();
-            UpdateDisplay();
-        }
-        private void checkGBA_CheckedChanged(object sender, EventArgs e)
-        {
-            CreateTimer();
-            UpdateDisplay();
-        }
-        /// <summary>Closing handler</summary>
-        private void Form1_FormClosing(object sender, FormClosingEventArgs e)
-        {
-            if (saveOnQuitToolStripMenuItem.Checked)
-            {
-                Save();
-            }
-            else if (AskOnQuitToolStripMenuItem.Checked)
-            {
-                DialogResult result = MessageBox.Show("Store input?", "Save values?", MessageBoxButtons.YesNoCancel);
-
-                if (result == System.Windows.Forms.DialogResult.Yes)
-                    Save();
-                else if (result == System.Windows.Forms.DialogResult.Cancel)
-                    e.Cancel = true;
-            }
+            Settings.Default.Save();
         }
 
         #region Form Change Events
-
-        //Checks for numeric input only
-        private void numeric_KeyPress(object sender, KeyPressEventArgs e)
+        /// <summary>Makes sure keypresses are numeric</summary>
+        private void NumericKeyPress(object sender, KeyPressEventArgs e)
         {
             if (!(Char.IsNumber(e.KeyChar) || Char.IsControl(e.KeyChar) || e.KeyChar == '-'))
                 e.Handled = true;
         }
+        /// <summary>Triggered when modes change</summary>
+        private void ModeChanged(object sender, EventArgs e)
+        {
+            UpdateSettings();
+            CreateTimer();
+        }
+        /// <summary>Triggered when </summary>
+        private void InputTextChanged(object sender, EventArgs e)
+        {
 
+        }
         #endregion
 
         #region Form Control Events
         /// <summary>Saves Data</summary>
-        private void save_Click(object sender, EventArgs e)
+        private void Save(object sender, EventArgs e)
         {
-            Save();
         }
         /// <summary>Closes the Program</summary>
-        private void buttonClose_Click(object sender, EventArgs e)
+        private void Close(object sender, EventArgs e)
         {
             this.Close();
         }
         /// <summary>Minimizes</summary>
-        private void buttonMinimize_Click(object sender, EventArgs e)
+        private void Minimize(object sender, EventArgs e)
         {
             this.WindowState = FormWindowState.Minimized;
         }
         /// <summary>Go To Help Forum</summary>
-        private void buttonSite_Click(object sender, EventArgs e)
+        private void Help(object sender, EventArgs e)
         {
             try
             {
@@ -357,32 +299,54 @@ namespace EonTimer
                 MessageBox.Show("Sorry, this doesn't work on your computer.");
             }
         }
-        /// <summary>Always On Top</summary>
-        private void alwaysOnTopToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            this.TopMost = alwaysOnTopToolStripMenuItem.Checked;
-        }
-        /// <summary>Controls Opacity</summary>
-        private void trackTransp_Scroll(object sender, EventArgs e)
-        {
-            this.Opacity = trackTransp.Value / 100.0;
-        }
         /// <summary>Controls Mini-Mode</summary>
-        private void miniToolStripMenuItem_CheckedChanged(object sender, EventArgs e)
+        private void Mini(object sender, EventArgs e)
         {
-            tabMenu.Visible = buttonUpdate.Visible = buttonSave.Visible = !miniToolStripMenuItem.Checked;
+            Settings.Default.Setting_Form_Mini = !Settings.Default.Setting_Form_Mini;
 
-            if (miniToolStripMenuItem.Checked)
+            //hide interface
+            tabMenu.Visible = !Settings.Default.Setting_Form_Mini;
+            buttonUpdate.Visible = !Settings.Default.Setting_Form_Mini;
+            buttonSave.Visible = !Settings.Default.Setting_Form_Mini;
+
+            //form changes
+            if (Settings.Default.Setting_Form_Mini)
             {
                 this.BackgroundImage = EonTimer.Properties.Resources.glaceonmini;
                 this.Height = 148;
                 this.Width = 246;
+                pictureMini.Image = miniButton.Active;
             }
             else
             {
                 this.BackgroundImage = EonTimer.Properties.Resources.glaceonbg;
                 this.Height = 293;
                 this.Width = 392;
+                pictureMini.Image = miniButton.Basic;
+            }
+        }
+        /// <summary>Opens settings</summary>
+        private void OpenSettings(object sender, EventArgs e)
+        {
+        }
+        #endregion
+
+        #region Other Form Events
+        /// <summary>Closing handler</summary>
+        private void OnClosing(object sender, FormClosingEventArgs e)
+        {
+            monitor.Cancel();
+
+            if (Settings.Default.Setting_Form_AutoSave)
+                Save();
+            else if (Settings.Default.Setting_Form_AskSave)
+            {
+                DialogResult result = MessageBox.Show("Store input?", "Save values?", MessageBoxButtons.YesNoCancel);
+
+                if (result == System.Windows.Forms.DialogResult.Yes)
+                    Save();
+                else if (result == System.Windows.Forms.DialogResult.Cancel)
+                    e.Cancel = true;
             }
         }
         #endregion
@@ -393,51 +357,66 @@ namespace EonTimer
         {
             public Image Basic { get; set; }
             public Image Hover { get; set; }
+            public Image Active { get; set; }
         }
-        EonButton helpButton = new EonButton
-        {
-            Basic = EonTimer.Properties.Resources.helpbutton,
-            Hover = EonTimer.Properties.Resources.helpbutton2
-        };
         EonButton minimizeButton = new EonButton
         {
-            Basic = EonTimer.Properties.Resources._button,
-            Hover = EonTimer.Properties.Resources._button2
+            Basic = EonTimer.Properties.Resources.Minimize,
+            Hover = EonTimer.Properties.Resources.Minimize_Hover
         };
         EonButton closeButton = new EonButton
         {
-            Basic = EonTimer.Properties.Resources.xbutton,
-            Hover = EonTimer.Properties.Resources.xbutton2
+            Basic = EonTimer.Properties.Resources.Close,
+            Hover = EonTimer.Properties.Resources.Close_Hover
+        };
+        EonButton settingsButton = new EonButton
+        {
+            Basic = EonTimer.Properties.Resources.Settings,
+            Hover = EonTimer.Properties.Resources.Settings_Hover
+        };
+        EonButton miniButton = new EonButton
+        {
+            Basic = EonTimer.Properties.Resources.Mini,
+            Hover = EonTimer.Properties.Resources.Mini_Hover,
+            Active = EonTimer.Properties.Resources.Mini_Active
         };
 
         //Close Button
-        private void pictureClose_MouseEnter(object sender, EventArgs e)
+        private void Close_MouseEnter(object sender, EventArgs e)
         {
             pictureClose.Image = closeButton.Hover;
         }
-        private void pictureClose_MouseLeave(object sender, EventArgs e)
+        private void Close_MouseLeave(object sender, EventArgs e)
         {
             pictureClose.Image = closeButton.Basic;
         }
 
         //Minimize Button
-        private void pictureMinimize_MouseEnter(object sender, EventArgs e)
+        private void Minimize_MouseEnter(object sender, EventArgs e)
         {
             pictureMinimize.Image = minimizeButton.Hover;
         }
-        private void pictureMinimize_MouseLeave(object sender, EventArgs e)
+        private void Minimize_MouseLeave(object sender, EventArgs e)
         {
             pictureMinimize.Image = minimizeButton.Basic;
         }
 
-        //help
-        private void pictureHelp_MouseEnter(object sender, EventArgs e)
+        private void Mini_MouseEnter(object sender, EventArgs e)
         {
-            pictureHelp.Image = helpButton.Hover;
+            pictureMini.Image = miniButton.Hover;
         }
-        private void pictureHelp_MouseLeave(object sender, EventArgs e)
+        private void Mini_MouseLeave(object sender, EventArgs e)
         {
-            pictureHelp.Image = helpButton.Basic;
+            pictureMini.Image = Settings.Default.Setting_Form_Mini ? miniButton.Active : miniButton.Basic;
+        }
+
+        private void Settings_MouseEnter(object sender, EventArgs e)
+        {
+            pictureSettings.Image = settingsButton.Hover;
+        }
+        private void Settings_MouseLeave(object sender, EventArgs e)
+        {
+            pictureSettings.Image = settingsButton.Basic;
         }
         #endregion
 

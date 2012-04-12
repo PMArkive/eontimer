@@ -79,22 +79,20 @@
     <Compile Include="Actions\ICountdownAction.cs" />
     <Compile Include="Handlers\ActionHandler.cs" />
     <Compile Include="Handlers\DisplayHandler.cs" />
-    <Compile Include="Timers1\CustomTimer.cs" />
-    <Compile Include="Timers1\GBAAltTimer.cs" />
-    <Compile Include="Timers1\EntralinkTimer.cs" />
-    <Compile Include="Timers1\GBATimer.cs" />
     <Compile Include="Timers\DelayTimer.cs" />
+    <Compile Include="Timers\EnhancedEntralinkTimer.cs" />
     <Compile Include="Timers\EntralinkTimer.cs" />
     <Compile Include="Timers\FrameTimer.cs" />
+    <Compile Include="Timers\NullTimer.cs" />
     <Compile Include="Timers\SimpleTimer.cs" />
+    <Compile Include="Timers\Stage.cs" />
     <Compile Include="Timers\VariableTargetFrameTimer.cs" />
     <Compile Include="Timers\ITimer.cs" />
     <Compile Include="Utilities\Helpers\CalibrationHelper.cs" />
-    <Compile Include="Utilities\Reference\ConsoleType.cs" />
+    <Compile Include="Utilities\Helpers\Extensions.cs" />
+    <Compile Include="Utilities\Reference\Actions.cs" />
     <Compile Include="Utilities\Helpers\GUIHelper.cs" />
     <Compile Include="Actions\SoundAction.cs" />
-    <Compile Include="Timers1\StandardSeedTimer.cs" />
-    <Compile Include="Timers1\DelayTimer.cs" />
     <Compile Include="MainTimer.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -103,7 +101,6 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Timers1\RNGTimer.cs" />
     <Compile Include="Handlers\ITimerEventHandler.cs" />
     <Compile Include="Utilities\ITimerMonitor.cs" />
     <Compile Include="Utilities\Helpers\RegistryMigrationHelper.cs" />
@@ -139,18 +136,21 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Resources\EonTimerIcon.ico" />
+    <Content Include="Resources\Images\Close.png" />
+    <Content Include="Resources\Images\Close_Hover.png" />
     <Content Include="Resources\Images\glaceonmini.jpg" />
     <Content Include="Resources\Images\glaceonbg.jpg" />
-    <Content Include="Resources\Images\helpbutton.png" />
-    <Content Include="Resources\Images\helpbutton2.png" />
     <None Include="Resources\DING.WAV" />
     <None Include="Resources\pop.wav" />
     <None Include="Resources\tick.wav" />
+    <Content Include="Resources\Images\Mini.png" />
+    <Content Include="Resources\Images\Minimize.png" />
+    <Content Include="Resources\Images\Minimize_Hover.png" />
+    <Content Include="Resources\Images\Mini_Active.png" />
+    <Content Include="Resources\Images\Mini_Hover.png" />
+    <Content Include="Resources\Images\Settings.png" />
+    <Content Include="Resources\Images\Settings_Hover.png" />
     <Content Include="Resources\Images\TabGlac.jpg" />
-    <Content Include="Resources\Images\xbutton.png" />
-    <Content Include="Resources\Images\xbutton2.png" />
-    <Content Include="Resources\Images\_button.png" />
-    <Content Include="Resources\Images\_button2.png" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>

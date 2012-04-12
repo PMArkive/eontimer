@@ -3,7 +3,6 @@ using EonTimer.Utilities.Reference;
 
 namespace EonTimer.Utilities.Helpers
 {
-    /* Converts between delays and millis */
     public static class CalibrationHelper
     {
         /// <summary>
@@ -17,9 +16,13 @@ namespace EonTimer.Utilities.Helpers
             switch (type)
             {
                 case ConsoleType.GBA:
-                    return (Int32)(delays * TimerConstants.GBA_FRAMERATE);
+                    return (Int32)(delays * TimerConstants.FRAMERATE_GBA);
                 case ConsoleType.NDS:
-                    return (Int32)(delays * TimerConstants.NDS_FRAMERATE);
+                    return (Int32)(delays * TimerConstants.FRAMERATE_NDS);
+                case ConsoleType.DSI:
+                    return (Int32)(delays * TimerConstants.FRAMERATE_DSI);
+                case ConsoleType._3DS:
+                    return (Int32)(delays * TimerConstants.FRAMERATE_3DS);
                 default:
                     return 0;
             }
@@ -35,12 +38,21 @@ namespace EonTimer.Utilities.Helpers
             switch (type)
             {
                 case ConsoleType.GBA:
-                    return (Int32)(millis / TimerConstants.GBA_FRAMERATE);
+                    return (Int32)(millis / TimerConstants.FRAMERATE_GBA);
                 case ConsoleType.NDS:
-                    return (Int32)(millis / TimerConstants.NDS_FRAMERATE);
+                    return (Int32)(millis / TimerConstants.FRAMERATE_NDS);
+                case ConsoleType.DSI:
+                    return (Int32)(millis / TimerConstants.FRAMERATE_DSI);
+                case ConsoleType._3DS:
+                    return (Int32)(millis / TimerConstants.FRAMERATE_3DS);
                 default:
                     return 0;
             }
+        }
+        public static Int32 CreateCalibration(Int32 delay, Int32 second, ConsoleType type)
+        {
+            var delayCalibration = delay - ConvertToDelays(second * 1000, type);
+            return ConvertToMillis(delayCalibration, type);
         }
     }
 }

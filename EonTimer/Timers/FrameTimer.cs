@@ -12,8 +12,30 @@ namespace EonTimer.Timers
         public Int32 Calibration { get; set; }
         public Int32 TargetFrame { get; set; }
         public ConsoleType ConsoleType { get; set; }
+        public List<TimeSpan> Stages { get; private set; }
 
-        public TimeSpan GetStage(Int32 stage)
+        public FrameTimer(Int32 calibration, Int32 pretimer, Int32 targetFrame, ConsoleType consoleType)
+        {
+            Calibration = calibration;
+            PretimerLength = pretimer;
+            TargetFrame = targetFrame;
+            ConsoleType = consoleType;
+
+            Stages = new List<TimeSpan>();
+            for (Int32 i = 0; GetStage(i) != TimerConstants.NULL_TIMESPAN; i++)
+                Stages.Add(GetStage(i));
+        }
+
+        public Int32 Calibrate(Int32 result)
+        {
+            return CalibrationHelper.ConvertToMillis((TargetFrame - result), ConsoleType);
+        }
+        public Int32 GetMinutesBeforeTarget()
+        {
+            return 0;
+        }
+
+        private TimeSpan GetStage(Int32 stage)
         {
             switch (stage)
             {
@@ -24,10 +46,6 @@ namespace EonTimer.Timers
                 default:
                     return TimerConstants.NULL_TIMESPAN;
             }
-        }
-        public Int32 Calibrate(Int32 result)
-        {
-            return CalibrationHelper.ConvertToMillis((TargetFrame - result), ConsoleType);
         }
     }
 }

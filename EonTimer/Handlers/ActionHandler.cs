@@ -30,7 +30,7 @@ namespace EonTimer.Handlers
         public void NotifyStageStart(Int32 stage)
         {
             TimeSpan next = new TimeSpan(Interval.Ticks * (ActionCount - 1));
-            TimeSpan alt = timeMonitor.Timer.GetStage(stage);
+            TimeSpan alt = timeMonitor.Timer.Stages[stage];
 
             if (alt < next)
                 nextAction = new TimeSpan(0, 0, 0, 0, alt.Milliseconds / Interval.Milliseconds * Interval.Milliseconds); //keeps intervals even

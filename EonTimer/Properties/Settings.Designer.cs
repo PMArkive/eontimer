@@ -298,5 +298,89 @@ namespace EonTimer.Properties {
                 this["Setting_Timer_Minimum"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("8")]
+        public int Setting_Timer_SleepInterval {
+            get {
+                return ((int)(this["Setting_Timer_SleepInterval"]));
+            }
+            set {
+                this["Setting_Timer_SleepInterval"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("1")]
+        public int Setting_Timer_Console {
+            get {
+                return ((int)(this["Setting_Timer_Console"]));
+            }
+            set {
+                this["Setting_Timer_Console"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public int Mode_5 {
+            get {
+                return ((int)(this["Mode_5"]));
+            }
+            set {
+                this["Mode_5"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public int Mode_4 {
+            get {
+                return ((int)(this["Mode_4"]));
+            }
+            set {
+                this["Mode_4"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public int Mode_3 {
+            get {
+                return ((int)(this["Mode_3"]));
+            }
+            set {
+                this["Mode_3"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool Setting_Timer_PreciseCalibration {
+            get {
+                return ((bool)(this["Setting_Timer_PreciseCalibration"]));
+            }
+            set {
+                this["Setting_Timer_PreciseCalibration"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("35")]
+        public int Target_5_SecondaryEntralink {
+            get {
+                return ((int)(this["Target_5_SecondaryEntralink"]));
+            }
+            set {
+                this["Target_5_SecondaryEntralink"] = value;
+            }
+        }
     }
 }
