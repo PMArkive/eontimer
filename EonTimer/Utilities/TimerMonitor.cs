@@ -87,11 +87,14 @@ namespace EonTimer.Utilities
 
         public void Cancel()
         {
-            foreach(var handler in Handlers)
-                handler.NotifyEnd();
-
             if(IsRunning())
                 thread.Abort();
+
+            //wait to update display until thread stops
+            while (IsRunning()) { }
+
+            foreach (var handler in Handlers)
+                handler.NotifyEnd();
         }
         public Boolean IsRunning()
         {

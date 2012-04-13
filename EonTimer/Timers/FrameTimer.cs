@@ -11,10 +11,10 @@ namespace EonTimer.Timers
         public Int32 PretimerLength { get; set; }
         public Int32 Calibration { get; set; }
         public Int32 TargetFrame { get; set; }
-        public ConsoleType ConsoleType { get; set; }
+        public Consoles.ConsoleType ConsoleType { get; set; }
         public List<TimeSpan> Stages { get; private set; }
 
-        public FrameTimer(Int32 calibration, Int32 pretimer, Int32 targetFrame, ConsoleType consoleType)
+        public FrameTimer(Int32 calibration, Int32 pretimer, Int32 targetFrame, Consoles.ConsoleType consoleType)
         {
             Calibration = calibration;
             PretimerLength = pretimer;

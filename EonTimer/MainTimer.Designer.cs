@@ -31,13 +31,6 @@
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainTimer));
             this.displayCurrent = new System.Windows.Forms.Label();
-            this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
-            this.timingToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.miniToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.optionsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.saveOnQuitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.AskOnQuitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.alwaysOnTopToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.buttonStart = new System.Windows.Forms.Button();
             this.displayNextStage = new System.Windows.Forms.Label();
             this.labelMinsLabel = new System.Windows.Forms.Label();
@@ -91,8 +84,8 @@
             this.tabCustom = new System.Windows.Forms.TabPage();
             this.tabImages = new System.Windows.Forms.ImageList(this.components);
             this.pictureMini = new System.Windows.Forms.PictureBox();
+            this.picturePin = new System.Windows.Forms.PictureBox();
             this.pictureSettings = new System.Windows.Forms.PictureBox();
-            this.contextMenuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureClose)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureMinimize)).BeginInit();
             this.tabGen3.SuspendLayout();
@@ -100,6 +93,7 @@
             this.tabGen5.SuspendLayout();
             this.tabMenu.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureMini)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.picturePin)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureSettings)).BeginInit();
             this.SuspendLayout();
             // 
@@ -107,7 +101,6 @@
             // 
             this.displayCurrent.AutoSize = true;
             this.displayCurrent.BackColor = System.Drawing.Color.Transparent;
-            this.displayCurrent.ContextMenuStrip = this.contextMenuStrip1;
             this.displayCurrent.Font = new System.Drawing.Font("Times New Roman", 48F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.displayCurrent.Location = new System.Drawing.Point(2, 19);
             this.displayCurrent.MinimumSize = new System.Drawing.Size(193, 0);
@@ -115,63 +108,6 @@
             this.displayCurrent.Size = new System.Drawing.Size(193, 73);
             this.displayCurrent.TabIndex = 0;
             this.displayCurrent.Text = "00:00";
-            // 
-            // contextMenuStrip1
-            // 
-            this.contextMenuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.timingToolStripMenuItem,
-            this.miniToolStripMenuItem,
-            this.optionsToolStripMenuItem});
-            this.contextMenuStrip1.Name = "contextMenuStrip1";
-            this.contextMenuStrip1.ShowCheckMargin = true;
-            this.contextMenuStrip1.ShowImageMargin = false;
-            this.contextMenuStrip1.Size = new System.Drawing.Size(159, 70);
-            // 
-            // timingToolStripMenuItem
-            // 
-            this.timingToolStripMenuItem.Name = "timingToolStripMenuItem";
-            this.timingToolStripMenuItem.Size = new System.Drawing.Size(158, 22);
-            this.timingToolStripMenuItem.Text = "Suggest Second";
-            // 
-            // miniToolStripMenuItem
-            // 
-            this.miniToolStripMenuItem.CheckOnClick = true;
-            this.miniToolStripMenuItem.Name = "miniToolStripMenuItem";
-            this.miniToolStripMenuItem.Size = new System.Drawing.Size(158, 22);
-            this.miniToolStripMenuItem.Text = "Mini";
-            // 
-            // optionsToolStripMenuItem
-            // 
-            this.optionsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.saveOnQuitToolStripMenuItem,
-            this.AskOnQuitToolStripMenuItem,
-            this.alwaysOnTopToolStripMenuItem});
-            this.optionsToolStripMenuItem.Name = "optionsToolStripMenuItem";
-            this.optionsToolStripMenuItem.Size = new System.Drawing.Size(158, 22);
-            this.optionsToolStripMenuItem.Text = "Options";
-            // 
-            // saveOnQuitToolStripMenuItem
-            // 
-            this.saveOnQuitToolStripMenuItem.CheckOnClick = true;
-            this.saveOnQuitToolStripMenuItem.Name = "saveOnQuitToolStripMenuItem";
-            this.saveOnQuitToolStripMenuItem.Size = new System.Drawing.Size(168, 22);
-            this.saveOnQuitToolStripMenuItem.Text = "Autosave On Quit";
-            // 
-            // AskOnQuitToolStripMenuItem
-            // 
-            this.AskOnQuitToolStripMenuItem.Checked = true;
-            this.AskOnQuitToolStripMenuItem.CheckOnClick = true;
-            this.AskOnQuitToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.AskOnQuitToolStripMenuItem.Name = "AskOnQuitToolStripMenuItem";
-            this.AskOnQuitToolStripMenuItem.Size = new System.Drawing.Size(168, 22);
-            this.AskOnQuitToolStripMenuItem.Text = "Ask Save On Quit";
-            // 
-            // alwaysOnTopToolStripMenuItem
-            // 
-            this.alwaysOnTopToolStripMenuItem.CheckOnClick = true;
-            this.alwaysOnTopToolStripMenuItem.Name = "alwaysOnTopToolStripMenuItem";
-            this.alwaysOnTopToolStripMenuItem.Size = new System.Drawing.Size(168, 22);
-            this.alwaysOnTopToolStripMenuItem.Text = "Always On Top";
             // 
             // buttonStart
             // 
@@ -182,6 +118,7 @@
             this.buttonStart.TabIndex = 1;
             this.buttonStart.Text = "Start";
             this.buttonStart.UseVisualStyleBackColor = true;
+            this.buttonStart.Click += new System.EventHandler(this.Start);
             // 
             // displayNextStage
             // 
@@ -300,7 +237,7 @@
             this.combo_mode_3.Name = "combo_mode_3";
             this.combo_mode_3.Size = new System.Drawing.Size(125, 21);
             this.combo_mode_3.TabIndex = 10;
-            this.combo_mode_3.SelectionChangeCommitted += new System.EventHandler(this.ModeChanged);
+            this.combo_mode_3.SelectedIndexChanged += new System.EventHandler(this.UpdateTimer);
             // 
             // labelHit3
             // 
@@ -318,6 +255,7 @@
             this.text_hit_3.Name = "text_hit_3";
             this.text_hit_3.Size = new System.Drawing.Size(75, 20);
             this.text_hit_3.TabIndex = 8;
+            this.text_hit_3.TextChanged += new System.EventHandler(this.UpdateTimer);
             // 
             // text_calibration_lag_3
             // 
@@ -325,6 +263,7 @@
             this.text_calibration_lag_3.Name = "text_calibration_lag_3";
             this.text_calibration_lag_3.Size = new System.Drawing.Size(41, 20);
             this.text_calibration_lag_3.TabIndex = 1;
+            this.text_calibration_lag_3.TextChanged += new System.EventHandler(this.UpdateTimer);
             this.text_calibration_lag_3.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.NumericKeyPress);
             // 
             // text_calibration_factor_3
@@ -334,6 +273,7 @@
             this.text_calibration_factor_3.Name = "text_calibration_factor_3";
             this.text_calibration_factor_3.Size = new System.Drawing.Size(41, 20);
             this.text_calibration_factor_3.TabIndex = 0;
+            this.text_calibration_factor_3.TextChanged += new System.EventHandler(this.UpdateTimer);
             // 
             // text_target_frame_3
             // 
@@ -341,6 +281,7 @@
             this.text_target_frame_3.Name = "text_target_frame_3";
             this.text_target_frame_3.Size = new System.Drawing.Size(75, 20);
             this.text_target_frame_3.TabIndex = 3;
+            this.text_target_frame_3.TextChanged += new System.EventHandler(this.UpdateTimer);
             this.text_target_frame_3.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.NumericKeyPress);
             // 
             // text_target_initial_3
@@ -349,6 +290,7 @@
             this.text_target_initial_3.Name = "text_target_initial_3";
             this.text_target_initial_3.Size = new System.Drawing.Size(75, 20);
             this.text_target_initial_3.TabIndex = 2;
+            this.text_target_initial_3.TextChanged += new System.EventHandler(this.UpdateTimer);
             this.text_target_initial_3.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.NumericKeyPress);
             // 
             // labelFrame
@@ -432,7 +374,7 @@
             this.combo_mode_4.Name = "combo_mode_4";
             this.combo_mode_4.Size = new System.Drawing.Size(125, 21);
             this.combo_mode_4.TabIndex = 10;
-            this.combo_mode_4.SelectionChangeCommitted += new System.EventHandler(this.ModeChanged);
+            this.combo_mode_4.SelectedIndexChanged += new System.EventHandler(this.UpdateTimer);
             // 
             // text_hit_4
             // 
@@ -467,6 +409,7 @@
             this.text_calibration_second_4.Size = new System.Drawing.Size(75, 20);
             this.text_calibration_second_4.TabIndex = 3;
             this.text_calibration_second_4.Text = "14";
+            this.text_calibration_second_4.TextChanged += new System.EventHandler(this.UpdateTimer);
             this.text_calibration_second_4.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.NumericKeyPress);
             // 
             // text_calibration_delay_4
@@ -476,7 +419,7 @@
             this.text_calibration_delay_4.Size = new System.Drawing.Size(75, 20);
             this.text_calibration_delay_4.TabIndex = 1;
             this.text_calibration_delay_4.Text = "500";
-            this.text_calibration_delay_4.TextChanged += new System.EventHandler(this.text_calibration_delay_4_TextChanged);
+            this.text_calibration_delay_4.TextChanged += new System.EventHandler(this.UpdateTimer);
             this.text_calibration_delay_4.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.NumericKeyPress);
             // 
             // labelDelay
@@ -533,7 +476,6 @@
             // 
             this.tabGen5.BackColor = System.Drawing.Color.GhostWhite;
             this.tabGen5.BackgroundImage = global::EonTimer.Properties.Resources.TabGlac;
-            this.tabGen5.ContextMenuStrip = this.contextMenuStrip1;
             this.tabGen5.Controls.Add(this.labelELSec);
             this.tabGen5.Controls.Add(this.text_target_standard_5);
             this.tabGen5.Controls.Add(this.labelMode5);
@@ -592,7 +534,6 @@
             this.combo_mode_5.Name = "combo_mode_5";
             this.combo_mode_5.Size = new System.Drawing.Size(125, 21);
             this.combo_mode_5.TabIndex = 12;
-            this.combo_mode_5.SelectionChangeCommitted += new System.EventHandler(this.ModeChanged);
             // 
             // labelHL
             // 
@@ -689,7 +630,6 @@
             // tabMenu
             // 
             this.tabMenu.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
-            this.tabMenu.ContextMenuStrip = this.contextMenuStrip1;
             this.tabMenu.Controls.Add(this.tabGen5);
             this.tabMenu.Controls.Add(this.tabGen4);
             this.tabMenu.Controls.Add(this.tabGen3);
@@ -702,7 +642,7 @@
             this.tabMenu.Size = new System.Drawing.Size(185, 237);
             this.tabMenu.SizeMode = System.Windows.Forms.TabSizeMode.Fixed;
             this.tabMenu.TabIndex = 2;
-            this.tabMenu.SelectedIndexChanged += new System.EventHandler(this.ModeChanged);
+            this.tabMenu.SelectedIndexChanged += new System.EventHandler(this.UpdateTimer);
             // 
             // tabCustom
             // 
@@ -739,16 +679,31 @@
             this.pictureMini.MouseEnter += new System.EventHandler(this.Mini_MouseEnter);
             this.pictureMini.MouseLeave += new System.EventHandler(this.Mini_MouseLeave);
             // 
+            // picturePin
+            // 
+            this.picturePin.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.picturePin.BackColor = System.Drawing.Color.Transparent;
+            this.picturePin.Location = new System.Drawing.Point(315, 4);
+            this.picturePin.Name = "picturePin";
+            this.picturePin.Size = new System.Drawing.Size(13, 13);
+            this.picturePin.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.picturePin.TabIndex = 15;
+            this.picturePin.TabStop = false;
+            this.picturePin.Click += new System.EventHandler(this.Pin);
+            this.picturePin.MouseEnter += new System.EventHandler(this.Pin_MouseEnter);
+            this.picturePin.MouseLeave += new System.EventHandler(this.Pin_MouseLeave);
+            // 
             // pictureSettings
             // 
             this.pictureSettings.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.pictureSettings.BackColor = System.Drawing.Color.Transparent;
-            this.pictureSettings.Location = new System.Drawing.Point(315, 4);
+            this.pictureSettings.Location = new System.Drawing.Point(12, 262);
             this.pictureSettings.Name = "pictureSettings";
-            this.pictureSettings.Size = new System.Drawing.Size(13, 13);
+            this.pictureSettings.Size = new System.Drawing.Size(24, 24);
             this.pictureSettings.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.pictureSettings.TabIndex = 15;
+            this.pictureSettings.TabIndex = 16;
             this.pictureSettings.TabStop = false;
+            this.pictureSettings.Click += new System.EventHandler(this.OpenSettings);
             this.pictureSettings.MouseEnter += new System.EventHandler(this.Settings_MouseEnter);
             this.pictureSettings.MouseLeave += new System.EventHandler(this.Settings_MouseLeave);
             // 
@@ -760,9 +715,9 @@
             this.BackgroundImage = global::EonTimer.Properties.Resources.glaceonbg;
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
             this.ClientSize = new System.Drawing.Size(392, 293);
-            this.ContextMenuStrip = this.contextMenuStrip1;
-            this.Controls.Add(this.pictureMini);
             this.Controls.Add(this.pictureSettings);
+            this.Controls.Add(this.pictureMini);
+            this.Controls.Add(this.picturePin);
             this.Controls.Add(this.pictureClose);
             this.Controls.Add(this.pictureMinimize);
             this.Controls.Add(this.buttonUpdate);
@@ -778,7 +733,6 @@
             this.Name = "MainTimer";
             this.Text = "EonTimer v1.6";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.OnClosing);
-            this.contextMenuStrip1.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.pictureClose)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureMinimize)).EndInit();
             this.tabGen3.ResumeLayout(false);
@@ -789,6 +743,7 @@
             this.tabGen5.PerformLayout();
             this.tabMenu.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.pictureMini)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.picturePin)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureSettings)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -803,13 +758,9 @@
         private System.Windows.Forms.Label labelMinsLabel;
         private System.Windows.Forms.Label displayMinsBefore;
         private System.Windows.Forms.Button buttonUpdate;
-        private System.Windows.Forms.ContextMenuStrip contextMenuStrip1;
-        private System.Windows.Forms.ToolStripMenuItem timingToolStripMenuItem;
         private System.Windows.Forms.Button buttonSave;
         private System.Windows.Forms.PictureBox pictureClose;
         private System.Windows.Forms.PictureBox pictureMinimize;
-        private System.Windows.Forms.ToolStripMenuItem AskOnQuitToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem saveOnQuitToolStripMenuItem;
         private System.Windows.Forms.TabPage tabGen3;
         private System.Windows.Forms.Label labelHit3;
         private System.Windows.Forms.TextBox text_hit_3;
@@ -846,11 +797,8 @@
         private System.Windows.Forms.TabControl tabMenu;
         private System.Windows.Forms.TabPage tabCustom;
         private System.Windows.Forms.ImageList tabImages;
-        private System.Windows.Forms.ToolStripMenuItem alwaysOnTopToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem miniToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem optionsToolStripMenuItem;
         private System.Windows.Forms.PictureBox pictureMini;
-        private System.Windows.Forms.PictureBox pictureSettings;
+        private System.Windows.Forms.PictureBox picturePin;
         private System.Windows.Forms.Label labelELSec;
         private System.Windows.Forms.TextBox text_target_standard_5;
         private System.Windows.Forms.Label labelMode5;
@@ -859,6 +807,7 @@
         private System.Windows.Forms.ComboBox combo_mode_4;
         private System.Windows.Forms.Label labelMode3;
         private System.Windows.Forms.ComboBox combo_mode_3;
+        private System.Windows.Forms.PictureBox pictureSettings;
 
     }
 }

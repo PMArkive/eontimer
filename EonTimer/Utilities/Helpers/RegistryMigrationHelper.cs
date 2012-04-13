@@ -2,6 +2,7 @@
 using System.Drawing;
 using Microsoft.Win32;
 using Settings = EonTimer.Properties.Settings;
+using UserData = EonTimer.Properties.UserData;
 
 namespace EonTimer.Utilities.Helpers
 {
@@ -24,20 +25,20 @@ namespace EonTimer.Utilities.Helpers
                 if (key != null)
                 {
                     //copy calibration
-                    Settings.Default.Calibration_5_Basic = GetValue(key, "gen5cal", Settings.Default.Calibration_5_Basic);
-                    Settings.Default.Calibration_5_Entralink = GetValue(key, "hlcal", Settings.Default.Calibration_5_Entralink);
-                    Settings.Default.Calibration_4_Delay = GetValue(key, "gen4cd", Settings.Default.Calibration_4_Delay);
-                    Settings.Default.Calibration_4_Second = GetValue(key, "gen4cs", Settings.Default.Calibration_4_Second);
-                    Settings.Default.Calibration_3_Factor = GetValue(key, "gen3factor", Settings.Default.Calibration_3_Factor);
-                    Settings.Default.Calibration_3_Lag = GetValue(key, "gen3lag", Settings.Default.Calibration_3_Lag);
+                    UserData.Default.Calibration_5_Basic = GetValue(key, "gen5cal", UserData.Default.Calibration_5_Basic);
+                    UserData.Default.Calibration_5_Entralink = GetValue(key, "hlcal", UserData.Default.Calibration_5_Entralink);
+                    UserData.Default.Calibration_4_Delay = GetValue(key, "gen4cd", UserData.Default.Calibration_4_Delay);
+                    UserData.Default.Calibration_4_Second = GetValue(key, "gen4cs", UserData.Default.Calibration_4_Second);
+                    UserData.Default.Calibration_3_Factor = GetValue(key, "gen3factor", UserData.Default.Calibration_3_Factor);
+                    UserData.Default.Calibration_3_Lag = GetValue(key, "gen3lag", UserData.Default.Calibration_3_Lag);
 
                     //copy targets
-                    Settings.Default.Target_3_Initial = GetValue(key, "gen3init", Settings.Default.Target_3_Initial);
-                    Settings.Default.Target_3_Frame = GetValue(key, "gen3TFrame", Settings.Default.Target_3_Frame);
-                    Settings.Default.Target_4_Delay = GetValue(key, "gen4TDelay", Settings.Default.Target_4_Delay);
-                    Settings.Default.Target_4_Second = GetValue(key, "gen4TSec", Settings.Default.Target_4_Second);
-                    Settings.Default.Target_5_Delay = GetValue(key, "gen5TDelay", Settings.Default.Target_5_Delay);
-                    Settings.Default.Target_5_Second = GetValue(key, "gen5TSec", Settings.Default.Target_5_Second);
+                    UserData.Default.Target_3_Initial = GetValue(key, "gen3init", UserData.Default.Target_3_Initial);
+                    UserData.Default.Target_3_Frame = GetValue(key, "gen3TFrame", UserData.Default.Target_3_Frame);
+                    UserData.Default.Target_4_Delay = GetValue(key, "gen4TDelay", UserData.Default.Target_4_Delay);
+                    UserData.Default.Target_4_Second = GetValue(key, "gen4TSec", UserData.Default.Target_4_Second);
+                    UserData.Default.Target_5_Delay = GetValue(key, "gen5TDelay", UserData.Default.Target_5_Delay);
+                    UserData.Default.Target_5_Second = GetValue(key, "gen5TSec", UserData.Default.Target_5_Second);
 
                     //copy action settings
                     Settings.Default.Setting_Action_Color = Color.FromArgb((Int32)GetValue(key, "color", 0xff00ffff));

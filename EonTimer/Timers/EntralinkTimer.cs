@@ -9,7 +9,8 @@ namespace EonTimer.Timers
     {
         public Int32 SecondaryCalibration { get; set; }
 
-        public EntralinkTimer(Int32 calibration, Int32 secondaryCalibration, Int32 targetDelay, Int32 targetSecond, ConsoleType consoleType, Int32 minLength) : base(calibration, targetDelay, targetSecond, consoleType, minLength)
+        public EntralinkTimer(Int32 calibration, Int32 secondaryCalibration, Int32 targetDelay, Int32 targetSecond, Consoles.ConsoleType consoleType, Int32 minLength)
+            : base(calibration, targetDelay, targetSecond, consoleType, minLength)
         {
             SecondaryCalibration = secondaryCalibration;
 
@@ -19,7 +20,7 @@ namespace EonTimer.Timers
         }
 
         //overriden methods
-        protected TimeSpan GetStage(Int32 stage)
+        protected new TimeSpan GetStage(Int32 stage)
         {
             switch (stage)
             {

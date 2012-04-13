@@ -77,8 +77,15 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Actions\ICountdownAction.cs" />
+    <Compile Include="EonTimerSettings.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="EonTimerSettings.Designer.cs">
+      <DependentUpon>EonTimerSettings.cs</DependentUpon>
+    </Compile>
     <Compile Include="Handlers\ActionHandler.cs" />
     <Compile Include="Handlers\DisplayHandler.cs" />
+    <Compile Include="Settings.cs" />
     <Compile Include="Timers\DelayTimer.cs" />
     <Compile Include="Timers\EnhancedEntralinkTimer.cs" />
     <Compile Include="Timers\EntralinkTimer.cs" />
@@ -88,8 +95,12 @@
     <Compile Include="Timers\Stage.cs" />
     <Compile Include="Timers\VariableTargetFrameTimer.cs" />
     <Compile Include="Timers\ITimer.cs" />
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+      <DependentUpon>Settings.settings</DependentUpon>
+    </Compile>
     <Compile Include="Utilities\Helpers\CalibrationHelper.cs" />
-    <Compile Include="Utilities\Helpers\Extensions.cs" />
     <Compile Include="Utilities\Reference\Actions.cs" />
     <Compile Include="Utilities\Helpers\GUIHelper.cs" />
     <Compile Include="Actions\SoundAction.cs" />
@@ -107,6 +118,9 @@
     <Compile Include="Utilities\Reference\TimerConstants.cs" />
     <Compile Include="Utilities\TimerMonitor.cs" />
     <Compile Include="Actions\VisualAction.cs" />
+    <EmbeddedResource Include="EonTimerSettings.resx">
+      <DependentUpon>EonTimerSettings.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="MainTimer.resx">
       <DependentUpon>MainTimer.cs</DependentUpon>
     </EmbeddedResource>
@@ -121,15 +135,19 @@
       <DesignTime>True</DesignTime>
     </Compile>
     <None Include="app.config" />
+    <None Include="Properties\UserData.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>UserData.Designer.cs</LastGenOutput>
+    </None>
+    <Compile Include="Properties\UserData.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>UserData.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
-    <Compile Include="Properties\Settings.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DependentUpon>Settings.settings</DependentUpon>
-      <DesignTimeSharedInput>True</DesignTimeSharedInput>
-    </Compile>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Resources\beep.wav" />
@@ -148,6 +166,9 @@
     <Content Include="Resources\Images\Minimize_Hover.png" />
     <Content Include="Resources\Images\Mini_Active.png" />
     <Content Include="Resources\Images\Mini_Hover.png" />
+    <Content Include="Resources\Images\Pin.png" />
+    <Content Include="Resources\Images\Pin_Active.png" />
+    <Content Include="Resources\Images\Pin_Hover.png" />
     <Content Include="Resources\Images\Settings.png" />
     <Content Include="Resources\Images\Settings_Hover.png" />
     <Content Include="Resources\Images\TabGlac.jpg" />

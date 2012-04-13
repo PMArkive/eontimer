@@ -19,13 +19,16 @@ namespace EonTimer.Timers
                 targetFrame = value;
             }
         }
-        public ConsoleType ConsoleType { get; set; }
+        public Consoles.ConsoleType ConsoleType { get; set; }
         public List<TimeSpan> Stages { get; protected set; }
 
-        public VariableTargetFrameTimer(ConsoleType consoleType)
+        public VariableTargetFrameTimer(Consoles.ConsoleType consoleType)
         {
             ConsoleType = consoleType;
             TargetFrame = -1;
+
+            for (Int32 i = 0; GetStage(i) != TimerConstants.NULL_TIMESPAN; i++)
+                Stages.Add(GetStage(i));
         }
         
         public Int32 Calibrate(Int32 frameToHit)
@@ -47,7 +50,7 @@ namespace EonTimer.Timers
         {
             switch (stage)
             {
-                case 1:
+                case 0:
                     return CalculateTarget();
                 default:
                     return TimerConstants.NULL_TIMESPAN;

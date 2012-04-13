@@ -9,7 +9,7 @@ namespace EonTimer.Timers
     {
         public Int32 StandardTargetSecond { get; set; }
 
-        public EnhancedEntralinkTimer(Int32 calibration, Int32 secondaryCalibration, Int32 standardTargetSecond, Int32 targetDelay, Int32 entralinkTargetSecond, ConsoleType consoleType, Int32 minLength)
+        public EnhancedEntralinkTimer(Int32 calibration, Int32 secondaryCalibration, Int32 standardTargetSecond, Int32 targetDelay, Int32 entralinkTargetSecond, Consoles.ConsoleType consoleType, Int32 minLength)
             : base(calibration, secondaryCalibration, targetDelay, entralinkTargetSecond, consoleType, minLength)
         {
             StandardTargetSecond = standardTargetSecond;
@@ -19,7 +19,7 @@ namespace EonTimer.Timers
                 Stages.Add(GetStage(i));
         }
 
-        protected TimeSpan GetStage(Int32 stage)
+        protected new TimeSpan GetStage(Int32 stage)
         {
             switch (stage)
             {

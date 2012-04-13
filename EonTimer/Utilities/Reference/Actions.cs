@@ -4,9 +4,20 @@ using System.Text;
 
 namespace EonTimer.Utilities.Reference
 {
-    public enum ConsoleType { GBA, NDS, DSI, _3DS }
-    public enum ActionType { Audio, Visual, Dual, None }
-    public enum SoundType { Beep, Ding, Pop, Tick }
+    public static class Consoles
+    {
+        public static readonly String[] CONSOLE_STRINGS = { "GBA", "NDS", "DSI", "3DS" };
+        public enum ConsoleType { GBA, NDS, DSI, _3DS }
+    }
+
+    public static class Actions
+    {
+        public static readonly String[] TYPE_STRINGS = { "Audio", "Visual", "A/V", "None" };
+        public enum ActionType { Audio, Visual, Dual, None };
+
+        public static readonly String[] SOUND_STRINGS = { "Beep", "Ding", "Pop", "Tick" };
+        public enum SoundType { Beep, Ding, Pop, Tick };
+    }
     
     public static class GenerationModes
     {

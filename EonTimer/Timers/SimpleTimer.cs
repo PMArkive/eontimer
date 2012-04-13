@@ -9,11 +9,11 @@ namespace EonTimer.Timers
     {
         public Int32 Calibration { get; set; }
         public Int32 TargetSecond { get; set; }
-        public ConsoleType ConsoleType { get; set; }
+        public Consoles.ConsoleType ConsoleType { get; set; }
         public List<TimeSpan> Stages { get; protected set; }
         public Int32 MinimumLength { get; set; }
 
-        public SimpleTimer(Int32 calibration, Int32 targetSecond, ConsoleType consoleType, Int32 minLength)
+        public SimpleTimer(Int32 calibration, Int32 targetSecond, Consoles.ConsoleType consoleType, Int32 minLength)
         {
             Calibration = calibration;
             TargetSecond = targetSecond;

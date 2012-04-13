@@ -9,6 +9,7 @@ using EonTimer.Utilities.Reference;
 using EonTimer.Handlers;
 using EonTimer.Timers;
 using Settings = EonTimer.Properties.Settings;
+using UserData = EonTimer.Properties.UserData;
 using Resources = EonTimer.Properties.Resources;
 
 namespace EonTimer
@@ -18,7 +19,8 @@ namespace EonTimer
         private ITimerMonitor monitor;
         private DisplayHandler displayHandler;
         private ActionHandler actionHandler;
-
+        private Boolean eventLock;
+        private EonTimerSettings settingsForm;
         
 
         #region Setup
@@ -31,7 +33,7 @@ namespace EonTimer
             InitializeComponent();
             InitializeCustom();
             PrepareTimeMonitor();
-            AddSettings();
+            ShowSettingsInControls();
 
             CreateTimer();
         }
@@ -46,12 +48,17 @@ namespace EonTimer
             pictureClose.Image = closeButton.Basic;
             pictureMinimize.Image = minimizeButton.Basic;
             pictureMini.Image = Settings.Default.Setting_Form_Mini ? miniButton.Active : miniButton.Basic;
+            picturePin.Image = pinButton.Basic;
             pictureSettings.Image = settingsButton.Basic;
 
             //fill combo boxes
             combo_mode_5.Items.AddRange(GenerationModes.FIVE_STRINGS);
             combo_mode_4.Items.AddRange(GenerationModes.FOUR_STRINGS);
             combo_mode_3.Items.AddRange(GenerationModes.THREE_STRINGS);
+
+            settingsForm = new EonTimerSettings();
+            settingsForm.TransparencyHandler = new EventHandler(this.UpdateOpacity);
+            settingsForm.FormClosing += new FormClosingEventHandler(this.OnSettingsFormClosing);
         }
         private void PrepareTimeMonitor()
         {
@@ -86,15 +93,15 @@ namespace EonTimer
         {
             actionHandler.Actions.Clear();
 
-            switch ((ActionType)Settings.Default.Setting_Action_Mode)
+            switch ((Actions.ActionType)Settings.Default.Setting_Action_Mode)
             {
-                case ActionType.Audio:
+                case Actions.ActionType.Audio:
                     actionHandler.Actions.Add(GetSoundAction());
                     break;
-                case ActionType.Visual:
+                case Actions.ActionType.Visual:
                     actionHandler.Actions.Add(GetVisualAction());
                     break;
-                case ActionType.Dual:
+                case Actions.ActionType.Dual:
                     actionHandler.Actions.Add(GetSoundAction());
                     actionHandler.Actions.Add(GetVisualAction());
                     break;
@@ -102,15 +109,15 @@ namespace EonTimer
         }
         private SoundAction GetSoundAction()
         {
-            switch ((SoundType)Settings.Default.Setting_Action_Sound)
+            switch ((Actions.SoundType)Settings.Default.Setting_Action_Sound)
             {
-                case SoundType.Beep:
+                case Actions.SoundType.Beep:
                     return new SoundAction(Resources.beep);
-                case SoundType.Ding:
+                case Actions.SoundType.Ding:
                     return new SoundAction(Resources.ding);
-                case SoundType.Pop:
+                case Actions.SoundType.Pop:
                     return new SoundAction(Resources.pop);
-                case SoundType.Tick:
+                case Actions.SoundType.Tick:
                     return new SoundAction(Resources.tick);
                 default:
                     return new SoundAction();
@@ -120,53 +127,67 @@ namespace EonTimer
         {
             return new VisualAction(displayCurrent, Settings.Default.Setting_Action_Color);
         }
-        public void AddSettings()
+        public void ShowSettingsInControls()
         {
+            if (eventLock)
+                return;
+
+            eventLock = true;
+
             //gen 5 settings
-            combo_mode_5.SelectedIndex = Settings.Default.Mode_5;
-            text_calibration_5.Text = Settings.Default.Calibration_5_Basic.ToString();
-            text_target_delay_5.Text = Settings.Default.Target_5_Delay.ToString();
-            text_target_second_5.Text = Settings.Default.Target_5_Second.ToString();
-            text_calibration_entralink_5.Text = Settings.Default.Calibration_5_Entralink.ToString();
-            text_target_standard_5.Text = Settings.Default.Target_5_SecondaryEntralink.ToString();
+            combo_mode_5.SelectedIndex = UserData.Default.Mode_5;
+            text_calibration_5.Text = UserData.Default.Calibration_5_Basic.ToString();
+            text_target_delay_5.Text = UserData.Default.Target_5_Delay.ToString();
+            text_target_second_5.Text = UserData.Default.Target_5_Second.ToString();
+            text_calibration_entralink_5.Text = UserData.Default.Calibration_5_Entralink.ToString();
+            text_target_standard_5.Text = UserData.Default.Target_5_SecondaryEntralink.ToString();
 
             //gen 4 settings
-            combo_mode_4.SelectedIndex = Settings.Default.Mode_4;
-            text_calibration_delay_4.Text = Settings.Default.Calibration_4_Delay.ToString();
-            text_calibration_second_4.Text = Settings.Default.Calibration_4_Second.ToString();
-            text_target_delay_4.Text = Settings.Default.Target_4_Delay.ToString();
-            text_target_second_4.Text = Settings.Default.Target_4_Second.ToString();
+            combo_mode_4.SelectedIndex = UserData.Default.Mode_4;
+            text_calibration_delay_4.Text = UserData.Default.Calibration_4_Delay.ToString();
+            text_calibration_second_4.Text = UserData.Default.Calibration_4_Second.ToString();
+            text_target_delay_4.Text = UserData.Default.Target_4_Delay.ToString();
+            text_target_second_4.Text = UserData.Default.Target_4_Second.ToString();
 
             //gen 3 settings
-            combo_mode_3.SelectedIndex = Settings.Default.Mode_3;
-            text_calibration_lag_3.Text = Settings.Default.Calibration_3_Lag.ToString();
-            text_calibration_factor_3.Text = Settings.Default.Calibration_3_Factor.ToString();
-            text_target_initial_3.Text = Settings.Default.Target_3_Initial.ToString();
-            text_target_frame_3.Text = Settings.Default.Target_3_Frame.ToString();
+            combo_mode_3.SelectedIndex = UserData.Default.Mode_3;
+            text_calibration_lag_3.Text = UserData.Default.Calibration_3_Lag.ToString();
+            text_calibration_factor_3.Text = UserData.Default.Calibration_3_Factor.ToString();
+            text_target_initial_3.Text = UserData.Default.Target_3_Initial.ToString();
+            text_target_frame_3.Text = UserData.Default.Target_3_Frame.ToString();
+
+            eventLock = false;
         }
-        public void UpdateSettings()
+        public void UpdateSettingsFromControls()
         {
+            if (eventLock)
+                return;
+
+            eventLock = true;
+
             //gen 5 settings
-            Settings.Default.Mode_5 = combo_mode_5.SelectedIndex;
-            Settings.Default.Calibration_5_Basic = SetInt(text_calibration_5.Text, Settings.Default.Calibration_5_Basic);
-            Settings.Default.Target_5_Delay = SetInt(text_target_delay_5.Text, Settings.Default.Target_5_Delay);
-            Settings.Default.Target_5_Second = SetInt(text_target_second_5.Text, Settings.Default.Target_5_Second);
-            Settings.Default.Calibration_5_Entralink = SetInt(text_calibration_entralink_5.Text, Settings.Default.Calibration_5_Entralink);
-            Settings.Default.Target_5_SecondaryEntralink = SetInt(text_target_standard_5.Text, Settings.Default.Target_5_SecondaryEntralink);
+            UserData.Default.Mode_5 = combo_mode_5.SelectedIndex;
+            UserData.Default.Calibration_5_Basic = SetInt(text_calibration_5.Text, UserData.Default.Calibration_5_Basic);
+            UserData.Default.Target_5_Delay = SetInt(text_target_delay_5.Text, UserData.Default.Target_5_Delay);
+            UserData.Default.Target_5_Second = SetInt(text_target_second_5.Text, UserData.Default.Target_5_Second);
+            UserData.Default.Calibration_5_Entralink = SetInt(text_calibration_entralink_5.Text, UserData.Default.Calibration_5_Entralink);
+            UserData.Default.Target_5_SecondaryEntralink = SetInt(text_target_standard_5.Text, UserData.Default.Target_5_SecondaryEntralink);
 
             //gen 4 settings
-            Settings.Default.Mode_4 = combo_mode_4.SelectedIndex;
-            Settings.Default.Calibration_4_Delay = SetInt(text_calibration_delay_4.Text, Settings.Default.Calibration_4_Delay);
-            Settings.Default.Calibration_4_Second = SetInt(text_calibration_second_4.Text, Settings.Default.Calibration_4_Second);
-            Settings.Default.Target_4_Delay = SetInt(text_target_delay_4.Text, Settings.Default.Target_4_Delay);
-            Settings.Default.Target_4_Second = SetInt(text_target_second_4.Text, Settings.Default.Target_4_Second);
+            UserData.Default.Mode_4 = combo_mode_4.SelectedIndex;
+            UserData.Default.Calibration_4_Delay = SetInt(text_calibration_delay_4.Text, UserData.Default.Calibration_4_Delay);
+            UserData.Default.Calibration_4_Second = SetInt(text_calibration_second_4.Text, UserData.Default.Calibration_4_Second);
+            UserData.Default.Target_4_Delay = SetInt(text_target_delay_4.Text, UserData.Default.Target_4_Delay);
+            UserData.Default.Target_4_Second = SetInt(text_target_second_4.Text, UserData.Default.Target_4_Second);
 
             //gen 3 settings
-            Settings.Default.Mode_3 = combo_mode_3.SelectedIndex;
-            Settings.Default.Calibration_3_Lag = SetInt(text_calibration_lag_3.Text, Settings.Default.Calibration_3_Lag);
-            Settings.Default.Calibration_3_Factor = SetDecimal(text_calibration_factor_3.Text, Settings.Default.Calibration_3_Factor);
-            Settings.Default.Target_3_Initial = SetInt(text_target_initial_3.Text, Settings.Default.Target_3_Initial);
-            Settings.Default.Target_3_Frame = SetInt(text_target_frame_3.Text, Settings.Default.Target_3_Frame);
+            UserData.Default.Mode_3 = combo_mode_3.SelectedIndex;
+            UserData.Default.Calibration_3_Lag = SetInt(text_calibration_lag_3.Text, UserData.Default.Calibration_3_Lag);
+            UserData.Default.Calibration_3_Factor = SetDecimal(text_calibration_factor_3.Text, UserData.Default.Calibration_3_Factor);
+            UserData.Default.Target_3_Initial = SetInt(text_target_initial_3.Text, UserData.Default.Target_3_Initial);
+            UserData.Default.Target_3_Frame = SetInt(text_target_frame_3.Text, UserData.Default.Target_3_Frame);
+
+            eventLock = false;
         }
         private Int32 SetInt(String toParse, Int32 defaultResult)
         {
@@ -190,53 +211,54 @@ namespace EonTimer
             if (monitor.IsRunning())
                 return;
 
-            var type = (ConsoleType)Settings.Default.Setting_Timer_Console;
+            var type = (Consoles.ConsoleType)Settings.Default.Setting_Timer_Console;
             var min = Settings.Default.Setting_Timer_Minimum;
 
+            // Gen 5
             if (tabMenu.SelectedTab.Equals(tabGen5))
             {
-                var calibration = Settings.Default.Setting_Timer_PreciseCalibration ? Settings.Default.Calibration_5_Basic : CalibrationHelper.ConvertToMillis(Settings.Default.Calibration_5_Basic, type);
-                var elCal = Settings.Default.Setting_Timer_PreciseCalibration ? Settings.Default.Calibration_5_Entralink : CalibrationHelper.ConvertToMillis(Settings.Default.Calibration_5_Entralink, type);
+                var calibration = Settings.Default.Setting_Timer_PreciseCalibration ? UserData.Default.Calibration_5_Basic : CalibrationHelper.ConvertToMillis(UserData.Default.Calibration_5_Basic, type);
+                var elCal = Settings.Default.Setting_Timer_PreciseCalibration ? UserData.Default.Calibration_5_Entralink : CalibrationHelper.ConvertToMillis(UserData.Default.Calibration_5_Entralink, type);
 
-                switch (Settings.Default.Mode_5)
+                switch ((GenerationModes.Five)UserData.Default.Mode_5)
                 {
-                    case (Int32)GenerationModes.Five.Standard:
-                        monitor.Timer = new SimpleTimer(calibration, Settings.Default.Target_5_Second, type, min);
+                    case GenerationModes.Five.Standard:
+                        monitor.Timer = new SimpleTimer(calibration, UserData.Default.Target_5_Second, type, min);
                         break;
-                    case (Int32)GenerationModes.Five.CGear:
-                        monitor.Timer = new DelayTimer(calibration, Settings.Default.Target_5_Delay, Settings.Default.Target_5_Second, type, min);
+                    case GenerationModes.Five.CGear:
+                        monitor.Timer = new DelayTimer(calibration, UserData.Default.Target_5_Delay, UserData.Default.Target_5_Second, type, min);
                         break;
-                    case (Int32)GenerationModes.Five.Entralink:
-                        monitor.Timer = new EntralinkTimer(calibration, elCal, Settings.Default.Target_5_Delay, Settings.Default.Target_5_Second, type, min);
+                    case GenerationModes.Five.Entralink:
+                        monitor.Timer = new EntralinkTimer(calibration, elCal, UserData.Default.Target_5_Delay, UserData.Default.Target_5_Second, type, min);
                         break;
-                    case (Int32)GenerationModes.Five.EntralinkPlus:
-                        monitor.Timer = new EnhancedEntralinkTimer(calibration, elCal, Settings.Default.Target_5_SecondaryEntralink, Settings.Default.Target_5_Delay, Settings.Default.Target_5_Second, type, min);
+                    case GenerationModes.Five.EntralinkPlus:
+                        monitor.Timer = new EnhancedEntralinkTimer(calibration, elCal, UserData.Default.Target_5_SecondaryEntralink, UserData.Default.Target_5_Delay, UserData.Default.Target_5_Second, type, min);
                         break;
                     default:
                         monitor.Timer = new NullTimer();
                         break;
                 }
-            }
+            } // Gen 4
             else if (tabMenu.SelectedTab.Equals(tabGen4))
             {
-                switch (Settings.Default.Mode_4)
+                switch ((GenerationModes.Four)UserData.Default.Mode_4)
                 {
-                    case (Int32)GenerationModes.Four.Standard:
-                        monitor.Timer = new DelayTimer(CalibrationHelper.CreateCalibration(Settings.Default.Calibration_4_Delay, Settings.Default.Calibration_4_Second, type), Settings.Default.Target_4_Delay, Settings.Default.Target_4_Second, type, min);
+                    case GenerationModes.Four.Standard:
+                        monitor.Timer = new DelayTimer(CalibrationHelper.CreateCalibration(UserData.Default.Calibration_4_Delay, UserData.Default.Calibration_4_Second, type), UserData.Default.Target_4_Delay, UserData.Default.Target_4_Second, type, min);
                         break;    
                     default:
                         monitor.Timer = new NullTimer();
                         break;
                 }
-            }
+            } // Gen 3
             else if (tabMenu.SelectedTab.Equals(tabGen3))
             {
-                switch(Settings.Default.Mode_3)
+                switch ((GenerationModes.Three)UserData.Default.Mode_3)
                 {
-                    case (Int32)GenerationModes.Three.Standard:
-                        monitor.Timer = new FrameTimer(Settings.Default.Calibration_3_Lag, Settings.Default.Target_3_Initial, Settings.Default.Target_3_Frame, type);
+                    case GenerationModes.Three.Standard:
+                        monitor.Timer = new FrameTimer(UserData.Default.Calibration_3_Lag, UserData.Default.Target_3_Initial, UserData.Default.Target_3_Frame, type);
                         break;
-                    case (Int32) GenerationModes.Three.VariableTarget:
+                    case GenerationModes.Three.VariableTarget:
                         monitor.Timer = new VariableTargetFrameTimer(type);
                         break;
                     default:
@@ -245,12 +267,17 @@ namespace EonTimer
                 }
             }
         }
-        #endregion
 
+        private void ApplyOpacity()
+        {
+            this.Opacity = Settings.Default.Setting_Form_Opacity / 100.0;
+            
+        }
         private void Save()
         {
-            Settings.Default.Save();
+            UserData.Default.Save();
         }
+        #endregion
 
         #region Form Change Events
         /// <summary>Makes sure keypresses are numeric</summary>
@@ -260,22 +287,30 @@ namespace EonTimer
                 e.Handled = true;
         }
         /// <summary>Triggered when modes change</summary>
-        private void ModeChanged(object sender, EventArgs e)
+        private void UpdateTimer(object sender, EventArgs e)
         {
-            UpdateSettings();
+            UpdateSettingsFromControls();
             CreateTimer();
         }
-        /// <summary>Triggered when </summary>
-        private void InputTextChanged(object sender, EventArgs e)
+        private void UpdateOpacity(object sender, EventArgs e)
         {
-
+            ApplyOpacity();
         }
         #endregion
+
+        private void Start(object sender, EventArgs e)
+        {
+            if (!monitor.IsRunning())
+                monitor.Run();
+            else
+                monitor.Cancel();
+        }
 
         #region Form Control Events
         /// <summary>Saves Data</summary>
         private void Save(object sender, EventArgs e)
         {
+            Save();
         }
         /// <summary>Closes the Program</summary>
         private void Close(object sender, EventArgs e)
@@ -325,9 +360,16 @@ namespace EonTimer
                 pictureMini.Image = miniButton.Basic;
             }
         }
+        /// <summary>Toggles pin to top</summary>
+        private void Pin(object sender, EventArgs e)
+        {
+            Settings.Default.Setting_Form_OnTop = !Settings.Default.Setting_Form_OnTop;
+            this.TopMost = Settings.Default.Setting_Form_OnTop;
+        }
         /// <summary>Opens settings</summary>
         private void OpenSettings(object sender, EventArgs e)
         {
+            settingsForm.Show();
         }
         #endregion
 
@@ -349,6 +391,14 @@ namespace EonTimer
                     e.Cancel = true;
             }
         }
+        private void OnSettingsFormClosing(object sender, FormClosingEventArgs e)
+        {
+            settingsForm.Hide();
+            Settings.Default.Reload();
+            ApplyOpacity();
+            CreateTimer();
+            e.Cancel = true;
+        }
         #endregion
 
         #region Image Button Support
@@ -361,24 +411,30 @@ namespace EonTimer
         }
         EonButton minimizeButton = new EonButton
         {
-            Basic = EonTimer.Properties.Resources.Minimize,
-            Hover = EonTimer.Properties.Resources.Minimize_Hover
+            Basic = Resources.Minimize,
+            Hover = Resources.Minimize_Hover
         };
         EonButton closeButton = new EonButton
         {
-            Basic = EonTimer.Properties.Resources.Close,
-            Hover = EonTimer.Properties.Resources.Close_Hover
+            Basic = Resources.Close,
+            Hover = Resources.Close_Hover
         };
         EonButton settingsButton = new EonButton
         {
-            Basic = EonTimer.Properties.Resources.Settings,
-            Hover = EonTimer.Properties.Resources.Settings_Hover
+            Basic = Resources.Settings,
+            Hover = Resources.Settings_Hover
         };
         EonButton miniButton = new EonButton
         {
-            Basic = EonTimer.Properties.Resources.Mini,
-            Hover = EonTimer.Properties.Resources.Mini_Hover,
-            Active = EonTimer.Properties.Resources.Mini_Active
+            Basic = Resources.Mini,
+            Hover = Resources.Mini_Hover,
+            Active = Resources.Mini_Active
+        };
+        EonButton pinButton = new EonButton
+        {
+            Basic = Resources.Pin,
+            Hover = Resources.Pin_Hover,
+            Active = Resources.Pin_Active
         };
 
         //Close Button
@@ -401,6 +457,7 @@ namespace EonTimer
             pictureMinimize.Image = minimizeButton.Basic;
         }
 
+        //Mini Button
         private void Mini_MouseEnter(object sender, EventArgs e)
         {
             pictureMini.Image = miniButton.Hover;
@@ -410,6 +467,17 @@ namespace EonTimer
             pictureMini.Image = Settings.Default.Setting_Form_Mini ? miniButton.Active : miniButton.Basic;
         }
 
+        //Pin Button
+        private void Pin_MouseEnter(object sender, EventArgs e)
+        {
+            picturePin.Image = pinButton.Hover;
+        }
+        private void Pin_MouseLeave(object sender, EventArgs e)
+        {
+            picturePin.Image = Settings.Default.Setting_Form_OnTop ? pinButton.Active : pinButton.Basic;
+        }
+
+        //Settings Button
         private void Settings_MouseEnter(object sender, EventArgs e)
         {
             pictureSettings.Image = settingsButton.Hover;

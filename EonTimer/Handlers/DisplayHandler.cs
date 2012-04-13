@@ -48,12 +48,22 @@ namespace EonTimer.Handlers
                 }
             }
 
+            foreach (Control control in StatusDisplays)
+                GUIHelper.SetControlText(control, "Start");
             foreach (Control control in MinutesBeforeDisplays)
                 GUIHelper.SetControlText(control, timeMonitor.Timer.GetMinutesBeforeTarget().ToString());
         }
+        public void NotifyStart()
+        {
+            foreach (Control control in StatusDisplays)
+                GUIHelper.SetControlText(control, "Cancel");
+        }
         public void NotifyStageStart(Int32 stage)
         {
-            TimeSpan ts = timeMonitor.Timer.Stages[stage];
+            TimeSpan ts = TimerConstants.NULL_TIMESPAN;
+
+            if (timeMonitor.Timer.Stages.Count > stage + 1)
+                ts = timeMonitor.Timer.Stages[stage + 1];
 
             foreach (Control control in NextStageDisplays)
                 GUIHelper.SetControlText(control, FormatTime(ts));
@@ -69,7 +79,6 @@ namespace EonTimer.Handlers
         }
 
         //not implemented interface
-        public void NotifyStart() { }
         public void NotifyStageEnd(Int32 stage) { }
 
         private String FormatTime(TimeSpan ts)

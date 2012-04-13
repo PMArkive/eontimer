@@ -11,17 +11,17 @@ namespace EonTimer.Utilities.Helpers
         /// <param name="delays">Delays to be converted</param>
         /// <param name="type">The Console Type</param>
         /// <returns>Milliseconds</returns>
-        public static Int32 ConvertToMillis(Int32 delays, ConsoleType type)
+        public static Int32 ConvertToMillis(Int32 delays, Consoles.ConsoleType type)
         {
             switch (type)
             {
-                case ConsoleType.GBA:
+                case Consoles.ConsoleType.GBA:
                     return (Int32)(delays * TimerConstants.FRAMERATE_GBA);
-                case ConsoleType.NDS:
+                case Consoles.ConsoleType.NDS:
                     return (Int32)(delays * TimerConstants.FRAMERATE_NDS);
-                case ConsoleType.DSI:
+                case Consoles.ConsoleType.DSI:
                     return (Int32)(delays * TimerConstants.FRAMERATE_DSI);
-                case ConsoleType._3DS:
+                case Consoles.ConsoleType._3DS:
                     return (Int32)(delays * TimerConstants.FRAMERATE_3DS);
                 default:
                     return 0;
@@ -33,23 +33,23 @@ namespace EonTimer.Utilities.Helpers
         /// <param name="millis">Milliseconds to be converted</param>
         /// <param name="type">The console type</param>
         /// <returns>Delays</returns>
-        public static Int32 ConvertToDelays(Int32 millis, ConsoleType type)
+        public static Int32 ConvertToDelays(Int32 millis, Consoles.ConsoleType type)
         {
             switch (type)
             {
-                case ConsoleType.GBA:
+                case Consoles.ConsoleType.GBA:
                     return (Int32)(millis / TimerConstants.FRAMERATE_GBA);
-                case ConsoleType.NDS:
+                case Consoles.ConsoleType.NDS:
                     return (Int32)(millis / TimerConstants.FRAMERATE_NDS);
-                case ConsoleType.DSI:
+                case Consoles.ConsoleType.DSI:
                     return (Int32)(millis / TimerConstants.FRAMERATE_DSI);
-                case ConsoleType._3DS:
+                case Consoles.ConsoleType._3DS:
                     return (Int32)(millis / TimerConstants.FRAMERATE_3DS);
                 default:
                     return 0;
             }
         }
-        public static Int32 CreateCalibration(Int32 delay, Int32 second, ConsoleType type)
+        public static Int32 CreateCalibration(Int32 delay, Int32 second, Consoles.ConsoleType type)
         {
             var delayCalibration = delay - ConvertToDelays(second * 1000, type);
             return ConvertToMillis(delayCalibration, type);

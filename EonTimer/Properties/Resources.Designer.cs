@@ -135,6 +135,27 @@ namespace EonTimer.Properties {
             }
         }
         
+        internal static System.Drawing.Bitmap Pin {
+            get {
+                object obj = ResourceManager.GetObject("Pin", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap Pin_Active {
+            get {
+                object obj = ResourceManager.GetObject("Pin_Active", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap Pin_Hover {
+            get {
+                object obj = ResourceManager.GetObject("Pin_Hover", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
         internal static System.IO.UnmanagedMemoryStream pop {
             get {
                 return ResourceManager.GetStream("pop", resourceCulture);

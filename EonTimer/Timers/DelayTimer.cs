@@ -9,16 +9,16 @@ namespace EonTimer.Timers
     {
         public Int32 TargetDelay { get; set; }
 
-        public DelayTimer(Int32 calibration, Int32 targetDelay, Int32 targetSecond, ConsoleType consoleType, Int32 minLength) : base(calibration, targetSecond, consoleType, minLength)
+        public DelayTimer(Int32 calibration, Int32 targetDelay, Int32 targetSecond, Consoles.ConsoleType consoleType, Int32 minLength) : base(calibration, targetSecond, consoleType, minLength)
         {
-            
+            TargetDelay = targetDelay;
 
             Stages = new List<TimeSpan>();
             for (Int32 i = 0; GetStage(i) != TimerConstants.NULL_TIMESPAN; i++)
                 Stages.Add(GetStage(i));
         }
 
-        public Int32 Calibrate(Int32 result)
+        public new Int32 Calibrate(Int32 result)
         {
             //convert to millis
             result = CalibrationHelper.ConvertToMillis(result, ConsoleType);
@@ -41,7 +41,7 @@ namespace EonTimer.Timers
                 case 0:
                     return new TimeSpan(0, 0, 0, 0, (Int32)base.GetStage(0).TotalMilliseconds - CalibrationHelper.ConvertToMillis(TargetDelay, ConsoleType));
                 case 1:
-                    return new TimeSpan(0, 0, 0, 0, (CalibrationHelper.ConvertToMillis(TargetDelay, ConsoleType) + Calibration));
+                    return new TimeSpan(0, 0, 0, 0, (CalibrationHelper.ConvertToMillis(TargetDelay, ConsoleType) - Calibration));
                 default:
                     return TimerConstants.NULL_TIMESPAN;
             }
