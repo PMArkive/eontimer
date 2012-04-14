@@ -1,5 +1,5 @@
 ﻿<?xml version='1.0' encoding='utf-8'?>
-<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="EonTimer.Properties" GeneratedClassName="Settings">
+<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="EonTimer.Properties" GeneratedClassName="UserData">
   <Profiles />
   <Settings>
     <Setting Name="Calibration_5_Basic" Type="System.Int32" Scope="User">
@@ -21,7 +21,7 @@
       <Value Profile="(Default)">1</Value>
     </Setting>
     <Setting Name="Target_3_Initial" Type="System.Int32" Scope="User">
-      <Value Profile="(Default)">5</Value>
+      <Value Profile="(Default)">5000</Value>
     </Setting>
     <Setting Name="Target_3_Frame" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">1000</Value>

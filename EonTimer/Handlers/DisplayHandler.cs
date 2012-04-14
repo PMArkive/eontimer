@@ -41,22 +41,27 @@ namespace EonTimer.Handlers
                         GUIHelper.SetControlText(control, FormatTime(timeMonitor.Timer.Stages[0]));
                 }
 
-                if(timeMonitor.Timer.Stages.Count > 1)
+                if (timeMonitor.Timer.Stages.Count > 1)
                 {
                     foreach (Control control in NextStageDisplays)
                         GUIHelper.SetControlText(control, FormatTime(timeMonitor.Timer.Stages[1]));
                 }
+                else
+                {
+                    foreach (Control control in NextStageDisplays)
+                        GUIHelper.SetControlText(control, FormatTime(TimerConstants.NULL_TIMESPAN));
+                }
             }
 
             foreach (Control control in StatusDisplays)
-                GUIHelper.SetControlText(control, "Start");
+                GUIHelper.SetControlText(control, "Stopped");
             foreach (Control control in MinutesBeforeDisplays)
                 GUIHelper.SetControlText(control, timeMonitor.Timer.GetMinutesBeforeTarget().ToString());
         }
         public void NotifyStart()
         {
             foreach (Control control in StatusDisplays)
-                GUIHelper.SetControlText(control, "Cancel");
+                GUIHelper.SetControlText(control, "Running");
         }
         public void NotifyStageStart(Int32 stage)
         {

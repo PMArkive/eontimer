@@ -8,6 +8,7 @@ namespace EonTimer.Utilities
     public interface ITimerMonitor
     {
         List<ITimerEventHandler> Handlers { get; }
+        List<ITimeoutHandler> TimeoutHandlers { get; }
         ITimer Timer { get; set; }
 
         Boolean IsRunning();
@@ -15,6 +16,7 @@ namespace EonTimer.Utilities
         void Cancel();
 
         void AddHandler(ITimerEventHandler handler);
+        void AddHandler(ITimeoutHandler handler);
         void ClearHandlers();
     }
 }

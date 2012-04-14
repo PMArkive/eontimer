@@ -90,9 +90,9 @@
     <Compile Include="Timers\EnhancedEntralinkTimer.cs" />
     <Compile Include="Timers\EntralinkTimer.cs" />
     <Compile Include="Timers\FrameTimer.cs" />
+    <Compile Include="Timers\IVariableTimer.cs" />
     <Compile Include="Timers\NullTimer.cs" />
     <Compile Include="Timers\SimpleTimer.cs" />
-    <Compile Include="Timers\Stage.cs" />
     <Compile Include="Timers\VariableTargetFrameTimer.cs" />
     <Compile Include="Timers\ITimer.cs" />
     <Compile Include="Properties\Settings.Designer.cs">
@@ -101,6 +101,7 @@
       <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
     <Compile Include="Utilities\Helpers\CalibrationHelper.cs" />
+    <Compile Include="Utilities\ITimeoutHandler.cs" />
     <Compile Include="Utilities\Reference\Actions.cs" />
     <Compile Include="Utilities\Helpers\GUIHelper.cs" />
     <Compile Include="Actions\SoundAction.cs" />

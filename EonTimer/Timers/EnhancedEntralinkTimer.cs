@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 using EonTimer.Utilities.Reference;
 
 namespace EonTimer.Timers
@@ -19,7 +18,7 @@ namespace EonTimer.Timers
                 Stages.Add(GetStage(i));
         }
 
-        protected new TimeSpan GetStage(Int32 stage)
+        protected override TimeSpan GetStage(Int32 stage)
         {
             switch (stage)
             {

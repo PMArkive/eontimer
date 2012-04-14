@@ -36,5 +36,17 @@ namespace EonTimer.Utilities.Helpers
             else
                 control.BackColor = color;
         }
+        /// <summary>
+        /// Changes foreground color of a control
+        /// </summary>
+        /// <param name="control">Control to change</param>
+        /// <param name="color">Color to set foreground</param>
+        public static void SetControlForeColor(Control control, Color color)
+        {
+            if (control.InvokeRequired)
+                control.Invoke(new SetControlColorDelegate(SetControlForeColor), new Object[] { control, color });
+            else
+                control.ForeColor = color;
+        }
     }
 }

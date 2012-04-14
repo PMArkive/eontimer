@@ -13,6 +13,7 @@ namespace EonTimer.Utilities
     {
         //public properties
         public List<ITimerEventHandler> Handlers { get { return handlers; } }
+        public List<ITimeoutHandler> TimeoutHandlers { get { return timeoutHandlers; } }
         public ITimer Timer
         {
             get { return timer; }
@@ -29,10 +30,12 @@ namespace EonTimer.Utilities
         private Thread thread;
         private ITimer timer;
         private List<ITimerEventHandler> handlers;
+        private List<ITimeoutHandler> timeoutHandlers;
 
         public TimeMonitor(ITimer timer, Int32 sleepInterval = 8)
         {
             handlers = new List<ITimerEventHandler>();
+            timeoutHandlers = new List<ITimeoutHandler>();
             Timer = timer;
             SleepInterval = sleepInterval;
         }
@@ -53,14 +56,20 @@ namespace EonTimer.Utilities
             for(Int32 stage = 0; stage < Timer.Stages.Count; stage++)
                 RunStage(stage);
 
+
+            if (Timer is IVariableTimer)
+                (Timer as IVariableTimer).Reset();
             foreach (ITimerEventHandler h in Handlers)
                 h.NotifyEnd();
+
+            foreach (var handler in TimeoutHandlers)
+                handler.NotifyTimeout();
         }
         private void RunStage(Int32 stage)
         {
             DateTime start = DateTime.Now;
 
-            PauseWhileNull(stage);
+            PauseWhileInfinite(stage);
 
             //stage length is committed at this point
             DateTime endTime = start.Add(Timer.Stages[stage]);
@@ -95,6 +104,8 @@ namespace EonTimer.Utilities
 
             foreach (var handler in Handlers)
                 handler.NotifyEnd();
+            foreach (var handler in TimeoutHandlers)
+                handler.NotifyTimeout();
         }
         public Boolean IsRunning()
         {
@@ -106,15 +117,20 @@ namespace EonTimer.Utilities
             handler.Register(this);
             handlers.Add(handler);
         }
+        public void AddHandler(ITimeoutHandler handler)
+        {
+            timeoutHandlers.Add(handler);
+        }
         public void ClearHandlers()
         {
             handlers.Clear();
+            timeoutHandlers.Clear();
         }
 
         //Acts as a pause for variable-target timers
-        private void PauseWhileNull(Int32 stage)
+        private void PauseWhileInfinite(Int32 stage)
         {
-            while (Timer.Stages[stage] == TimerConstants.NULL_TIMESPAN)
+            while (Timer.Stages[stage] == TimerConstants.INFINITE_TIMESPAN)
                 Thread.Sleep(SleepInterval);
         }
     }

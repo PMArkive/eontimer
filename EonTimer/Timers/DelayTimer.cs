@@ -18,7 +18,7 @@ namespace EonTimer.Timers
                 Stages.Add(GetStage(i));
         }
 
-        public new Int32 Calibrate(Int32 result)
+        public override Int32 Calibrate(Int32 result)
         {
             //convert to millis
             result = CalibrationHelper.ConvertToMillis(result, ConsoleType);
@@ -31,7 +31,7 @@ namespace EonTimer.Timers
             else
                 offset *= (Int32)TimerConstants.UPDATE_FACTOR;
 
-            return offset;
+            return Calibration + offset;
         }
 
         protected override TimeSpan GetStage(Int32 stage)
@@ -39,7 +39,10 @@ namespace EonTimer.Timers
             switch (stage)
             {
                 case 0:
-                    return new TimeSpan(0, 0, 0, 0, (Int32)base.GetStage(0).TotalMilliseconds - CalibrationHelper.ConvertToMillis(TargetDelay, ConsoleType));
+                    var ts = new TimeSpan(0, 0, 0, 0, (Int32)base.GetStage(0).TotalMilliseconds - CalibrationHelper.ConvertToMillis(TargetDelay, ConsoleType));
+                    while ((Int32)ts.TotalMilliseconds < MinimumLength)
+                        ts = ts.Add(new TimeSpan(0, 1, 0));
+                    return ts;
                 case 1:
                     return new TimeSpan(0, 0, 0, 0, (CalibrationHelper.ConvertToMillis(TargetDelay, ConsoleType) - Calibration));
                 default:

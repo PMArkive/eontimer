@@ -97,7 +97,7 @@ namespace EonTimer.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("5")]
+        [global::System.Configuration.DefaultSettingValueAttribute("5000")]
         public int Target_3_Initial {
             get {
                 return ((int)(this["Target_3_Initial"]));

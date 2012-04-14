@@ -14,7 +14,7 @@ using Resources = EonTimer.Properties.Resources;
 
 namespace EonTimer
 {
-    public partial class MainTimer : Form
+    public partial class MainTimer : Form, ITimeoutHandler
     {
         private ITimerMonitor monitor;
         private DisplayHandler displayHandler;
@@ -34,8 +34,13 @@ namespace EonTimer
             InitializeCustom();
             PrepareTimeMonitor();
             ShowSettingsInControls();
+            ApplyOpacity();
+            HideGUIElements();
 
             CreateTimer();
+            SetMini(Settings.Default.Setting_Form_Mini);
+            SetPin(Settings.Default.Setting_Form_OnTop);
+
         }
         private void InitializeCustom()
         {
@@ -68,7 +73,6 @@ namespace EonTimer
             displayHandler = new DisplayHandler();
             displayHandler.CurrentDisplays.Add(displayCurrent);
             displayHandler.NextStageDisplays.Add(displayNextStage);
-            displayHandler.StatusDisplays.Add(buttonStart);
             displayHandler.MinutesBeforeDisplays.Add(displayMinsBefore);
 
             //create ActionHandler
@@ -88,6 +92,7 @@ namespace EonTimer
             monitor.ClearHandlers();
             monitor.AddHandler(displayHandler);
             monitor.AddHandler(actionHandler);
+            monitor.AddHandler(this);
         }
         private void CreateCountdownActions()
         {
@@ -290,23 +295,130 @@ namespace EonTimer
         private void UpdateTimer(object sender, EventArgs e)
         {
             UpdateSettingsFromControls();
+            HideGUIElements();
             CreateTimer();
         }
+        /// <summary>Sets opacity</summary>
         private void UpdateOpacity(object sender, EventArgs e)
         {
             ApplyOpacity();
+        }
+        /// <summary>Hides unused elements</summary>
+        private void HideGUIElements()
+        {
+            labelDelayHit5.Text = "Delay Hit";
+
+            switch ((GenerationModes.Five)UserData.Default.Mode_5)
+            {
+                case GenerationModes.Five.Standard:
+                    Hide(new Control[] { label_target_delay_5, text_target_delay_5, label_calibration_entralink_5, text_calibration_entralink_5, label_target_entralink_second, text_target_standard_5 });
+                    labelDelayHit5.Text = "Second Hit";
+                    break;
+                case GenerationModes.Five.CGear:
+                    Hide(new Control[] { label_calibration_entralink_5, text_calibration_entralink_5, label_target_entralink_second, text_target_standard_5 });
+                    Show(new Control[] { label_target_delay_5, text_target_delay_5 });
+                    break;
+                case GenerationModes.Five.Entralink:
+                    Hide(new Control[] { label_target_entralink_second, text_target_standard_5 });
+                    Show(new Control[] { label_target_delay_5, text_target_delay_5, label_calibration_entralink_5, text_calibration_entralink_5 });
+                    break;
+                case GenerationModes.Five.EntralinkPlus:
+                    Show(new Control[] { label_target_delay_5, text_target_delay_5, label_calibration_entralink_5, text_calibration_entralink_5, label_target_entralink_second, text_target_standard_5 });
+                    break;
+            }
+            switch ((GenerationModes.Three)UserData.Default.Mode_3)
+            {
+                case GenerationModes.Three.Standard:
+                    Show(new Control[] { text_hit_3, labelHit3, label_calibration_lag_3, text_calibration_lag_3 });
+                    break;
+                case GenerationModes.Three.VariableTarget:
+                    Hide(new Control[] { text_hit_3, labelHit3, label_calibration_lag_3, text_calibration_lag_3 });
+                    break;
+            }
+        }
+        private void Hide(Control[] ctrls)
+        {
+            foreach (var ctrl in ctrls)
+                ctrl.Visible = false;
+        }
+        private void Show(Control[] ctrls)
+        {
+            foreach (var ctrl in ctrls)
+                ctrl.Visible = true;
         }
         #endregion
 
         private void Start(object sender, EventArgs e)
         {
             if (!monitor.IsRunning())
+            {
+                buttonStart.Text = "Cancel";
+                CreateTimer();
                 monitor.Run();
+            }
             else
+            {
                 monitor.Cancel();
+                CreateTimer();
+            }
         }
 
         #region Form Control Events
+        /// <summary>Updates Calibration</summary>
+        private void UpdateCalibration(object sender, EventArgs e)
+        {
+            Int32 temp = 0;
+
+            if(tabMenu.SelectedTab.Equals(tabGen5))
+            {
+                switch((GenerationModes.Five)UserData.Default.Mode_5)
+                {
+                    case GenerationModes.Five.Standard:
+                    case GenerationModes.Five.CGear:
+                        temp = monitor.Timer.Calibrate(SetInt(text_hit_5.Text, UserData.Default.Calibration_5_Basic));
+                        UserData.Default.Calibration_5_Basic = Settings.Default.Setting_Timer_PreciseCalibration ? temp : CalibrationHelper.ConvertToDelays(temp, (Consoles.ConsoleType)Settings.Default.Setting_Timer_Console);
+                        break;
+                    case GenerationModes.Five.Entralink:
+                    case GenerationModes.Five.EntralinkPlus:
+                        temp = monitor.Timer.Calibrate(SetInt(text_hit_5.Text, UserData.Default.Calibration_5_Entralink));
+                        UserData.Default.Calibration_5_Entralink = Settings.Default.Setting_Timer_PreciseCalibration ? temp : CalibrationHelper.ConvertToDelays(temp, (Consoles.ConsoleType)Settings.Default.Setting_Timer_Console);
+                        break;
+                }
+
+                text_hit_5.Text = "";
+            }
+            else if (tabMenu.SelectedTab.Equals(tabGen4))
+            {
+                switch ((GenerationModes.Four)UserData.Default.Mode_4)
+                {
+                    case GenerationModes.Four.Standard:
+                        temp = monitor.Timer.Calibrate(SetInt(text_hit_4.Text, UserData.Default.Calibration_4_Delay)) + (UserData.Default.Calibration_4_Second * 1000);
+                        UserData.Default.Calibration_4_Delay = Settings.Default.Setting_Timer_PreciseCalibration ? temp : CalibrationHelper.ConvertToDelays(temp, (Consoles.ConsoleType)Settings.Default.Setting_Timer_Console);
+                        break;
+                }
+
+                text_hit_4.Text = "";
+            }
+            else if (tabMenu.SelectedTab.Equals(tabGen3))
+            {
+                switch ((GenerationModes.Three)UserData.Default.Mode_3)
+                {
+                    case GenerationModes.Three.Standard:
+                        temp = monitor.Timer.Calibrate(SetInt(text_hit_3.Text, UserData.Default.Calibration_3_Lag));
+                        UserData.Default.Calibration_3_Lag = temp;
+                        break;
+                    case GenerationModes.Three.VariableTarget:
+                        temp = SetInt(text_target_frame_3.Text, 10000);
+                        if (monitor.Timer is VariableTargetFrameTimer)
+                            ((VariableTargetFrameTimer)monitor.Timer).TargetFrame = temp;
+                        break;
+                }
+
+                text_hit_3.Text = "";
+            }
+
+            ShowSettingsInControls();
+        }
         /// <summary>Saves Data</summary>
         private void Save(object sender, EventArgs e)
         {
@@ -338,14 +450,17 @@ namespace EonTimer
         private void Mini(object sender, EventArgs e)
         {
             Settings.Default.Setting_Form_Mini = !Settings.Default.Setting_Form_Mini;
-
+            SetMini(Settings.Default.Setting_Form_Mini);
+        }
+        private void SetMini(Boolean mini)
+        {
             //hide interface
-            tabMenu.Visible = !Settings.Default.Setting_Form_Mini;
-            buttonUpdate.Visible = !Settings.Default.Setting_Form_Mini;
-            buttonSave.Visible = !Settings.Default.Setting_Form_Mini;
+            tabMenu.Visible = !mini;
+            buttonUpdate.Visible = !mini;
+            buttonSave.Visible = !mini;
 
             //form changes
-            if (Settings.Default.Setting_Form_Mini)
+            if (mini)
             {
                 this.BackgroundImage = EonTimer.Properties.Resources.glaceonmini;
                 this.Height = 148;
@@ -364,7 +479,12 @@ namespace EonTimer
         private void Pin(object sender, EventArgs e)
         {
             Settings.Default.Setting_Form_OnTop = !Settings.Default.Setting_Form_OnTop;
+            SetPin(Settings.Default.Setting_Form_OnTop);
+        }
+        private void SetPin(Boolean pinned)
+        {
             this.TopMost = Settings.Default.Setting_Form_OnTop;
+            picturePin.Image = pinButton.Active;
         }
         /// <summary>Opens settings</summary>
         private void OpenSettings(object sender, EventArgs e)
@@ -396,6 +516,7 @@ namespace EonTimer
             settingsForm.Hide();
             Settings.Default.Reload();
             ApplyOpacity();
+            CreateCountdownActions();
             CreateTimer();
             e.Cancel = true;
         }
@@ -522,5 +643,12 @@ namespace EonTimer
         }
 
         #endregion
+
+        //TODO:This is crap.
+        public void NotifyTimeout()
+        {
+            GUIHelper.SetControlText(buttonStart, "Start");
+            CreateTimer();
+        }
     }
 }

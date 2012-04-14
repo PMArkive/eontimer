@@ -25,21 +25,21 @@ namespace EonTimer.Timers
                 Stages.Add(GetStage(i));
         }
 
-        public Int32 Calibrate(Int32 result)
+        public virtual Int32 Calibrate(Int32 result)
         {
             if (result == TargetSecond)
-                return 0;
+                return Calibration;
             else if (result > TargetSecond)
-                return ((TargetSecond - result) * 1000 + 500);
+                return (Calibration + (TargetSecond - result) * 1000 + 500);
             else
-                return ((TargetSecond - result) * 1000 - 500);
+                return (Calibration + (TargetSecond - result) * 1000 - 500);
         }
-        public Int32 GetMinutesBeforeTarget()
+        public virtual Int32 GetMinutesBeforeTarget()
         {
             var ts = new TimeSpan(0);
 
-            for (Int32 i = 0; GetStage(i) != TimerConstants.NULL_TIMESPAN; i++)
-                ts = ts.Add(GetStage(i));
+            for (Int32 i = 0; i < Stages.Count; i++)
+                ts = ts.Add(Stages[i]);
 
             return (Int32)ts.TotalMilliseconds / 60000;
         }

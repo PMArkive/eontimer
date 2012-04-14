@@ -50,10 +50,10 @@
             this.text_target_initial_3 = new System.Windows.Forms.TextBox();
             this.labelFrame = new System.Windows.Forms.Label();
             this.labelInitial = new System.Windows.Forms.Label();
-            this.labelLag = new System.Windows.Forms.Label();
+            this.label_calibration_lag_3 = new System.Windows.Forms.Label();
             this.labelFactor = new System.Windows.Forms.Label();
             this.tabGen4 = new System.Windows.Forms.TabPage();
-            this.labelMode4 = new System.Windows.Forms.Label();
+            this.label_mode_4 = new System.Windows.Forms.Label();
             this.combo_mode_4 = new System.Windows.Forms.ComboBox();
             this.text_hit_4 = new System.Windows.Forms.TextBox();
             this.text_target_second_4 = new System.Windows.Forms.TextBox();
@@ -61,37 +61,39 @@
             this.text_calibration_second_4 = new System.Windows.Forms.TextBox();
             this.text_calibration_delay_4 = new System.Windows.Forms.TextBox();
             this.labelDelay = new System.Windows.Forms.Label();
-            this.labelTSec = new System.Windows.Forms.Label();
-            this.labelTDelay = new System.Windows.Forms.Label();
-            this.labelCSec = new System.Windows.Forms.Label();
-            this.labelCDelay = new System.Windows.Forms.Label();
+            this.label_target_second_4 = new System.Windows.Forms.Label();
+            this.label_target_delay_4 = new System.Windows.Forms.Label();
+            this.label_calibration_second_4 = new System.Windows.Forms.Label();
+            this.label_calibration_delay_4 = new System.Windows.Forms.Label();
             this.tabGen5 = new System.Windows.Forms.TabPage();
-            this.labelELSec = new System.Windows.Forms.Label();
+            this.label_target_entralink_second = new System.Windows.Forms.Label();
             this.text_target_standard_5 = new System.Windows.Forms.TextBox();
-            this.labelMode5 = new System.Windows.Forms.Label();
+            this.label_mode_5 = new System.Windows.Forms.Label();
             this.combo_mode_5 = new System.Windows.Forms.ComboBox();
-            this.labelHL = new System.Windows.Forms.Label();
+            this.label_calibration_entralink_5 = new System.Windows.Forms.Label();
             this.text_calibration_entralink_5 = new System.Windows.Forms.TextBox();
             this.text_hit_5 = new System.Windows.Forms.TextBox();
             this.text_target_second_5 = new System.Windows.Forms.TextBox();
             this.text_target_delay_5 = new System.Windows.Forms.TextBox();
             this.text_calibration_5 = new System.Windows.Forms.TextBox();
             this.labelDelayHit5 = new System.Windows.Forms.Label();
-            this.labelTSec5 = new System.Windows.Forms.Label();
-            this.labelTDelay5 = new System.Windows.Forms.Label();
-            this.labelCalibration = new System.Windows.Forms.Label();
+            this.label_target_second_5 = new System.Windows.Forms.Label();
+            this.label_target_delay_5 = new System.Windows.Forms.Label();
+            this.label_calibration_5 = new System.Windows.Forms.Label();
             this.tabMenu = new System.Windows.Forms.TabControl();
             this.tabCustom = new System.Windows.Forms.TabPage();
             this.tabImages = new System.Windows.Forms.ImageList(this.components);
             this.pictureMini = new System.Windows.Forms.PictureBox();
             this.picturePin = new System.Windows.Forms.PictureBox();
             this.pictureSettings = new System.Windows.Forms.PictureBox();
+            this.label1 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.pictureClose)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureMinimize)).BeginInit();
             this.tabGen3.SuspendLayout();
             this.tabGen4.SuspendLayout();
             this.tabGen5.SuspendLayout();
             this.tabMenu.SuspendLayout();
+            this.tabCustom.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureMini)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.picturePin)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureSettings)).BeginInit();
@@ -158,6 +160,7 @@
             this.buttonUpdate.TabIndex = 7;
             this.buttonUpdate.Text = "Update";
             this.buttonUpdate.UseVisualStyleBackColor = true;
+            this.buttonUpdate.Click += new System.EventHandler(this.UpdateCalibration);
             // 
             // buttonSave
             // 
@@ -211,7 +214,7 @@
             this.tabGen3.Controls.Add(this.text_target_initial_3);
             this.tabGen3.Controls.Add(this.labelFrame);
             this.tabGen3.Controls.Add(this.labelInitial);
-            this.tabGen3.Controls.Add(this.labelLag);
+            this.tabGen3.Controls.Add(this.label_calibration_lag_3);
             this.tabGen3.Controls.Add(this.labelFactor);
             this.tabGen3.ImageKey = "3.png";
             this.tabGen3.Location = new System.Drawing.Point(4, 20);
@@ -255,7 +258,7 @@
             this.text_hit_3.Name = "text_hit_3";
             this.text_hit_3.Size = new System.Drawing.Size(75, 20);
             this.text_hit_3.TabIndex = 8;
-            this.text_hit_3.TextChanged += new System.EventHandler(this.UpdateTimer);
+            this.text_hit_3.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.NumericKeyPress);
             // 
             // text_calibration_lag_3
             // 
@@ -274,6 +277,7 @@
             this.text_calibration_factor_3.Size = new System.Drawing.Size(41, 20);
             this.text_calibration_factor_3.TabIndex = 0;
             this.text_calibration_factor_3.TextChanged += new System.EventHandler(this.UpdateTimer);
+            this.text_calibration_factor_3.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.NumericKeyPress);
             // 
             // text_target_frame_3
             // 
@@ -313,15 +317,15 @@
             this.labelInitial.TabIndex = 6;
             this.labelInitial.Text = "Pre-Timer";
             // 
-            // labelLag
+            // label_calibration_lag_3
             // 
-            this.labelLag.AutoSize = true;
-            this.labelLag.BackColor = System.Drawing.Color.Transparent;
-            this.labelLag.Location = new System.Drawing.Point(99, 36);
-            this.labelLag.Name = "labelLag";
-            this.labelLag.Size = new System.Drawing.Size(25, 13);
-            this.labelLag.TabIndex = 5;
-            this.labelLag.Text = "Lag";
+            this.label_calibration_lag_3.AutoSize = true;
+            this.label_calibration_lag_3.BackColor = System.Drawing.Color.Transparent;
+            this.label_calibration_lag_3.Location = new System.Drawing.Point(99, 36);
+            this.label_calibration_lag_3.Name = "label_calibration_lag_3";
+            this.label_calibration_lag_3.Size = new System.Drawing.Size(25, 13);
+            this.label_calibration_lag_3.TabIndex = 5;
+            this.label_calibration_lag_3.Text = "Lag";
             // 
             // labelFactor
             // 
@@ -338,7 +342,7 @@
             // 
             this.tabGen4.BackColor = System.Drawing.Color.GhostWhite;
             this.tabGen4.BackgroundImage = global::EonTimer.Properties.Resources.TabGlac;
-            this.tabGen4.Controls.Add(this.labelMode4);
+            this.tabGen4.Controls.Add(this.label_mode_4);
             this.tabGen4.Controls.Add(this.combo_mode_4);
             this.tabGen4.Controls.Add(this.text_hit_4);
             this.tabGen4.Controls.Add(this.text_target_second_4);
@@ -346,10 +350,10 @@
             this.tabGen4.Controls.Add(this.text_calibration_second_4);
             this.tabGen4.Controls.Add(this.text_calibration_delay_4);
             this.tabGen4.Controls.Add(this.labelDelay);
-            this.tabGen4.Controls.Add(this.labelTSec);
-            this.tabGen4.Controls.Add(this.labelTDelay);
-            this.tabGen4.Controls.Add(this.labelCSec);
-            this.tabGen4.Controls.Add(this.labelCDelay);
+            this.tabGen4.Controls.Add(this.label_target_second_4);
+            this.tabGen4.Controls.Add(this.label_target_delay_4);
+            this.tabGen4.Controls.Add(this.label_calibration_second_4);
+            this.tabGen4.Controls.Add(this.label_calibration_delay_4);
             this.tabGen4.ImageKey = "4.png";
             this.tabGen4.Location = new System.Drawing.Point(4, 20);
             this.tabGen4.Name = "tabGen4";
@@ -357,15 +361,15 @@
             this.tabGen4.Size = new System.Drawing.Size(177, 213);
             this.tabGen4.TabIndex = 0;
             // 
-            // labelMode4
+            // label_mode_4
             // 
-            this.labelMode4.AutoSize = true;
-            this.labelMode4.BackColor = System.Drawing.Color.Transparent;
-            this.labelMode4.Location = new System.Drawing.Point(6, 10);
-            this.labelMode4.Name = "labelMode4";
-            this.labelMode4.Size = new System.Drawing.Size(34, 13);
-            this.labelMode4.TabIndex = 11;
-            this.labelMode4.Text = "Mode";
+            this.label_mode_4.AutoSize = true;
+            this.label_mode_4.BackColor = System.Drawing.Color.Transparent;
+            this.label_mode_4.Location = new System.Drawing.Point(6, 10);
+            this.label_mode_4.Name = "label_mode_4";
+            this.label_mode_4.Size = new System.Drawing.Size(34, 13);
+            this.label_mode_4.TabIndex = 11;
+            this.label_mode_4.Text = "Mode";
             // 
             // combo_mode_4
             // 
@@ -390,7 +394,7 @@
             this.text_target_second_4.Name = "text_target_second_4";
             this.text_target_second_4.Size = new System.Drawing.Size(75, 20);
             this.text_target_second_4.TabIndex = 7;
-            this.text_target_second_4.Text = "50";
+            this.text_target_second_4.TextChanged += new System.EventHandler(this.UpdateTimer);
             this.text_target_second_4.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.NumericKeyPress);
             // 
             // text_target_delay_4
@@ -399,7 +403,7 @@
             this.text_target_delay_4.Name = "text_target_delay_4";
             this.text_target_delay_4.Size = new System.Drawing.Size(75, 20);
             this.text_target_delay_4.TabIndex = 5;
-            this.text_target_delay_4.Text = "600";
+            this.text_target_delay_4.TextChanged += new System.EventHandler(this.UpdateTimer);
             this.text_target_delay_4.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.NumericKeyPress);
             // 
             // text_calibration_second_4
@@ -408,7 +412,6 @@
             this.text_calibration_second_4.Name = "text_calibration_second_4";
             this.text_calibration_second_4.Size = new System.Drawing.Size(75, 20);
             this.text_calibration_second_4.TabIndex = 3;
-            this.text_calibration_second_4.Text = "14";
             this.text_calibration_second_4.TextChanged += new System.EventHandler(this.UpdateTimer);
             this.text_calibration_second_4.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.NumericKeyPress);
             // 
@@ -418,7 +421,6 @@
             this.text_calibration_delay_4.Name = "text_calibration_delay_4";
             this.text_calibration_delay_4.Size = new System.Drawing.Size(75, 20);
             this.text_calibration_delay_4.TabIndex = 1;
-            this.text_calibration_delay_4.Text = "500";
             this.text_calibration_delay_4.TextChanged += new System.EventHandler(this.UpdateTimer);
             this.text_calibration_delay_4.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.NumericKeyPress);
             // 
@@ -432,64 +434,64 @@
             this.labelDelay.TabIndex = 8;
             this.labelDelay.Text = "Delay Hit";
             // 
-            // labelTSec
+            // label_target_second_4
             // 
-            this.labelTSec.AutoSize = true;
-            this.labelTSec.BackColor = System.Drawing.Color.Transparent;
-            this.labelTSec.Location = new System.Drawing.Point(6, 115);
-            this.labelTSec.Name = "labelTSec";
-            this.labelTSec.Size = new System.Drawing.Size(63, 13);
-            this.labelTSec.TabIndex = 6;
-            this.labelTSec.Text = "Target Sec.";
+            this.label_target_second_4.AutoSize = true;
+            this.label_target_second_4.BackColor = System.Drawing.Color.Transparent;
+            this.label_target_second_4.Location = new System.Drawing.Point(6, 115);
+            this.label_target_second_4.Name = "label_target_second_4";
+            this.label_target_second_4.Size = new System.Drawing.Size(63, 13);
+            this.label_target_second_4.TabIndex = 6;
+            this.label_target_second_4.Text = "Target Sec.";
             // 
-            // labelTDelay
+            // label_target_delay_4
             // 
-            this.labelTDelay.AutoSize = true;
-            this.labelTDelay.BackColor = System.Drawing.Color.Transparent;
-            this.labelTDelay.Location = new System.Drawing.Point(6, 89);
-            this.labelTDelay.Name = "labelTDelay";
-            this.labelTDelay.Size = new System.Drawing.Size(68, 13);
-            this.labelTDelay.TabIndex = 4;
-            this.labelTDelay.Text = "Target Delay";
+            this.label_target_delay_4.AutoSize = true;
+            this.label_target_delay_4.BackColor = System.Drawing.Color.Transparent;
+            this.label_target_delay_4.Location = new System.Drawing.Point(6, 89);
+            this.label_target_delay_4.Name = "label_target_delay_4";
+            this.label_target_delay_4.Size = new System.Drawing.Size(68, 13);
+            this.label_target_delay_4.TabIndex = 4;
+            this.label_target_delay_4.Text = "Target Delay";
             // 
-            // labelCSec
+            // label_calibration_second_4
             // 
-            this.labelCSec.AutoSize = true;
-            this.labelCSec.BackColor = System.Drawing.Color.Transparent;
-            this.labelCSec.Location = new System.Drawing.Point(6, 63);
-            this.labelCSec.Name = "labelCSec";
-            this.labelCSec.Size = new System.Drawing.Size(79, 13);
-            this.labelCSec.TabIndex = 2;
-            this.labelCSec.Text = "Calibrated Sec.";
+            this.label_calibration_second_4.AutoSize = true;
+            this.label_calibration_second_4.BackColor = System.Drawing.Color.Transparent;
+            this.label_calibration_second_4.Location = new System.Drawing.Point(6, 63);
+            this.label_calibration_second_4.Name = "label_calibration_second_4";
+            this.label_calibration_second_4.Size = new System.Drawing.Size(79, 13);
+            this.label_calibration_second_4.TabIndex = 2;
+            this.label_calibration_second_4.Text = "Calibrated Sec.";
             // 
-            // labelCDelay
+            // label_calibration_delay_4
             // 
-            this.labelCDelay.AutoSize = true;
-            this.labelCDelay.BackColor = System.Drawing.Color.Transparent;
-            this.labelCDelay.Location = new System.Drawing.Point(6, 37);
-            this.labelCDelay.Name = "labelCDelay";
-            this.labelCDelay.Size = new System.Drawing.Size(84, 13);
-            this.labelCDelay.TabIndex = 0;
-            this.labelCDelay.Text = "Calibrated Delay";
+            this.label_calibration_delay_4.AutoSize = true;
+            this.label_calibration_delay_4.BackColor = System.Drawing.Color.Transparent;
+            this.label_calibration_delay_4.Location = new System.Drawing.Point(6, 37);
+            this.label_calibration_delay_4.Name = "label_calibration_delay_4";
+            this.label_calibration_delay_4.Size = new System.Drawing.Size(84, 13);
+            this.label_calibration_delay_4.TabIndex = 0;
+            this.label_calibration_delay_4.Text = "Calibrated Delay";
             // 
             // tabGen5
             // 
             this.tabGen5.BackColor = System.Drawing.Color.GhostWhite;
             this.tabGen5.BackgroundImage = global::EonTimer.Properties.Resources.TabGlac;
-            this.tabGen5.Controls.Add(this.labelELSec);
+            this.tabGen5.Controls.Add(this.label_target_entralink_second);
             this.tabGen5.Controls.Add(this.text_target_standard_5);
-            this.tabGen5.Controls.Add(this.labelMode5);
+            this.tabGen5.Controls.Add(this.label_mode_5);
             this.tabGen5.Controls.Add(this.combo_mode_5);
-            this.tabGen5.Controls.Add(this.labelHL);
+            this.tabGen5.Controls.Add(this.label_calibration_entralink_5);
             this.tabGen5.Controls.Add(this.text_calibration_entralink_5);
             this.tabGen5.Controls.Add(this.text_hit_5);
             this.tabGen5.Controls.Add(this.text_target_second_5);
             this.tabGen5.Controls.Add(this.text_target_delay_5);
             this.tabGen5.Controls.Add(this.text_calibration_5);
             this.tabGen5.Controls.Add(this.labelDelayHit5);
-            this.tabGen5.Controls.Add(this.labelTSec5);
-            this.tabGen5.Controls.Add(this.labelTDelay5);
-            this.tabGen5.Controls.Add(this.labelCalibration);
+            this.tabGen5.Controls.Add(this.label_target_second_5);
+            this.tabGen5.Controls.Add(this.label_target_delay_5);
+            this.tabGen5.Controls.Add(this.label_calibration_5);
             this.tabGen5.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.tabGen5.ImageKey = "5.png";
             this.tabGen5.Location = new System.Drawing.Point(4, 20);
@@ -498,16 +500,16 @@
             this.tabGen5.Size = new System.Drawing.Size(177, 213);
             this.tabGen5.TabIndex = 1;
             // 
-            // labelELSec
+            // label_target_entralink_second
             // 
-            this.labelELSec.AutoSize = true;
-            this.labelELSec.BackColor = System.Drawing.Color.Transparent;
-            this.labelELSec.Location = new System.Drawing.Point(6, 151);
-            this.labelELSec.Name = "labelELSec";
-            this.labelELSec.Size = new System.Drawing.Size(84, 13);
-            this.labelELSec.TabIndex = 15;
-            this.labelELSec.Text = "Standard Target";
-            this.labelELSec.Visible = false;
+            this.label_target_entralink_second.AutoSize = true;
+            this.label_target_entralink_second.BackColor = System.Drawing.Color.Transparent;
+            this.label_target_entralink_second.Location = new System.Drawing.Point(6, 151);
+            this.label_target_entralink_second.Name = "label_target_entralink_second";
+            this.label_target_entralink_second.Size = new System.Drawing.Size(84, 13);
+            this.label_target_entralink_second.TabIndex = 15;
+            this.label_target_entralink_second.Text = "Standard Target";
+            this.label_target_entralink_second.Visible = false;
             // 
             // text_target_standard_5
             // 
@@ -516,16 +518,18 @@
             this.text_target_standard_5.Size = new System.Drawing.Size(75, 20);
             this.text_target_standard_5.TabIndex = 14;
             this.text_target_standard_5.Visible = false;
+            this.text_target_standard_5.TextChanged += new System.EventHandler(this.UpdateTimer);
+            this.text_target_standard_5.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.NumericKeyPress);
             // 
-            // labelMode5
+            // label_mode_5
             // 
-            this.labelMode5.AutoSize = true;
-            this.labelMode5.BackColor = System.Drawing.Color.Transparent;
-            this.labelMode5.Location = new System.Drawing.Point(6, 10);
-            this.labelMode5.Name = "labelMode5";
-            this.labelMode5.Size = new System.Drawing.Size(34, 13);
-            this.labelMode5.TabIndex = 13;
-            this.labelMode5.Text = "Mode";
+            this.label_mode_5.AutoSize = true;
+            this.label_mode_5.BackColor = System.Drawing.Color.Transparent;
+            this.label_mode_5.Location = new System.Drawing.Point(6, 10);
+            this.label_mode_5.Name = "label_mode_5";
+            this.label_mode_5.Size = new System.Drawing.Size(34, 13);
+            this.label_mode_5.TabIndex = 13;
+            this.label_mode_5.Text = "Mode";
             // 
             // combo_mode_5
             // 
@@ -534,17 +538,18 @@
             this.combo_mode_5.Name = "combo_mode_5";
             this.combo_mode_5.Size = new System.Drawing.Size(125, 21);
             this.combo_mode_5.TabIndex = 12;
+            this.combo_mode_5.SelectedIndexChanged += new System.EventHandler(this.UpdateTimer);
             // 
-            // labelHL
+            // label_calibration_entralink_5
             // 
-            this.labelHL.AutoSize = true;
-            this.labelHL.BackColor = System.Drawing.Color.Transparent;
-            this.labelHL.Location = new System.Drawing.Point(6, 125);
-            this.labelHL.Name = "labelHL";
-            this.labelHL.Size = new System.Drawing.Size(72, 13);
-            this.labelHL.TabIndex = 11;
-            this.labelHL.Text = "EL Calibration";
-            this.labelHL.Visible = false;
+            this.label_calibration_entralink_5.AutoSize = true;
+            this.label_calibration_entralink_5.BackColor = System.Drawing.Color.Transparent;
+            this.label_calibration_entralink_5.Location = new System.Drawing.Point(6, 125);
+            this.label_calibration_entralink_5.Name = "label_calibration_entralink_5";
+            this.label_calibration_entralink_5.Size = new System.Drawing.Size(72, 13);
+            this.label_calibration_entralink_5.TabIndex = 11;
+            this.label_calibration_entralink_5.Text = "EL Calibration";
+            this.label_calibration_entralink_5.Visible = false;
             // 
             // text_calibration_entralink_5
             // 
@@ -553,6 +558,7 @@
             this.text_calibration_entralink_5.Size = new System.Drawing.Size(75, 20);
             this.text_calibration_entralink_5.TabIndex = 10;
             this.text_calibration_entralink_5.Visible = false;
+            this.text_calibration_entralink_5.TextChanged += new System.EventHandler(this.UpdateTimer);
             this.text_calibration_entralink_5.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.NumericKeyPress);
             // 
             // text_hit_5
@@ -569,6 +575,7 @@
             this.text_target_second_5.Name = "text_target_second_5";
             this.text_target_second_5.Size = new System.Drawing.Size(75, 20);
             this.text_target_second_5.TabIndex = 4;
+            this.text_target_second_5.TextChanged += new System.EventHandler(this.UpdateTimer);
             this.text_target_second_5.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.NumericKeyPress);
             // 
             // text_target_delay_5
@@ -577,6 +584,7 @@
             this.text_target_delay_5.Name = "text_target_delay_5";
             this.text_target_delay_5.Size = new System.Drawing.Size(75, 20);
             this.text_target_delay_5.TabIndex = 2;
+            this.text_target_delay_5.TextChanged += new System.EventHandler(this.UpdateTimer);
             this.text_target_delay_5.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.NumericKeyPress);
             // 
             // text_calibration_5
@@ -585,6 +593,7 @@
             this.text_calibration_5.Name = "text_calibration_5";
             this.text_calibration_5.Size = new System.Drawing.Size(75, 20);
             this.text_calibration_5.TabIndex = 0;
+            this.text_calibration_5.TextChanged += new System.EventHandler(this.UpdateTimer);
             this.text_calibration_5.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.NumericKeyPress);
             // 
             // labelDelayHit5
@@ -597,35 +606,35 @@
             this.labelDelayHit5.TabIndex = 7;
             this.labelDelayHit5.Text = "Delay Hit";
             // 
-            // labelTSec5
+            // label_target_second_5
             // 
-            this.labelTSec5.AutoSize = true;
-            this.labelTSec5.BackColor = System.Drawing.Color.Transparent;
-            this.labelTSec5.Location = new System.Drawing.Point(6, 89);
-            this.labelTSec5.Name = "labelTSec5";
-            this.labelTSec5.Size = new System.Drawing.Size(83, 13);
-            this.labelTSec5.TabIndex = 5;
-            this.labelTSec5.Text = "Target Seconds";
+            this.label_target_second_5.AutoSize = true;
+            this.label_target_second_5.BackColor = System.Drawing.Color.Transparent;
+            this.label_target_second_5.Location = new System.Drawing.Point(6, 89);
+            this.label_target_second_5.Name = "label_target_second_5";
+            this.label_target_second_5.Size = new System.Drawing.Size(83, 13);
+            this.label_target_second_5.TabIndex = 5;
+            this.label_target_second_5.Text = "Target Seconds";
             // 
-            // labelTDelay5
+            // label_target_delay_5
             // 
-            this.labelTDelay5.AutoSize = true;
-            this.labelTDelay5.BackColor = System.Drawing.Color.Transparent;
-            this.labelTDelay5.Location = new System.Drawing.Point(6, 63);
-            this.labelTDelay5.Name = "labelTDelay5";
-            this.labelTDelay5.Size = new System.Drawing.Size(68, 13);
-            this.labelTDelay5.TabIndex = 3;
-            this.labelTDelay5.Text = "Target Delay";
+            this.label_target_delay_5.AutoSize = true;
+            this.label_target_delay_5.BackColor = System.Drawing.Color.Transparent;
+            this.label_target_delay_5.Location = new System.Drawing.Point(6, 63);
+            this.label_target_delay_5.Name = "label_target_delay_5";
+            this.label_target_delay_5.Size = new System.Drawing.Size(68, 13);
+            this.label_target_delay_5.TabIndex = 3;
+            this.label_target_delay_5.Text = "Target Delay";
             // 
-            // labelCalibration
+            // label_calibration_5
             // 
-            this.labelCalibration.AutoSize = true;
-            this.labelCalibration.BackColor = System.Drawing.Color.Transparent;
-            this.labelCalibration.Location = new System.Drawing.Point(6, 37);
-            this.labelCalibration.Name = "labelCalibration";
-            this.labelCalibration.Size = new System.Drawing.Size(56, 13);
-            this.labelCalibration.TabIndex = 1;
-            this.labelCalibration.Text = "Calibration";
+            this.label_calibration_5.AutoSize = true;
+            this.label_calibration_5.BackColor = System.Drawing.Color.Transparent;
+            this.label_calibration_5.Location = new System.Drawing.Point(6, 37);
+            this.label_calibration_5.Name = "label_calibration_5";
+            this.label_calibration_5.Size = new System.Drawing.Size(56, 13);
+            this.label_calibration_5.TabIndex = 1;
+            this.label_calibration_5.Text = "Calibration";
             // 
             // tabMenu
             // 
@@ -647,6 +656,7 @@
             // tabCustom
             // 
             this.tabCustom.BackgroundImage = global::EonTimer.Properties.Resources.TabGlac;
+            this.tabCustom.Controls.Add(this.label1);
             this.tabCustom.ImageKey = "EonCustom.png";
             this.tabCustom.Location = new System.Drawing.Point(4, 20);
             this.tabCustom.Name = "tabCustom";
@@ -707,6 +717,15 @@
             this.pictureSettings.MouseEnter += new System.EventHandler(this.Settings_MouseEnter);
             this.pictureSettings.MouseLeave += new System.EventHandler(this.Settings_MouseLeave);
             // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(42, 94);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(94, 13);
+            this.label1.TabIndex = 0;
+            this.label1.Text = "This is in progress.";
+            // 
             // MainTimer
             // 
             this.AcceptButton = this.buttonStart;
@@ -742,6 +761,8 @@
             this.tabGen5.ResumeLayout(false);
             this.tabGen5.PerformLayout();
             this.tabMenu.ResumeLayout(false);
+            this.tabCustom.ResumeLayout(false);
+            this.tabCustom.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureMini)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.picturePin)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureSettings)).EndInit();
@@ -770,7 +791,7 @@
         private System.Windows.Forms.TextBox text_target_initial_3;
         private System.Windows.Forms.Label labelFrame;
         private System.Windows.Forms.Label labelInitial;
-        private System.Windows.Forms.Label labelLag;
+        private System.Windows.Forms.Label label_calibration_lag_3;
         private System.Windows.Forms.Label labelFactor;
         private System.Windows.Forms.TabPage tabGen4;
         private System.Windows.Forms.TextBox text_hit_4;
@@ -779,35 +800,36 @@
         private System.Windows.Forms.TextBox text_calibration_second_4;
         private System.Windows.Forms.TextBox text_calibration_delay_4;
         private System.Windows.Forms.Label labelDelay;
-        private System.Windows.Forms.Label labelTSec;
-        private System.Windows.Forms.Label labelTDelay;
-        private System.Windows.Forms.Label labelCSec;
-        private System.Windows.Forms.Label labelCDelay;
+        private System.Windows.Forms.Label label_target_second_4;
+        private System.Windows.Forms.Label label_target_delay_4;
+        private System.Windows.Forms.Label label_calibration_second_4;
+        private System.Windows.Forms.Label label_calibration_delay_4;
         private System.Windows.Forms.TabPage tabGen5;
-        private System.Windows.Forms.Label labelHL;
+        private System.Windows.Forms.Label label_calibration_entralink_5;
         private System.Windows.Forms.TextBox text_calibration_entralink_5;
         private System.Windows.Forms.TextBox text_hit_5;
         private System.Windows.Forms.TextBox text_target_second_5;
         private System.Windows.Forms.TextBox text_target_delay_5;
         private System.Windows.Forms.TextBox text_calibration_5;
         private System.Windows.Forms.Label labelDelayHit5;
-        private System.Windows.Forms.Label labelTSec5;
-        private System.Windows.Forms.Label labelTDelay5;
-        private System.Windows.Forms.Label labelCalibration;
+        private System.Windows.Forms.Label label_target_second_5;
+        private System.Windows.Forms.Label label_target_delay_5;
+        private System.Windows.Forms.Label label_calibration_5;
         private System.Windows.Forms.TabControl tabMenu;
         private System.Windows.Forms.TabPage tabCustom;
         private System.Windows.Forms.ImageList tabImages;
         private System.Windows.Forms.PictureBox pictureMini;
         private System.Windows.Forms.PictureBox picturePin;
-        private System.Windows.Forms.Label labelELSec;
+        private System.Windows.Forms.Label label_target_entralink_second;
         private System.Windows.Forms.TextBox text_target_standard_5;
-        private System.Windows.Forms.Label labelMode5;
+        private System.Windows.Forms.Label label_mode_5;
         private System.Windows.Forms.ComboBox combo_mode_5;
-        private System.Windows.Forms.Label labelMode4;
+        private System.Windows.Forms.Label label_mode_4;
         private System.Windows.Forms.ComboBox combo_mode_4;
         private System.Windows.Forms.Label labelMode3;
         private System.Windows.Forms.ComboBox combo_mode_3;
         private System.Windows.Forms.PictureBox pictureSettings;
+        private System.Windows.Forms.Label label1;
 
     }
 }

@@ -2,6 +2,7 @@
 using System.Threading;
 using System.Windows.Forms;
 using EonTimer.Utilities.Helpers;
+using System;
 
 namespace EonTimer
 {

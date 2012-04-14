@@ -6,7 +6,7 @@ using System.Collections.Generic;
 
 namespace EonTimer.Timers
 {
-    public class VariableTargetFrameTimer : ITimer
+    public class VariableTargetFrameTimer : ITimer, IVariableTimer
     {
         private Int32 targetFrame;
 
@@ -15,8 +15,8 @@ namespace EonTimer.Timers
             get { return targetFrame; }
             set
             {
-                PrepareStages(); 
                 targetFrame = value;
+                PrepareStages(); 
             }
         }
         public Consoles.ConsoleType ConsoleType { get; set; }
@@ -26,18 +26,21 @@ namespace EonTimer.Timers
         {
             ConsoleType = consoleType;
             TargetFrame = -1;
-
-            for (Int32 i = 0; GetStage(i) != TimerConstants.NULL_TIMESPAN; i++)
-                Stages.Add(GetStage(i));
+            PrepareStages();
         }
         
-        public Int32 Calibrate(Int32 frameToHit)
+        public Int32 Calibrate(Int32 hit)
         {
             return 0;
         }
         public Int32 GetMinutesBeforeTarget()
         {
             return 0;
+        }
+        public void Reset()
+        {
+            TargetFrame = -1;
+            PrepareStages();
         }
 
         private void PrepareStages()

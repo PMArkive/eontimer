@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
+using EonTimer.Utilities.Helpers;
 using EonTimer.Utilities.Reference;
 
 namespace EonTimer.Timers
@@ -20,7 +20,23 @@ namespace EonTimer.Timers
         }
 
         //overriden methods
-        protected new TimeSpan GetStage(Int32 stage)
+        public override Int32 Calibrate(Int32 result)
+        {
+            //convert to millis
+            result = CalibrationHelper.ConvertToMillis(result, ConsoleType);
+            Int32 target = CalibrationHelper.ConvertToMillis(TargetDelay, ConsoleType);
+
+            Int32 offset = result - target;
+
+            if (Math.Abs(offset) <= TimerConstants.CLOSE_THRESHOLD)
+                offset = (Int32)(TimerConstants.CLOSE_UPDATE_FACTOR * offset);
+            else
+                offset *= (Int32)TimerConstants.UPDATE_FACTOR;
+
+            return SecondaryCalibration + offset;
+        }
+
+        protected override TimeSpan GetStage(Int32 stage)
         {
             switch (stage)
             {
