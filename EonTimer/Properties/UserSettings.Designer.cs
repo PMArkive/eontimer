@@ -13,11 +13,11 @@ namespace EonTimer.Properties {
     
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "10.0.0.0")]
-    internal sealed partial class Settings : global::System.Configuration.ApplicationSettingsBase {
+    internal sealed partial class UserSettings : global::System.Configuration.ApplicationSettingsBase {
         
-        private static Settings defaultInstance = ((Settings)(global::System.Configuration.ApplicationSettingsBase.Synchronized(new Settings())));
+        private static UserSettings defaultInstance = ((UserSettings)(global::System.Configuration.ApplicationSettingsBase.Synchronized(new UserSettings())));
         
-        public static Settings Default {
+        public static UserSettings Default {
             get {
                 return defaultInstance;
             }
@@ -188,6 +188,30 @@ namespace EonTimer.Properties {
             }
             set {
                 this["Setting_Timer_PreciseCalibration"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public int Setting_EntralinkFrameMethod {
+            get {
+                return ((int)(this["Setting_EntralinkFrameMethod"]));
+            }
+            set {
+                this["Setting_EntralinkFrameMethod"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool Setting_Settings_Updates {
+            get {
+                return ((bool)(this["Setting_Settings_Updates"]));
+            }
+            set {
+                this["Setting_Settings_Updates"] = value;
             }
         }
     }

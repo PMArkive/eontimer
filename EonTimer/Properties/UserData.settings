@@ -8,6 +8,15 @@
     <Setting Name="Calibration_5_Entralink" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">256</Value>
     </Setting>
+    <Setting Name="Calibration_5_Frame" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">0</Value>
+    </Setting>
+    <Setting Name="Setting_5_NPCCount" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">1</Value>
+    </Setting>
+    <Setting Name="Setting_5_InitialFrames" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">3</Value>
+    </Setting>
     <Setting Name="Calibration_4_Delay" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">500</Value>
     </Setting>
@@ -38,8 +47,8 @@
     <Setting Name="Target_5_Delay" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">1200</Value>
     </Setting>
-    <Setting Name="Target_5_SecondaryEntralink" Type="System.Int32" Scope="User">
-      <Value Profile="(Default)">35</Value>
+    <Setting Name="Target_5_EntralinkFrame" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">100</Value>
     </Setting>
     <Setting Name="Mode_5" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">0</Value>

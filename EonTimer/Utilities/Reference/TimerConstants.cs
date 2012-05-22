@@ -19,5 +19,7 @@ namespace EonTimer.Utilities.Reference
 
         public static readonly TimeSpan NULL_TIMESPAN = new TimeSpan(-999);
         public static readonly TimeSpan INFINITE_TIMESPAN = new TimeSpan(-99);
+
+        public static readonly Decimal ENTRALINK_FRAMERATE = 0.837148929M;
     }
 }

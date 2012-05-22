@@ -16,13 +16,13 @@ namespace EonTimer.Utilities.Helpers
             switch (type)
             {
                 case Consoles.ConsoleType.GBA:
-                    return (Int32)(delays * TimerConstants.FRAMERATE_GBA);
+                    return (Int32)Math.Round(delays * TimerConstants.FRAMERATE_GBA);
                 case Consoles.ConsoleType.NDS:
-                    return (Int32)(delays * TimerConstants.FRAMERATE_NDS);
+                    return (Int32)Math.Round(delays * TimerConstants.FRAMERATE_NDS);
                 case Consoles.ConsoleType.DSI:
-                    return (Int32)(delays * TimerConstants.FRAMERATE_DSI);
+                    return (Int32)Math.Round(delays * TimerConstants.FRAMERATE_DSI);
                 case Consoles.ConsoleType._3DS:
-                    return (Int32)(delays * TimerConstants.FRAMERATE_3DS);
+                    return (Int32)Math.Round(delays * TimerConstants.FRAMERATE_3DS);
                 default:
                     return 0;
             }
@@ -38,13 +38,13 @@ namespace EonTimer.Utilities.Helpers
             switch (type)
             {
                 case Consoles.ConsoleType.GBA:
-                    return (Int32)(millis / TimerConstants.FRAMERATE_GBA);
+                    return (Int32)Math.Round(millis / TimerConstants.FRAMERATE_GBA);
                 case Consoles.ConsoleType.NDS:
-                    return (Int32)(millis / TimerConstants.FRAMERATE_NDS);
+                    return (Int32)Math.Round(millis / TimerConstants.FRAMERATE_NDS);
                 case Consoles.ConsoleType.DSI:
-                    return (Int32)(millis / TimerConstants.FRAMERATE_DSI);
+                    return (Int32)Math.Round(millis / TimerConstants.FRAMERATE_DSI);
                 case Consoles.ConsoleType._3DS:
-                    return (Int32)(millis / TimerConstants.FRAMERATE_3DS);
+                    return (Int32)Math.Round(millis / TimerConstants.FRAMERATE_3DS);
                 default:
                     return 0;
             }

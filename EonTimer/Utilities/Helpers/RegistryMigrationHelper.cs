@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Drawing;
 using Microsoft.Win32;
-using Settings = EonTimer.Properties.Settings;
+using Settings = EonTimer.Properties.UserSettings;
 using UserData = EonTimer.Properties.UserData;
 
 namespace EonTimer.Utilities.Helpers

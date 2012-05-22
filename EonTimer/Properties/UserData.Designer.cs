@@ -49,6 +49,42 @@ namespace EonTimer.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public int Calibration_5_Frame {
+            get {
+                return ((int)(this["Calibration_5_Frame"]));
+            }
+            set {
+                this["Calibration_5_Frame"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("1")]
+        public int Setting_5_NPCCount {
+            get {
+                return ((int)(this["Setting_5_NPCCount"]));
+            }
+            set {
+                this["Setting_5_NPCCount"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("3")]
+        public int Setting_5_InitialFrames {
+            get {
+                return ((int)(this["Setting_5_InitialFrames"]));
+            }
+            set {
+                this["Setting_5_InitialFrames"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("500")]
         public int Calibration_4_Delay {
             get {
@@ -169,13 +205,13 @@ namespace EonTimer.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("35")]
-        public int Target_5_SecondaryEntralink {
+        [global::System.Configuration.DefaultSettingValueAttribute("100")]
+        public int Target_5_EntralinkFrame {
             get {
-                return ((int)(this["Target_5_SecondaryEntralink"]));
+                return ((int)(this["Target_5_EntralinkFrame"]));
             }
             set {
-                this["Target_5_SecondaryEntralink"] = value;
+                this["Target_5_EntralinkFrame"] = value;
             }
         }
         

@@ -5,7 +5,7 @@ using System.Data;
 using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
-using Settings = EonTimer.Properties.Settings;
+using Settings = EonTimer.Properties.UserSettings;
 using EonTimer.Utilities.Reference;
 
 namespace EonTimer
@@ -58,6 +58,7 @@ namespace EonTimer
             else
                 combo_setting_onexit.SelectedIndex = 2;
             trackOpacity.Value = Settings.Default.Setting_Form_Opacity;
+            check_settings_updates.Checked = Settings.Default.Setting_Settings_Updates;
 
             //Timer
             combo_setting_console.SelectedIndex = Settings.Default.Setting_Timer_Console;
@@ -93,6 +94,7 @@ namespace EonTimer
                     break;
             }
             Settings.Default.Setting_Form_Opacity = trackOpacity.Value;
+            Settings.Default.Setting_Settings_Updates = check_settings_updates.Checked;
 
             //Timer
             Settings.Default.Setting_Timer_Console = combo_setting_console.SelectedIndex;

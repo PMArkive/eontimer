@@ -8,26 +8,41 @@ using EonTimer.Utilities;
 using EonTimer.Utilities.Reference;
 using EonTimer.Handlers;
 using EonTimer.Timers;
-using Settings = EonTimer.Properties.Settings;
+using Settings = EonTimer.Properties.UserSettings;
 using UserData = EonTimer.Properties.UserData;
 using Resources = EonTimer.Properties.Resources;
+using System.Net;
+using System.Threading;
 
 namespace EonTimer
 {
     public partial class MainTimer : Form, ITimeoutHandler
     {
+        private const String DOWNLOAD_URL = "http://bit.ly/JPenAo";
+        private const String VERSION_URL = "http://bit.ly/LcANZ2";
+        private const Int32 Version = 1641;
+
         private ITimerMonitor monitor;
         private DisplayHandler displayHandler;
         private ActionHandler actionHandler;
-        private Boolean eventLock;
+        private Boolean eventLock, isMono;
         private EonTimerSettings settingsForm;
-        
+        private List<Int32> customStages;
 
         #region Setup
         public MainTimer()
         {
+            isMono = Type.GetType ("Mono.Runtime") != null;
+
             //migrates settings if necessary
-            RegistryMigrationHelper.Migrate();
+            if(!isMono)
+                RegistryMigrationHelper.Migrate();
+
+            if (Settings.Default.Setting_Settings_Updates)
+            {
+                Thread t = new Thread(new ThreadStart(CheckUpdate));
+                t.Start();
+            }
 
             //Build form
             InitializeComponent();
@@ -40,7 +55,6 @@ namespace EonTimer
             CreateTimer();
             SetMini(Settings.Default.Setting_Form_Mini);
             SetPin(Settings.Default.Setting_Form_OnTop);
-
         }
         private void InitializeCustom()
         {
@@ -64,6 +78,8 @@ namespace EonTimer
             settingsForm = new EonTimerSettings();
             settingsForm.TransparencyHandler = new EventHandler(this.UpdateOpacity);
             settingsForm.FormClosing += new FormClosingEventHandler(this.OnSettingsFormClosing);
+
+            customStages = new List<Int32>();
         }
         private void PrepareTimeMonitor()
         {
@@ -82,6 +98,27 @@ namespace EonTimer
                 Interval = new TimeSpan(0, 0, 0, 0, Settings.Default.Setting_Action_Interval)
             };
             SetHandlers();
+        }
+        private void CheckUpdate()
+        {
+            try
+            {
+                using (var client = new WebClient())
+                {
+                    client.Headers["Accept"] = "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8";
+                    client.Headers["User-Agent"] = "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/536.5 (KHTML, like Gecko) Chrome/19.0.1084.46 Safari/536.5";
+                    String[] info = client.DownloadString(VERSION_URL).Split(';');
+                    if(Version < Int32.Parse(info[0]))
+                    {
+                        DialogResult result = MessageBox.Show("There is an update available. (" + info[1] + ")\r\nGo to download page?", "Updates!", MessageBoxButtons.YesNo);
+                        if (result == DialogResult.Yes)
+                        {
+                            System.Diagnostics.Process.Start(DOWNLOAD_URL);
+                        }
+                    }
+                }
+            }
+            catch (Exception) { }
         }
         #endregion
 
@@ -145,7 +182,8 @@ namespace EonTimer
             text_target_delay_5.Text = UserData.Default.Target_5_Delay.ToString();
             text_target_second_5.Text = UserData.Default.Target_5_Second.ToString();
             text_calibration_entralink_5.Text = UserData.Default.Calibration_5_Entralink.ToString();
-            text_target_standard_5.Text = UserData.Default.Target_5_SecondaryEntralink.ToString();
+            text_calibration_5_frame.Text = UserData.Default.Calibration_5_Frame.ToString();
+            text_target_5_frame.Text = UserData.Default.Target_5_EntralinkFrame.ToString();
 
             //gen 4 settings
             combo_mode_4.SelectedIndex = UserData.Default.Mode_4;
@@ -176,7 +214,8 @@ namespace EonTimer
             UserData.Default.Target_5_Delay = SetInt(text_target_delay_5.Text, UserData.Default.Target_5_Delay);
             UserData.Default.Target_5_Second = SetInt(text_target_second_5.Text, UserData.Default.Target_5_Second);
             UserData.Default.Calibration_5_Entralink = SetInt(text_calibration_entralink_5.Text, UserData.Default.Calibration_5_Entralink);
-            UserData.Default.Target_5_SecondaryEntralink = SetInt(text_target_standard_5.Text, UserData.Default.Target_5_SecondaryEntralink);
+            UserData.Default.Calibration_5_Frame = SetInt(text_calibration_5_frame.Text, UserData.Default.Calibration_5_Frame);
+            UserData.Default.Target_5_EntralinkFrame = SetInt(text_target_5_frame.Text, UserData.Default.Target_5_EntralinkFrame);
 
             //gen 4 settings
             UserData.Default.Mode_4 = combo_mode_4.SelectedIndex;
@@ -197,7 +236,7 @@ namespace EonTimer
         private Int32 SetInt(String toParse, Int32 defaultResult)
         {
             Int32 result = 0;
-            if (Int32.TryParse(toParse, out result))
+            if (!String.IsNullOrEmpty(toParse) && Int32.TryParse(toParse, out result))
                 return result;
             else
                 return defaultResult;
@@ -213,7 +252,7 @@ namespace EonTimer
 
         private void CreateTimer()
         {
-            if (monitor.IsRunning())
+            if (monitor.IsRunning() || eventLock)
                 return;
 
             var type = (Consoles.ConsoleType)Settings.Default.Setting_Timer_Console;
@@ -237,7 +276,7 @@ namespace EonTimer
                         monitor.Timer = new EntralinkTimer(calibration, elCal, UserData.Default.Target_5_Delay, UserData.Default.Target_5_Second, type, min);
                         break;
                     case GenerationModes.Five.EntralinkPlus:
-                        monitor.Timer = new EnhancedEntralinkTimer(calibration, elCal, UserData.Default.Target_5_SecondaryEntralink, UserData.Default.Target_5_Delay, UserData.Default.Target_5_Second, type, min);
+                        monitor.Timer = new EnhancedEntralinkTimer(calibration, elCal, UserData.Default.Target_5_Delay, UserData.Default.Target_5_Second, UserData.Default.Target_5_EntralinkFrame, UserData.Default.Calibration_5_Frame, type, min);
                         break;
                     default:
                         monitor.Timer = new NullTimer();
@@ -271,6 +310,10 @@ namespace EonTimer
                         break;
                 }
             }
+            else if (tabMenu.SelectedTab.Equals(tabCustom))
+            {
+                monitor.Timer = new CustomTimer(customStages.ToArray());
+            }
         }
 
         private void ApplyOpacity()
@@ -281,6 +324,7 @@ namespace EonTimer
         private void Save()
         {
             UserData.Default.Save();
+            Settings.Default.Save();
         }
         #endregion
 
@@ -294,9 +338,12 @@ namespace EonTimer
         /// <summary>Triggered when modes change</summary>
         private void UpdateTimer(object sender, EventArgs e)
         {
-            UpdateSettingsFromControls();
-            HideGUIElements();
-            CreateTimer();
+            if (!eventLock)
+            {
+                UpdateSettingsFromControls();
+                HideGUIElements();
+                CreateTimer();
+            }
         }
         /// <summary>Sets opacity</summary>
         private void UpdateOpacity(object sender, EventArgs e)
@@ -308,32 +355,43 @@ namespace EonTimer
         {
             labelDelayHit5.Text = "Delay Hit";
 
-            switch ((GenerationModes.Five)UserData.Default.Mode_5)
+            if (tabMenu.SelectedTab.Equals(tabGen5))
             {
-                case GenerationModes.Five.Standard:
-                    Hide(new Control[] { label_target_delay_5, text_target_delay_5, label_calibration_entralink_5, text_calibration_entralink_5, label_target_entralink_second, text_target_standard_5 });
-                    labelDelayHit5.Text = "Second Hit";
-                    break;
-                case GenerationModes.Five.CGear:
-                    Hide(new Control[] { label_calibration_entralink_5, text_calibration_entralink_5, label_target_entralink_second, text_target_standard_5 });
-                    Show(new Control[] { label_target_delay_5, text_target_delay_5 });
-                    break;
-                case GenerationModes.Five.Entralink:
-                    Hide(new Control[] { label_target_entralink_second, text_target_standard_5 });
-                    Show(new Control[] { label_target_delay_5, text_target_delay_5, label_calibration_entralink_5, text_calibration_entralink_5 });
-                    break;
-                case GenerationModes.Five.EntralinkPlus:
-                    Show(new Control[] { label_target_delay_5, text_target_delay_5, label_calibration_entralink_5, text_calibration_entralink_5, label_target_entralink_second, text_target_standard_5 });
-                    break;
+                switch ((GenerationModes.Five)UserData.Default.Mode_5)
+                {
+                    case GenerationModes.Five.Standard:
+                        Hide(new Control[] { label_target_delay_5, text_target_delay_5, label_calibration_entralink_5, text_calibration_entralink_5, text_hit_5_second, label_hit_5_second, panel_enhancedEL });
+                        labelDelayHit5.Text = "Second Hit";
+                        break;
+                    case GenerationModes.Five.CGear:
+                        Hide(new Control[] { label_calibration_entralink_5, text_calibration_entralink_5, text_hit_5_second, label_hit_5_second, panel_enhancedEL });
+                        Show(new Control[] { label_target_delay_5, text_target_delay_5 });
+                        break;
+                    case GenerationModes.Five.Entralink:
+                        Show(new Control[] { label_target_delay_5, text_target_delay_5, label_calibration_entralink_5, text_calibration_entralink_5, text_hit_5_second, label_hit_5_second });
+                        Hide(new Control[] { panel_enhancedEL });
+                        break;
+                    case GenerationModes.Five.EntralinkPlus:
+                        Show(new Control[] { label_target_delay_5, text_target_delay_5, label_calibration_entralink_5, text_calibration_entralink_5, panel_enhancedEL, text_hit_5_second, label_hit_5_second, panel_enhancedEL });
+                        break;
+                }
             }
-            switch ((GenerationModes.Three)UserData.Default.Mode_3)
+            else if (tabMenu.SelectedTab.Equals(tabGen4))
             {
-                case GenerationModes.Three.Standard:
-                    Show(new Control[] { text_hit_3, labelHit3, label_calibration_lag_3, text_calibration_lag_3 });
-                    break;
-                case GenerationModes.Three.VariableTarget:
-                    Hide(new Control[] { text_hit_3, labelHit3, label_calibration_lag_3, text_calibration_lag_3 });
-                    break;
+                Hide(new Control[] { panel_enhancedEL });
+            }
+            else if (tabMenu.SelectedTab.Equals(tabGen3))
+            {
+                switch ((GenerationModes.Three)UserData.Default.Mode_3)
+                {
+                    case GenerationModes.Three.Standard:
+                        Show(new Control[] { text_hit_3, labelHit3, label_calibration_lag_3, text_calibration_lag_3 });
+                        Hide(new Control[] { panel_enhancedEL });
+                        break;
+                    case GenerationModes.Three.VariableTarget:
+                        Hide(new Control[] { text_hit_3, labelHit3, label_calibration_lag_3, text_calibration_lag_3, panel_enhancedEL });
+                        break;
+                }
             }
         }
         private void Hide(Control[] ctrls)
@@ -367,33 +425,56 @@ namespace EonTimer
         /// <summary>Updates Calibration</summary>
         private void UpdateCalibration(object sender, EventArgs e)
         {
-            Int32 temp = 0;
+            Int32 temp = 0, offsetAccounted = 0;
 
             if(tabMenu.SelectedTab.Equals(tabGen5))
             {
                 switch((GenerationModes.Five)UserData.Default.Mode_5)
                 {
                     case GenerationModes.Five.Standard:
+                        temp = ((SimpleTimer)monitor.Timer).Calibrate(SetInt(text_hit_5_delay.Text, UserData.Default.Target_5_Second));
+                        UserData.Default.Calibration_5_Basic += Settings.Default.Setting_Timer_PreciseCalibration ? temp : CalibrationHelper.ConvertToDelays(temp, (Consoles.ConsoleType)Settings.Default.Setting_Timer_Console);
+                        break;
                     case GenerationModes.Five.CGear:
-                        temp = monitor.Timer.Calibrate(SetInt(text_hit_5.Text, UserData.Default.Calibration_5_Basic));
-                        UserData.Default.Calibration_5_Basic = Settings.Default.Setting_Timer_PreciseCalibration ? temp : CalibrationHelper.ConvertToDelays(temp, (Consoles.ConsoleType)Settings.Default.Setting_Timer_Console);
+                        temp = ((DelayTimer)monitor.Timer).Calibrate(SetInt(text_hit_5_delay.Text, UserData.Default.Target_5_Delay));
+                        UserData.Default.Calibration_5_Basic += Settings.Default.Setting_Timer_PreciseCalibration ? temp : CalibrationHelper.ConvertToDelays(temp, (Consoles.ConsoleType)Settings.Default.Setting_Timer_Console);
                         break;
                     case GenerationModes.Five.Entralink:
+                        temp = ((SimpleTimer)monitor.Timer).Calibrate(SetInt(text_hit_5_second.Text, UserData.Default.Target_5_Second));
+                        
+                        offsetAccounted = temp;
+                        UserData.Default.Calibration_5_Basic += Settings.Default.Setting_Timer_PreciseCalibration ? temp : CalibrationHelper.ConvertToDelays(temp, (Consoles.ConsoleType)Settings.Default.Setting_Timer_Console);
+                        temp = ((EntralinkTimer)monitor.Timer).Calibrate(SetInt(text_hit_5_delay.Text, UserData.Default.Target_5_Delay) - offsetAccounted);
+
+                        temp = ((EntralinkTimer)monitor.Timer).Calibrate(SetInt(text_hit_5_delay.Text, UserData.Default.Target_5_Delay));
+                        UserData.Default.Calibration_5_Entralink += Settings.Default.Setting_Timer_PreciseCalibration ? temp : CalibrationHelper.ConvertToDelays(temp, (Consoles.ConsoleType)Settings.Default.Setting_Timer_Console);
+                        break;
                     case GenerationModes.Five.EntralinkPlus:
-                        temp = monitor.Timer.Calibrate(SetInt(text_hit_5.Text, UserData.Default.Calibration_5_Entralink));
-                        UserData.Default.Calibration_5_Entralink = Settings.Default.Setting_Timer_PreciseCalibration ? temp : CalibrationHelper.ConvertToDelays(temp, (Consoles.ConsoleType)Settings.Default.Setting_Timer_Console);
+                        temp = ((SimpleTimer)monitor.Timer).Calibrate(SetInt(text_hit_5_second.Text, UserData.Default.Target_5_Second));
+
+                        offsetAccounted = temp;
+                        UserData.Default.Calibration_5_Basic += Settings.Default.Setting_Timer_PreciseCalibration ? temp : CalibrationHelper.ConvertToDelays(temp, (Consoles.ConsoleType)Settings.Default.Setting_Timer_Console);
+                        temp = ((EntralinkTimer)monitor.Timer).Calibrate(SetInt(text_hit_5_delay.Text, UserData.Default.Target_5_Delay) - offsetAccounted);
+
+                        temp = ((EntralinkTimer)monitor.Timer).Calibrate(SetInt(text_hit_5_delay.Text, UserData.Default.Target_5_Delay));
+                        UserData.Default.Calibration_5_Entralink += Settings.Default.Setting_Timer_PreciseCalibration ? temp : CalibrationHelper.ConvertToDelays(temp, (Consoles.ConsoleType)Settings.Default.Setting_Timer_Console);
+                        
+                        temp = ((EnhancedEntralinkTimer)monitor.Timer).Calibrate(SetInt(text_hit_5_frame.Text, UserData.Default.Calibration_5_Frame));
+                        UserData.Default.Calibration_5_Frame += temp;
                         break;
                 }
 
-                text_hit_5.Text = "";
+                text_hit_5_frame.Text = "";
+                text_hit_5_second.Text = "";
+                text_hit_5_delay.Text = "";
             }
             else if (tabMenu.SelectedTab.Equals(tabGen4))
             {
                 switch ((GenerationModes.Four)UserData.Default.Mode_4)
                 {
                     case GenerationModes.Four.Standard:
-                        temp = monitor.Timer.Calibrate(SetInt(text_hit_4.Text, UserData.Default.Calibration_4_Delay)) + (UserData.Default.Calibration_4_Second * 1000);
-                        UserData.Default.Calibration_4_Delay = Settings.Default.Setting_Timer_PreciseCalibration ? temp : CalibrationHelper.ConvertToDelays(temp, (Consoles.ConsoleType)Settings.Default.Setting_Timer_Console);
+                        temp = ((DelayTimer)monitor.Timer).Calibrate(SetInt(text_hit_4.Text, UserData.Default.Calibration_4_Delay));
+                        UserData.Default.Calibration_4_Delay += Settings.Default.Setting_Timer_PreciseCalibration ? temp : CalibrationHelper.ConvertToDelays(temp, (Consoles.ConsoleType)Settings.Default.Setting_Timer_Console);
                         break;
                 }
 
@@ -404,8 +485,8 @@ namespace EonTimer
                 switch ((GenerationModes.Three)UserData.Default.Mode_3)
                 {
                     case GenerationModes.Three.Standard:
-                        temp = monitor.Timer.Calibrate(SetInt(text_hit_3.Text, UserData.Default.Calibration_3_Lag));
-                        UserData.Default.Calibration_3_Lag = temp;
+                        temp = ((FrameTimer)monitor.Timer).Calibrate(SetInt(text_hit_3.Text, UserData.Default.Calibration_3_Lag));
+                        UserData.Default.Calibration_3_Lag += temp;
                         break;
                     case GenerationModes.Three.VariableTarget:
                         temp = SetInt(text_target_frame_3.Text, 10000);
@@ -517,8 +598,74 @@ namespace EonTimer
             Settings.Default.Reload();
             ApplyOpacity();
             CreateCountdownActions();
+            actionHandler.Interval = new TimeSpan(0, 0, 0, 0, Settings.Default.Setting_Action_Interval);
+            actionHandler.ActionCount = Settings.Default.Setting_Action_Count;
             CreateTimer();
             e.Cancel = true;
+        }
+        #endregion
+
+        #region custom timer
+        private void Custom_AddStage(object sender, EventArgs e)
+        {
+            Int32 temp = 0;
+            if (Int32.TryParse(text_custom_add.Text, out temp))
+            {
+                list_custom.Items.Add(temp);
+                text_custom_add.Text = "";
+                ApplyStages();
+                CreateTimer();
+            }
+            else
+                MessageBox.Show("Invalid. Please enter an integer.");
+        }
+        private void Custom_RemoveStage(object sender, EventArgs e)
+        {
+            if (list_custom.SelectedIndex != -1)
+                list_custom.Items.RemoveAt(list_custom.SelectedIndex);
+
+            CreateTimer();
+        }
+        private void Custom_ClearAll(object sender, EventArgs e)
+        {
+            list_custom.Items.Clear();
+            customStages.Clear();
+            CreateTimer();
+        }
+        private void Custom_Edit(object sender, EventArgs e)
+        {
+            Int32 index = list_custom.SelectedIndex;
+            Int32 temp = 0;
+
+            if(Int32.TryParse(text_custom_edit.Text, out temp))
+            {
+                list_custom.Items.Insert(index, temp);
+                list_custom.Items.RemoveAt(index + 1);
+                text_custom_edit.Text = "";
+                ApplyStages();
+                CreateTimer();
+            }
+            else
+                MessageBox.Show("Invalid. Please enteran integer.");
+        }
+        private void Custom_Selected(object sender, EventArgs e)
+        {
+            try
+            {
+                text_custom_edit.Text = list_custom.SelectedItem.ToString();
+            }
+            catch (NullReferenceException)
+            {
+                //this can happen when an entry is removed
+            }
+        }
+        private void ApplyStages()
+        {
+            customStages.Clear();
+            foreach (var item in list_custom.Items)
+            {
+                customStages.Add(Int32.Parse(item.ToString()));
+            }
         }
         #endregion
 

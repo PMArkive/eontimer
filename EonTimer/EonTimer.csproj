@@ -86,6 +86,7 @@
     <Compile Include="Handlers\ActionHandler.cs" />
     <Compile Include="Handlers\DisplayHandler.cs" />
     <Compile Include="Settings.cs" />
+    <Compile Include="Timers\CustomTimer.cs" />
     <Compile Include="Timers\DelayTimer.cs" />
     <Compile Include="Timers\EnhancedEntralinkTimer.cs" />
     <Compile Include="Timers\EntralinkTimer.cs" />
@@ -95,10 +96,10 @@
     <Compile Include="Timers\SimpleTimer.cs" />
     <Compile Include="Timers\VariableTargetFrameTimer.cs" />
     <Compile Include="Timers\ITimer.cs" />
-    <Compile Include="Properties\Settings.Designer.cs">
+    <Compile Include="Properties\UserSettings.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
-      <DependentUpon>Settings.settings</DependentUpon>
+      <DependentUpon>UserSettings.settings</DependentUpon>
     </Compile>
     <Compile Include="Utilities\Helpers\CalibrationHelper.cs" />
     <Compile Include="Utilities\ITimeoutHandler.cs" />
@@ -135,19 +136,19 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
-    <None Include="app.config" />
     <None Include="Properties\UserData.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>UserData.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
     </None>
     <Compile Include="Properties\UserData.Designer.cs">
       <AutoGen>True</AutoGen>
       <DependentUpon>UserData.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
-    <None Include="Properties\Settings.settings">
+    <None Include="Properties\UserSettings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
-      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+      <LastGenOutput>UserSettings.Designer.cs</LastGenOutput>
     </None>
   </ItemGroup>
   <ItemGroup>

@@ -1,21 +1,33 @@
 ﻿using System;
 using System.Collections.Generic;
 using EonTimer.Utilities.Reference;
+using EonTimer.Utilities.Helpers;
 
 namespace EonTimer.Timers
 {
     public class EnhancedEntralinkTimer : EntralinkTimer
     {
-        public Int32 StandardTargetSecond { get; set; }
+        public Int32 TargetFrame { get; set; }
+        public Int32 NPCCount { get; set; }
+        public Int32 InitialAdvances { get; set; }
+        public Int32 FrameCalibration { get; set; }
 
-        public EnhancedEntralinkTimer(Int32 calibration, Int32 secondaryCalibration, Int32 standardTargetSecond, Int32 targetDelay, Int32 entralinkTargetSecond, Consoles.ConsoleType consoleType, Int32 minLength)
-            : base(calibration, secondaryCalibration, targetDelay, entralinkTargetSecond, consoleType, minLength)
+        public EnhancedEntralinkTimer(Int32 calibration, Int32 secondaryCalibration, Int32 targetDelay, Int32 targetSecond, Int32 targetFrame, Int32 frameCalibration, Consoles.ConsoleType consoleType, Int32 minLength, Boolean initialize = true)
+            : base(calibration, secondaryCalibration, targetDelay, targetSecond, consoleType, minLength, false)
         {
-            StandardTargetSecond = standardTargetSecond;
+            TargetFrame = targetFrame;
+            NPCCount = 0;
+            InitialAdvances = 0;
+            FrameCalibration = frameCalibration;
 
-            Stages = new List<TimeSpan>();
-            for (Int32 i = 0; GetStage(i) != TimerConstants.NULL_TIMESPAN; i++)
-                Stages.Add(GetStage(i));
+            if (initialize)
+                Initialize();
+        }
+
+        public new virtual Int32 Calibrate(Int32 result)
+        {
+            Decimal npcRate = 1.0M / CalibrationHelper.ConvertToMillis(32, ConsoleType);
+            return (Int32)Math.Round((TargetFrame - result) / (TimerConstants.ENTRALINK_FRAMERATE + (NPCCount * npcRate))) * 1000;
         }
 
         protected override TimeSpan GetStage(Int32 stage)
@@ -23,14 +35,21 @@ namespace EonTimer.Timers
             switch (stage)
             {
                 case 0:
-                    return base.GetStage(0).Add(new TimeSpan(0, 0, 0, 0, 250));
                 case 1:
-                    return new TimeSpan(0, 0, 0, 0, (StandardTargetSecond * 1000) + Calibration);
+                    return base.GetStage(stage);
                 case 2:
-                    return base.GetStage(1).Subtract(new TimeSpan(0, 0, 0, 0, SecondaryCalibration)).Subtract(this.GetStage(1));
+                    return CalcFrameTime();
                 default:
                     return TimerConstants.NULL_TIMESPAN;
             }
+        }
+
+        private TimeSpan CalcFrameTime()
+        {
+            Int32 frames = TargetFrame - InitialAdvances;
+            Decimal npcRate = 1.0M / CalibrationHelper.ConvertToMillis(32, ConsoleType);
+            Int32 ms = (Int32)Math.Round((frames) / (TimerConstants.ENTRALINK_FRAMERATE + (NPCCount * npcRate))) * 1000 + FrameCalibration;
+            return new TimeSpan(0,0,0,0, ms);
         }
     }
 }

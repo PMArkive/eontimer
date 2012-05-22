@@ -48,13 +48,14 @@
             this.labelOnExit = new System.Windows.Forms.Label();
             this.combo_setting_onexit = new System.Windows.Forms.ComboBox();
             this.tabPage1 = new System.Windows.Forms.TabPage();
+            this.labelConsole = new System.Windows.Forms.Label();
+            this.combo_setting_console = new System.Windows.Forms.ComboBox();
             this.text_setting_refresh = new System.Windows.Forms.NumericUpDown();
             this.label2 = new System.Windows.Forms.Label();
             this.check_setting_precisionmode = new System.Windows.Forms.CheckBox();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.buttonDefault = new System.Windows.Forms.Button();
-            this.combo_setting_console = new System.Windows.Forms.ComboBox();
-            this.labelConsole = new System.Windows.Forms.Label();
+            this.check_settings_updates = new System.Windows.Forms.CheckBox();
             this.tabMenuSettings.SuspendLayout();
             this.tabActions.SuspendLayout();
             this.tabAppSettings.SuspendLayout();
@@ -201,6 +202,7 @@
             // 
             // tabAppSettings
             // 
+            this.tabAppSettings.Controls.Add(this.check_settings_updates);
             this.tabAppSettings.Controls.Add(this.labelOpacity);
             this.tabAppSettings.Controls.Add(this.trackOpacity);
             this.tabAppSettings.Controls.Add(this.labelOnExit);
@@ -271,6 +273,24 @@
             this.tabPage1.Text = "Timer";
             this.tabPage1.UseVisualStyleBackColor = true;
             // 
+            // labelConsole
+            // 
+            this.labelConsole.AutoSize = true;
+            this.labelConsole.Location = new System.Drawing.Point(6, 9);
+            this.labelConsole.Name = "labelConsole";
+            this.labelConsole.Size = new System.Drawing.Size(45, 13);
+            this.labelConsole.TabIndex = 4;
+            this.labelConsole.Text = "Console";
+            // 
+            // combo_setting_console
+            // 
+            this.combo_setting_console.FormattingEnabled = true;
+            this.combo_setting_console.Location = new System.Drawing.Point(101, 6);
+            this.combo_setting_console.Name = "combo_setting_console";
+            this.combo_setting_console.Size = new System.Drawing.Size(116, 21);
+            this.combo_setting_console.TabIndex = 3;
+            this.combo_setting_console.SelectedIndexChanged += new System.EventHandler(this.Change);
+            // 
             // text_setting_refresh
             // 
             this.text_setting_refresh.Location = new System.Drawing.Point(101, 124);
@@ -318,23 +338,16 @@
             this.buttonDefault.Text = "Defaults";
             this.buttonDefault.UseVisualStyleBackColor = true;
             // 
-            // combo_setting_console
+            // check_settings_updates
             // 
-            this.combo_setting_console.FormattingEnabled = true;
-            this.combo_setting_console.Location = new System.Drawing.Point(101, 6);
-            this.combo_setting_console.Name = "combo_setting_console";
-            this.combo_setting_console.Size = new System.Drawing.Size(116, 21);
-            this.combo_setting_console.TabIndex = 3;
-            this.combo_setting_console.SelectedIndexChanged += new System.EventHandler(this.Change);
-            // 
-            // labelConsole
-            // 
-            this.labelConsole.AutoSize = true;
-            this.labelConsole.Location = new System.Drawing.Point(6, 9);
-            this.labelConsole.Name = "labelConsole";
-            this.labelConsole.Size = new System.Drawing.Size(45, 13);
-            this.labelConsole.TabIndex = 4;
-            this.labelConsole.Text = "Console";
+            this.check_settings_updates.AutoSize = true;
+            this.check_settings_updates.Location = new System.Drawing.Point(9, 127);
+            this.check_settings_updates.Name = "check_settings_updates";
+            this.check_settings_updates.Size = new System.Drawing.Size(167, 17);
+            this.check_settings_updates.TabIndex = 4;
+            this.check_settings_updates.Text = "Check for Updates on Startup";
+            this.check_settings_updates.UseVisualStyleBackColor = true;
+            this.check_settings_updates.CheckedChanged += new System.EventHandler(this.Change);
             // 
             // EonTimerSettings
             // 
@@ -391,5 +404,6 @@
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.ComboBox combo_setting_console;
         private System.Windows.Forms.Label labelConsole;
+        private System.Windows.Forms.CheckBox check_settings_updates;
     }
 }

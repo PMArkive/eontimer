@@ -66,13 +66,13 @@
             this.label_calibration_second_4 = new System.Windows.Forms.Label();
             this.label_calibration_delay_4 = new System.Windows.Forms.Label();
             this.tabGen5 = new System.Windows.Forms.TabPage();
-            this.label_target_entralink_second = new System.Windows.Forms.Label();
-            this.text_target_standard_5 = new System.Windows.Forms.TextBox();
+            this.text_hit_5_second = new System.Windows.Forms.TextBox();
+            this.label_hit_5_second = new System.Windows.Forms.Label();
             this.label_mode_5 = new System.Windows.Forms.Label();
             this.combo_mode_5 = new System.Windows.Forms.ComboBox();
             this.label_calibration_entralink_5 = new System.Windows.Forms.Label();
             this.text_calibration_entralink_5 = new System.Windows.Forms.TextBox();
-            this.text_hit_5 = new System.Windows.Forms.TextBox();
+            this.text_hit_5_delay = new System.Windows.Forms.TextBox();
             this.text_target_second_5 = new System.Windows.Forms.TextBox();
             this.text_target_delay_5 = new System.Windows.Forms.TextBox();
             this.text_calibration_5 = new System.Windows.Forms.TextBox();
@@ -82,11 +82,24 @@
             this.label_calibration_5 = new System.Windows.Forms.Label();
             this.tabMenu = new System.Windows.Forms.TabControl();
             this.tabCustom = new System.Windows.Forms.TabPage();
+            this.button_custom_update = new System.Windows.Forms.Button();
+            this.button_remove = new System.Windows.Forms.Button();
+            this.text_custom_edit = new System.Windows.Forms.TextBox();
+            this.button_custom_clear = new System.Windows.Forms.Button();
+            this.button_custom_add = new System.Windows.Forms.Button();
+            this.text_custom_add = new System.Windows.Forms.TextBox();
+            this.list_custom = new System.Windows.Forms.ListBox();
             this.tabImages = new System.Windows.Forms.ImageList(this.components);
             this.pictureMini = new System.Windows.Forms.PictureBox();
             this.picturePin = new System.Windows.Forms.PictureBox();
             this.pictureSettings = new System.Windows.Forms.PictureBox();
-            this.label1 = new System.Windows.Forms.Label();
+            this.panel_enhancedEL = new System.Windows.Forms.Panel();
+            this.label_target_5_frame = new System.Windows.Forms.Label();
+            this.text_target_5_frame = new System.Windows.Forms.TextBox();
+            this.label_hit_5_frame = new System.Windows.Forms.Label();
+            this.text_hit_5_frame = new System.Windows.Forms.TextBox();
+            this.label2 = new System.Windows.Forms.Label();
+            this.text_calibration_5_frame = new System.Windows.Forms.TextBox();
             ((System.ComponentModel.ISupportInitialize)(this.pictureClose)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureMinimize)).BeginInit();
             this.tabGen3.SuspendLayout();
@@ -97,6 +110,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.pictureMini)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.picturePin)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureSettings)).BeginInit();
+            this.panel_enhancedEL.SuspendLayout();
             this.SuspendLayout();
             // 
             // displayCurrent
@@ -171,6 +185,7 @@
             this.buttonSave.TabIndex = 8;
             this.buttonSave.Text = "Save";
             this.buttonSave.UseVisualStyleBackColor = true;
+            this.buttonSave.Click += new System.EventHandler(this.Save);
             // 
             // pictureClose
             // 
@@ -478,13 +493,13 @@
             // 
             this.tabGen5.BackColor = System.Drawing.Color.GhostWhite;
             this.tabGen5.BackgroundImage = global::EonTimer.Properties.Resources.TabGlac;
-            this.tabGen5.Controls.Add(this.label_target_entralink_second);
-            this.tabGen5.Controls.Add(this.text_target_standard_5);
+            this.tabGen5.Controls.Add(this.text_hit_5_second);
+            this.tabGen5.Controls.Add(this.label_hit_5_second);
             this.tabGen5.Controls.Add(this.label_mode_5);
             this.tabGen5.Controls.Add(this.combo_mode_5);
             this.tabGen5.Controls.Add(this.label_calibration_entralink_5);
             this.tabGen5.Controls.Add(this.text_calibration_entralink_5);
-            this.tabGen5.Controls.Add(this.text_hit_5);
+            this.tabGen5.Controls.Add(this.text_hit_5_delay);
             this.tabGen5.Controls.Add(this.text_target_second_5);
             this.tabGen5.Controls.Add(this.text_target_delay_5);
             this.tabGen5.Controls.Add(this.text_calibration_5);
@@ -500,26 +515,23 @@
             this.tabGen5.Size = new System.Drawing.Size(177, 213);
             this.tabGen5.TabIndex = 1;
             // 
-            // label_target_entralink_second
+            // text_hit_5_second
             // 
-            this.label_target_entralink_second.AutoSize = true;
-            this.label_target_entralink_second.BackColor = System.Drawing.Color.Transparent;
-            this.label_target_entralink_second.Location = new System.Drawing.Point(6, 151);
-            this.label_target_entralink_second.Name = "label_target_entralink_second";
-            this.label_target_entralink_second.Size = new System.Drawing.Size(84, 13);
-            this.label_target_entralink_second.TabIndex = 15;
-            this.label_target_entralink_second.Text = "Standard Target";
-            this.label_target_entralink_second.Visible = false;
+            this.text_hit_5_second.Location = new System.Drawing.Point(96, 159);
+            this.text_hit_5_second.Name = "text_hit_5_second";
+            this.text_hit_5_second.Size = new System.Drawing.Size(75, 20);
+            this.text_hit_5_second.TabIndex = 14;
+            this.text_hit_5_second.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.NumericKeyPress);
             // 
-            // text_target_standard_5
+            // label_hit_5_second
             // 
-            this.text_target_standard_5.Location = new System.Drawing.Point(96, 148);
-            this.text_target_standard_5.Name = "text_target_standard_5";
-            this.text_target_standard_5.Size = new System.Drawing.Size(75, 20);
-            this.text_target_standard_5.TabIndex = 14;
-            this.text_target_standard_5.Visible = false;
-            this.text_target_standard_5.TextChanged += new System.EventHandler(this.UpdateTimer);
-            this.text_target_standard_5.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.NumericKeyPress);
+            this.label_hit_5_second.AutoSize = true;
+            this.label_hit_5_second.BackColor = System.Drawing.Color.Transparent;
+            this.label_hit_5_second.Location = new System.Drawing.Point(6, 162);
+            this.label_hit_5_second.Name = "label_hit_5_second";
+            this.label_hit_5_second.Size = new System.Drawing.Size(60, 13);
+            this.label_hit_5_second.TabIndex = 15;
+            this.label_hit_5_second.Text = "Second Hit";
             // 
             // label_mode_5
             // 
@@ -561,13 +573,13 @@
             this.text_calibration_entralink_5.TextChanged += new System.EventHandler(this.UpdateTimer);
             this.text_calibration_entralink_5.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.NumericKeyPress);
             // 
-            // text_hit_5
+            // text_hit_5_delay
             // 
-            this.text_hit_5.Location = new System.Drawing.Point(96, 185);
-            this.text_hit_5.Name = "text_hit_5";
-            this.text_hit_5.Size = new System.Drawing.Size(75, 20);
-            this.text_hit_5.TabIndex = 6;
-            this.text_hit_5.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.NumericKeyPress);
+            this.text_hit_5_delay.Location = new System.Drawing.Point(96, 185);
+            this.text_hit_5_delay.Name = "text_hit_5_delay";
+            this.text_hit_5_delay.Size = new System.Drawing.Size(75, 20);
+            this.text_hit_5_delay.TabIndex = 6;
+            this.text_hit_5_delay.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.NumericKeyPress);
             // 
             // text_target_second_5
             // 
@@ -656,7 +668,13 @@
             // tabCustom
             // 
             this.tabCustom.BackgroundImage = global::EonTimer.Properties.Resources.TabGlac;
-            this.tabCustom.Controls.Add(this.label1);
+            this.tabCustom.Controls.Add(this.button_custom_update);
+            this.tabCustom.Controls.Add(this.button_remove);
+            this.tabCustom.Controls.Add(this.text_custom_edit);
+            this.tabCustom.Controls.Add(this.button_custom_clear);
+            this.tabCustom.Controls.Add(this.button_custom_add);
+            this.tabCustom.Controls.Add(this.text_custom_add);
+            this.tabCustom.Controls.Add(this.list_custom);
             this.tabCustom.ImageKey = "EonCustom.png";
             this.tabCustom.Location = new System.Drawing.Point(4, 20);
             this.tabCustom.Name = "tabCustom";
@@ -664,6 +682,72 @@
             this.tabCustom.Size = new System.Drawing.Size(177, 213);
             this.tabCustom.TabIndex = 4;
             this.tabCustom.UseVisualStyleBackColor = true;
+            // 
+            // button_custom_update
+            // 
+            this.button_custom_update.Location = new System.Drawing.Point(114, 185);
+            this.button_custom_update.Name = "button_custom_update";
+            this.button_custom_update.Size = new System.Drawing.Size(57, 23);
+            this.button_custom_update.TabIndex = 7;
+            this.button_custom_update.Text = "Apply";
+            this.button_custom_update.UseVisualStyleBackColor = true;
+            this.button_custom_update.Click += new System.EventHandler(this.Custom_Edit);
+            // 
+            // button_remove
+            // 
+            this.button_remove.Location = new System.Drawing.Point(114, 34);
+            this.button_remove.Name = "button_remove";
+            this.button_remove.Size = new System.Drawing.Size(57, 23);
+            this.button_remove.TabIndex = 5;
+            this.button_remove.Text = "Remove";
+            this.button_remove.UseVisualStyleBackColor = true;
+            this.button_remove.Click += new System.EventHandler(this.Custom_RemoveStage);
+            // 
+            // text_custom_edit
+            // 
+            this.text_custom_edit.Location = new System.Drawing.Point(6, 187);
+            this.text_custom_edit.Name = "text_custom_edit";
+            this.text_custom_edit.Size = new System.Drawing.Size(102, 20);
+            this.text_custom_edit.TabIndex = 4;
+            this.text_custom_edit.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.NumericKeyPress);
+            // 
+            // button_custom_clear
+            // 
+            this.button_custom_clear.Location = new System.Drawing.Point(114, 62);
+            this.button_custom_clear.Name = "button_custom_clear";
+            this.button_custom_clear.Size = new System.Drawing.Size(57, 23);
+            this.button_custom_clear.TabIndex = 3;
+            this.button_custom_clear.Text = "Clear All";
+            this.button_custom_clear.UseVisualStyleBackColor = true;
+            this.button_custom_clear.Click += new System.EventHandler(this.Custom_ClearAll);
+            // 
+            // button_custom_add
+            // 
+            this.button_custom_add.Location = new System.Drawing.Point(114, 5);
+            this.button_custom_add.Name = "button_custom_add";
+            this.button_custom_add.Size = new System.Drawing.Size(57, 23);
+            this.button_custom_add.TabIndex = 2;
+            this.button_custom_add.Text = "Add";
+            this.button_custom_add.UseVisualStyleBackColor = true;
+            this.button_custom_add.Click += new System.EventHandler(this.Custom_AddStage);
+            // 
+            // text_custom_add
+            // 
+            this.text_custom_add.Location = new System.Drawing.Point(6, 7);
+            this.text_custom_add.Name = "text_custom_add";
+            this.text_custom_add.Size = new System.Drawing.Size(102, 20);
+            this.text_custom_add.TabIndex = 1;
+            this.text_custom_add.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.NumericKeyPress);
+            // 
+            // list_custom
+            // 
+            this.list_custom.FormattingEnabled = true;
+            this.list_custom.Location = new System.Drawing.Point(6, 31);
+            this.list_custom.MultiColumn = true;
+            this.list_custom.Name = "list_custom";
+            this.list_custom.Size = new System.Drawing.Size(102, 147);
+            this.list_custom.TabIndex = 0;
+            this.list_custom.SelectedIndexChanged += new System.EventHandler(this.Custom_Selected);
             // 
             // tabImages
             // 
@@ -717,14 +801,85 @@
             this.pictureSettings.MouseEnter += new System.EventHandler(this.Settings_MouseEnter);
             this.pictureSettings.MouseLeave += new System.EventHandler(this.Settings_MouseLeave);
             // 
-            // label1
+            // panel_enhancedEL
             // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(42, 94);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(94, 13);
-            this.label1.TabIndex = 0;
-            this.label1.Text = "This is in progress.";
+            this.panel_enhancedEL.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.panel_enhancedEL.Controls.Add(this.label_target_5_frame);
+            this.panel_enhancedEL.Controls.Add(this.text_target_5_frame);
+            this.panel_enhancedEL.Controls.Add(this.label_hit_5_frame);
+            this.panel_enhancedEL.Controls.Add(this.text_hit_5_frame);
+            this.panel_enhancedEL.Controls.Add(this.label2);
+            this.panel_enhancedEL.Controls.Add(this.text_calibration_5_frame);
+            this.panel_enhancedEL.Location = new System.Drawing.Point(12, 156);
+            this.panel_enhancedEL.Name = "panel_enhancedEL";
+            this.panel_enhancedEL.Size = new System.Drawing.Size(189, 97);
+            this.panel_enhancedEL.TabIndex = 17;
+            // 
+            // label_target_5_frame
+            // 
+            this.label_target_5_frame.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.label_target_5_frame.AutoSize = true;
+            this.label_target_5_frame.BackColor = System.Drawing.Color.Transparent;
+            this.label_target_5_frame.Location = new System.Drawing.Point(6, 32);
+            this.label_target_5_frame.Name = "label_target_5_frame";
+            this.label_target_5_frame.Size = new System.Drawing.Size(89, 13);
+            this.label_target_5_frame.TabIndex = 9;
+            this.label_target_5_frame.Text = "Target Advances";
+            // 
+            // text_target_5_frame
+            // 
+            this.text_target_5_frame.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.text_target_5_frame.Location = new System.Drawing.Point(101, 29);
+            this.text_target_5_frame.Name = "text_target_5_frame";
+            this.text_target_5_frame.Size = new System.Drawing.Size(84, 20);
+            this.text_target_5_frame.TabIndex = 8;
+            this.text_target_5_frame.TextChanged += new System.EventHandler(this.UpdateTimer);
+            this.text_target_5_frame.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.NumericKeyPress);
+            // 
+            // label_hit_5_frame
+            // 
+            this.label_hit_5_frame.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.label_hit_5_frame.AutoSize = true;
+            this.label_hit_5_frame.BackColor = System.Drawing.Color.Transparent;
+            this.label_hit_5_frame.Location = new System.Drawing.Point(6, 71);
+            this.label_hit_5_frame.Name = "label_hit_5_frame";
+            this.label_hit_5_frame.Size = new System.Drawing.Size(88, 13);
+            this.label_hit_5_frame.TabIndex = 7;
+            this.label_hit_5_frame.Text = "Actual Advances";
+            // 
+            // text_hit_5_frame
+            // 
+            this.text_hit_5_frame.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.text_hit_5_frame.Location = new System.Drawing.Point(100, 68);
+            this.text_hit_5_frame.Name = "text_hit_5_frame";
+            this.text_hit_5_frame.Size = new System.Drawing.Size(84, 20);
+            this.text_hit_5_frame.TabIndex = 6;
+            this.text_hit_5_frame.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.NumericKeyPress);
+            // 
+            // label2
+            // 
+            this.label2.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.label2.AutoSize = true;
+            this.label2.BackColor = System.Drawing.Color.Transparent;
+            this.label2.Location = new System.Drawing.Point(6, 6);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(88, 13);
+            this.label2.TabIndex = 5;
+            this.label2.Text = "Frame Calibration";
+            // 
+            // text_calibration_5_frame
+            // 
+            this.text_calibration_5_frame.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.text_calibration_5_frame.Location = new System.Drawing.Point(100, 3);
+            this.text_calibration_5_frame.Name = "text_calibration_5_frame";
+            this.text_calibration_5_frame.Size = new System.Drawing.Size(84, 20);
+            this.text_calibration_5_frame.TabIndex = 4;
+            this.text_calibration_5_frame.TextChanged += new System.EventHandler(this.UpdateTimer);
+            this.text_calibration_5_frame.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.NumericKeyPress);
             // 
             // MainTimer
             // 
@@ -734,6 +889,7 @@
             this.BackgroundImage = global::EonTimer.Properties.Resources.glaceonbg;
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
             this.ClientSize = new System.Drawing.Size(392, 293);
+            this.Controls.Add(this.panel_enhancedEL);
             this.Controls.Add(this.pictureSettings);
             this.Controls.Add(this.pictureMini);
             this.Controls.Add(this.picturePin);
@@ -766,6 +922,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.pictureMini)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.picturePin)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureSettings)).EndInit();
+            this.panel_enhancedEL.ResumeLayout(false);
+            this.panel_enhancedEL.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -807,7 +965,7 @@
         private System.Windows.Forms.TabPage tabGen5;
         private System.Windows.Forms.Label label_calibration_entralink_5;
         private System.Windows.Forms.TextBox text_calibration_entralink_5;
-        private System.Windows.Forms.TextBox text_hit_5;
+        private System.Windows.Forms.TextBox text_hit_5_delay;
         private System.Windows.Forms.TextBox text_target_second_5;
         private System.Windows.Forms.TextBox text_target_delay_5;
         private System.Windows.Forms.TextBox text_calibration_5;
@@ -820,8 +978,6 @@
         private System.Windows.Forms.ImageList tabImages;
         private System.Windows.Forms.PictureBox pictureMini;
         private System.Windows.Forms.PictureBox picturePin;
-        private System.Windows.Forms.Label label_target_entralink_second;
-        private System.Windows.Forms.TextBox text_target_standard_5;
         private System.Windows.Forms.Label label_mode_5;
         private System.Windows.Forms.ComboBox combo_mode_5;
         private System.Windows.Forms.Label label_mode_4;
@@ -829,7 +985,22 @@
         private System.Windows.Forms.Label labelMode3;
         private System.Windows.Forms.ComboBox combo_mode_3;
         private System.Windows.Forms.PictureBox pictureSettings;
-        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Button button_custom_update;
+        private System.Windows.Forms.Button button_remove;
+        private System.Windows.Forms.TextBox text_custom_edit;
+        private System.Windows.Forms.Button button_custom_clear;
+        private System.Windows.Forms.Button button_custom_add;
+        private System.Windows.Forms.TextBox text_custom_add;
+        private System.Windows.Forms.ListBox list_custom;
+        private System.Windows.Forms.Panel panel_enhancedEL;
+        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.TextBox text_calibration_5_frame;
+        private System.Windows.Forms.Label label_target_5_frame;
+        private System.Windows.Forms.TextBox text_target_5_frame;
+        private System.Windows.Forms.Label label_hit_5_frame;
+        private System.Windows.Forms.TextBox text_hit_5_frame;
+        private System.Windows.Forms.TextBox text_hit_5_second;
+        private System.Windows.Forms.Label label_hit_5_second;
 
     }
 }

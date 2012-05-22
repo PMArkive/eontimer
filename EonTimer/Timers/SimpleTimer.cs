@@ -13,13 +13,19 @@ namespace EonTimer.Timers
         public List<TimeSpan> Stages { get; protected set; }
         public Int32 MinimumLength { get; set; }
 
-        public SimpleTimer(Int32 calibration, Int32 targetSecond, Consoles.ConsoleType consoleType, Int32 minLength)
+        public SimpleTimer(Int32 calibration, Int32 targetSecond, Consoles.ConsoleType consoleType, Int32 minLength, Boolean initialize = true)
         {
             Calibration = calibration;
             TargetSecond = targetSecond;
             ConsoleType = consoleType;
             MinimumLength = minLength;
 
+            if (initialize)
+                Initialize();
+        }
+
+        protected void Initialize()
+        {
             Stages = new List<TimeSpan>();
             for (Int32 i = 0; GetStage(i) != TimerConstants.NULL_TIMESPAN; i++)
                 Stages.Add(GetStage(i));
@@ -28,11 +34,11 @@ namespace EonTimer.Timers
         public virtual Int32 Calibrate(Int32 result)
         {
             if (result == TargetSecond)
-                return Calibration;
+                return 0;
             else if (result > TargetSecond)
-                return (Calibration + (TargetSecond - result) * 1000 + 500);
+                return ((TargetSecond - result) * 1000 + 500);
             else
-                return (Calibration + (TargetSecond - result) * 1000 - 500);
+                return ((TargetSecond - result) * 1000 - 500);
         }
         public virtual Int32 GetMinutesBeforeTarget()
         {
