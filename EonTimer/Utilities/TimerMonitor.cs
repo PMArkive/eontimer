@@ -6,6 +6,7 @@ using EonTimer.Timers;
 using EonTimer.Handlers;
 using System.Threading;
 using EonTimer.Utilities.Reference;
+using EonTimer.Utilities.Helpers;
 
 namespace EonTimer.Utilities
 {
@@ -56,9 +57,9 @@ namespace EonTimer.Utilities
             for(Int32 stage = 0; stage < Timer.Stages.Count; stage++)
                 RunStage(stage);
 
-
             if (Timer is IVariableTimer)
                 (Timer as IVariableTimer).Reset();
+
             foreach (ITimerEventHandler h in Handlers)
                 h.NotifyEnd();
 
@@ -75,7 +76,6 @@ namespace EonTimer.Utilities
             DateTime endTime = start.Add(Timer.Stages[stage]);
             TimeSpan remaining = (endTime - DateTime.Now);
 
-
             foreach (ITimerEventHandler h in Handlers)
                 h.NotifyStageStart(stage);
 
@@ -88,7 +88,6 @@ namespace EonTimer.Utilities
                 foreach (ITimerEventHandler h in Handlers)
                     h.NotifyUpdate(remaining);
             }
-
 
             foreach (ITimerEventHandler h in Handlers)
                 h.NotifyStageEnd(stage);

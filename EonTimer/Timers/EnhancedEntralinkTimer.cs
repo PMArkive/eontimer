@@ -44,6 +44,16 @@ namespace EonTimer.Timers
             }
         }
 
+        public override Int32 GetMinutesBeforeTarget()
+        {
+            var ts = new TimeSpan(0);
+
+            for (Int32 i = 0; i < 2; i++)
+                ts = ts.Add(Stages[i]);
+
+            return (Int32)ts.TotalMilliseconds / 60000;
+        }
+
         private TimeSpan CalcFrameTime()
         {
             Int32 frames = TargetFrame - InitialAdvances;

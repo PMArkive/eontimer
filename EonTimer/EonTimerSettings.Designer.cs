@@ -34,7 +34,7 @@
             this.tabActions = new System.Windows.Forms.TabPage();
             this.labelActionCount = new System.Windows.Forms.Label();
             this.text_setting_count = new System.Windows.Forms.TextBox();
-            this.label1 = new System.Windows.Forms.Label();
+            this.labelActionInterval = new System.Windows.Forms.Label();
             this.text_setting_frequency = new System.Windows.Forms.TextBox();
             this.labelSound = new System.Windows.Forms.Label();
             this.combo_setting_sound = new System.Windows.Forms.ComboBox();
@@ -43,25 +43,28 @@
             this.labelActionMode = new System.Windows.Forms.Label();
             this.combo_setting_actionmode = new System.Windows.Forms.ComboBox();
             this.tabAppSettings = new System.Windows.Forms.TabPage();
+            this.check_settings_updates = new System.Windows.Forms.CheckBox();
             this.labelOpacity = new System.Windows.Forms.Label();
             this.trackOpacity = new System.Windows.Forms.TrackBar();
             this.labelOnExit = new System.Windows.Forms.Label();
             this.combo_setting_onexit = new System.Windows.Forms.ComboBox();
-            this.tabPage1 = new System.Windows.Forms.TabPage();
+            this.tabTimerSettings = new System.Windows.Forms.TabPage();
             this.labelConsole = new System.Windows.Forms.Label();
             this.combo_setting_console = new System.Windows.Forms.ComboBox();
             this.text_setting_refresh = new System.Windows.Forms.NumericUpDown();
-            this.label2 = new System.Windows.Forms.Label();
+            this.labelRefreshInterval = new System.Windows.Forms.Label();
             this.check_setting_precisionmode = new System.Windows.Forms.CheckBox();
+            this.tabAbout = new System.Windows.Forms.TabPage();
+            this.aboutBrowser = new System.Windows.Forms.WebBrowser();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.buttonDefault = new System.Windows.Forms.Button();
-            this.check_settings_updates = new System.Windows.Forms.CheckBox();
             this.tabMenuSettings.SuspendLayout();
             this.tabActions.SuspendLayout();
             this.tabAppSettings.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.trackOpacity)).BeginInit();
-            this.tabPage1.SuspendLayout();
+            this.tabTimerSettings.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.text_setting_refresh)).BeginInit();
+            this.tabAbout.SuspendLayout();
             this.SuspendLayout();
             // 
             // buttonSave
@@ -78,7 +81,8 @@
             // 
             this.tabMenuSettings.Controls.Add(this.tabActions);
             this.tabMenuSettings.Controls.Add(this.tabAppSettings);
-            this.tabMenuSettings.Controls.Add(this.tabPage1);
+            this.tabMenuSettings.Controls.Add(this.tabTimerSettings);
+            this.tabMenuSettings.Controls.Add(this.tabAbout);
             this.tabMenuSettings.Location = new System.Drawing.Point(-5, 5);
             this.tabMenuSettings.Multiline = true;
             this.tabMenuSettings.Name = "tabMenuSettings";
@@ -90,7 +94,7 @@
             // 
             this.tabActions.Controls.Add(this.labelActionCount);
             this.tabActions.Controls.Add(this.text_setting_count);
-            this.tabActions.Controls.Add(this.label1);
+            this.tabActions.Controls.Add(this.labelActionInterval);
             this.tabActions.Controls.Add(this.text_setting_frequency);
             this.tabActions.Controls.Add(this.labelSound);
             this.tabActions.Controls.Add(this.combo_setting_sound);
@@ -124,15 +128,15 @@
             this.text_setting_count.TabIndex = 8;
             this.text_setting_count.TextChanged += new System.EventHandler(this.Change);
             // 
-            // label1
+            // labelActionInterval
             // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(6, 93);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(75, 13);
-            this.label1.TabIndex = 7;
-            this.label1.Text = "Action Interval";
-            this.toolTip1.SetToolTip(this.label1, "The frequency of the actions in milliseconds");
+            this.labelActionInterval.AutoSize = true;
+            this.labelActionInterval.Location = new System.Drawing.Point(6, 93);
+            this.labelActionInterval.Name = "labelActionInterval";
+            this.labelActionInterval.Size = new System.Drawing.Size(75, 13);
+            this.labelActionInterval.TabIndex = 7;
+            this.labelActionInterval.Text = "Action Interval";
+            this.toolTip1.SetToolTip(this.labelActionInterval, "The frequency of the actions in milliseconds");
             // 
             // text_setting_frequency
             // 
@@ -215,6 +219,17 @@
             this.tabAppSettings.Text = "Application";
             this.tabAppSettings.UseVisualStyleBackColor = true;
             // 
+            // check_settings_updates
+            // 
+            this.check_settings_updates.AutoSize = true;
+            this.check_settings_updates.Location = new System.Drawing.Point(9, 127);
+            this.check_settings_updates.Name = "check_settings_updates";
+            this.check_settings_updates.Size = new System.Drawing.Size(167, 17);
+            this.check_settings_updates.TabIndex = 4;
+            this.check_settings_updates.Text = "Check for Updates on Startup";
+            this.check_settings_updates.UseVisualStyleBackColor = true;
+            this.check_settings_updates.CheckedChanged += new System.EventHandler(this.Change);
+            // 
             // labelOpacity
             // 
             this.labelOpacity.AutoSize = true;
@@ -258,20 +273,20 @@
             this.combo_setting_onexit.TabIndex = 0;
             this.combo_setting_onexit.SelectedIndexChanged += new System.EventHandler(this.Change);
             // 
-            // tabPage1
+            // tabTimerSettings
             // 
-            this.tabPage1.Controls.Add(this.labelConsole);
-            this.tabPage1.Controls.Add(this.combo_setting_console);
-            this.tabPage1.Controls.Add(this.text_setting_refresh);
-            this.tabPage1.Controls.Add(this.label2);
-            this.tabPage1.Controls.Add(this.check_setting_precisionmode);
-            this.tabPage1.Location = new System.Drawing.Point(4, 22);
-            this.tabPage1.Name = "tabPage1";
-            this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage1.Size = new System.Drawing.Size(223, 150);
-            this.tabPage1.TabIndex = 2;
-            this.tabPage1.Text = "Timer";
-            this.tabPage1.UseVisualStyleBackColor = true;
+            this.tabTimerSettings.Controls.Add(this.labelConsole);
+            this.tabTimerSettings.Controls.Add(this.combo_setting_console);
+            this.tabTimerSettings.Controls.Add(this.text_setting_refresh);
+            this.tabTimerSettings.Controls.Add(this.labelRefreshInterval);
+            this.tabTimerSettings.Controls.Add(this.check_setting_precisionmode);
+            this.tabTimerSettings.Location = new System.Drawing.Point(4, 22);
+            this.tabTimerSettings.Name = "tabTimerSettings";
+            this.tabTimerSettings.Padding = new System.Windows.Forms.Padding(3);
+            this.tabTimerSettings.Size = new System.Drawing.Size(223, 150);
+            this.tabTimerSettings.TabIndex = 2;
+            this.tabTimerSettings.Text = "Timer";
+            this.tabTimerSettings.UseVisualStyleBackColor = true;
             // 
             // labelConsole
             // 
@@ -305,15 +320,15 @@
             this.toolTip1.SetToolTip(this.text_setting_refresh, "This is an advanced setting that controls how");
             this.text_setting_refresh.ValueChanged += new System.EventHandler(this.Change);
             // 
-            // label2
+            // labelRefreshInterval
             // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(10, 126);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(82, 13);
-            this.label2.TabIndex = 1;
-            this.label2.Text = "Refresh Interval";
-            this.toolTip1.SetToolTip(this.label2, "This is an advanced setting that controls how\r\noften the countdown is refreshed. " +
+            this.labelRefreshInterval.AutoSize = true;
+            this.labelRefreshInterval.Location = new System.Drawing.Point(10, 126);
+            this.labelRefreshInterval.Name = "labelRefreshInterval";
+            this.labelRefreshInterval.Size = new System.Drawing.Size(82, 13);
+            this.labelRefreshInterval.TabIndex = 1;
+            this.labelRefreshInterval.Text = "Refresh Interval";
+            this.toolTip1.SetToolTip(this.labelRefreshInterval, "This is an advanced setting that controls how\r\noften the countdown is refreshed. " +
         "Higher values \r\nincrease performance at the cost of accuracy.");
             // 
             // check_setting_precisionmode
@@ -329,6 +344,31 @@
             this.check_setting_precisionmode.UseVisualStyleBackColor = true;
             this.check_setting_precisionmode.CheckedChanged += new System.EventHandler(this.Change);
             // 
+            // tabAbout
+            // 
+            this.tabAbout.Controls.Add(this.aboutBrowser);
+            this.tabAbout.Location = new System.Drawing.Point(4, 22);
+            this.tabAbout.Name = "tabAbout";
+            this.tabAbout.Padding = new System.Windows.Forms.Padding(3);
+            this.tabAbout.Size = new System.Drawing.Size(223, 150);
+            this.tabAbout.TabIndex = 3;
+            this.tabAbout.Text = "Help/About";
+            this.tabAbout.UseVisualStyleBackColor = true;
+            // 
+            // aboutBrowser
+            // 
+            this.aboutBrowser.AllowWebBrowserDrop = false;
+            this.aboutBrowser.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.aboutBrowser.IsWebBrowserContextMenuEnabled = false;
+            this.aboutBrowser.Location = new System.Drawing.Point(3, 3);
+            this.aboutBrowser.MinimumSize = new System.Drawing.Size(20, 20);
+            this.aboutBrowser.Name = "aboutBrowser";
+            this.aboutBrowser.Size = new System.Drawing.Size(217, 144);
+            this.aboutBrowser.TabIndex = 0;
+            this.aboutBrowser.Url = new System.Uri("http://dl.dropbox.com/u/18231634/Central/RESOURCES/AboutEon.html", System.UriKind.Absolute);
+            this.aboutBrowser.WebBrowserShortcutsEnabled = false;
+            this.aboutBrowser.Navigating += new System.Windows.Forms.WebBrowserNavigatingEventHandler(this.aboutBrowser_Navigating);
+            // 
             // buttonDefault
             // 
             this.buttonDefault.Location = new System.Drawing.Point(5, 183);
@@ -337,17 +377,6 @@
             this.buttonDefault.TabIndex = 3;
             this.buttonDefault.Text = "Defaults";
             this.buttonDefault.UseVisualStyleBackColor = true;
-            // 
-            // check_settings_updates
-            // 
-            this.check_settings_updates.AutoSize = true;
-            this.check_settings_updates.Location = new System.Drawing.Point(9, 127);
-            this.check_settings_updates.Name = "check_settings_updates";
-            this.check_settings_updates.Size = new System.Drawing.Size(167, 17);
-            this.check_settings_updates.TabIndex = 4;
-            this.check_settings_updates.Text = "Check for Updates on Startup";
-            this.check_settings_updates.UseVisualStyleBackColor = true;
-            this.check_settings_updates.CheckedChanged += new System.EventHandler(this.Change);
             // 
             // EonTimerSettings
             // 
@@ -369,9 +398,10 @@
             this.tabAppSettings.ResumeLayout(false);
             this.tabAppSettings.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.trackOpacity)).EndInit();
-            this.tabPage1.ResumeLayout(false);
-            this.tabPage1.PerformLayout();
+            this.tabTimerSettings.ResumeLayout(false);
+            this.tabTimerSettings.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.text_setting_refresh)).EndInit();
+            this.tabAbout.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -389,7 +419,7 @@
         private System.Windows.Forms.ToolTip toolTip1;
         private System.Windows.Forms.ComboBox combo_setting_sound;
         private System.Windows.Forms.Label labelSound;
-        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Label labelActionInterval;
         private System.Windows.Forms.TextBox text_setting_frequency;
         private System.Windows.Forms.TextBox text_setting_count;
         private System.Windows.Forms.Label labelActionCount;
@@ -398,12 +428,14 @@
         private System.Windows.Forms.TrackBar trackOpacity;
         private System.Windows.Forms.Label labelOpacity;
         private System.Windows.Forms.Button buttonDefault;
-        private System.Windows.Forms.TabPage tabPage1;
+        private System.Windows.Forms.TabPage tabTimerSettings;
         private System.Windows.Forms.CheckBox check_setting_precisionmode;
         private System.Windows.Forms.NumericUpDown text_setting_refresh;
-        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.Label labelRefreshInterval;
         private System.Windows.Forms.ComboBox combo_setting_console;
         private System.Windows.Forms.Label labelConsole;
         private System.Windows.Forms.CheckBox check_settings_updates;
+        private System.Windows.Forms.TabPage tabAbout;
+        private System.Windows.Forms.WebBrowser aboutBrowser;
     }
 }

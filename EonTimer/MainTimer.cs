@@ -20,7 +20,7 @@ namespace EonTimer
     {
         private const String DOWNLOAD_URL = "http://bit.ly/JPenAo";
         private const String VERSION_URL = "http://bit.ly/LcANZ2";
-        private const Int32 Version = 1641;
+        private const Int32 Version = 1653;
 
         private ITimerMonitor monitor;
         private DisplayHandler displayHandler;
@@ -110,7 +110,7 @@ namespace EonTimer
                     String[] info = client.DownloadString(VERSION_URL).Split(';');
                     if(Version < Int32.Parse(info[0]))
                     {
-                        DialogResult result = MessageBox.Show("There is an update available. (" + info[1] + ")\r\nGo to download page?", "Updates!", MessageBoxButtons.YesNo);
+                        DialogResult result = MessageBox.Show("There is an update available. (" + info[1] + ")\r\nDownload?", "Updates!", MessageBoxButtons.YesNo);
                         if (result == DialogResult.Yes)
                         {
                             System.Diagnostics.Process.Start(DOWNLOAD_URL);
@@ -127,8 +127,8 @@ namespace EonTimer
         {
             CreateCountdownActions();
             monitor.ClearHandlers();
-            monitor.AddHandler(displayHandler);
             monitor.AddHandler(actionHandler);
+            monitor.AddHandler(displayHandler);
             monitor.AddHandler(this);
         }
         private void CreateCountdownActions()
@@ -446,7 +446,6 @@ namespace EonTimer
                         UserData.Default.Calibration_5_Basic += Settings.Default.Setting_Timer_PreciseCalibration ? temp : CalibrationHelper.ConvertToDelays(temp, (Consoles.ConsoleType)Settings.Default.Setting_Timer_Console);
                         temp = ((EntralinkTimer)monitor.Timer).Calibrate(SetInt(text_hit_5_delay.Text, UserData.Default.Target_5_Delay) - offsetAccounted);
 
-                        temp = ((EntralinkTimer)monitor.Timer).Calibrate(SetInt(text_hit_5_delay.Text, UserData.Default.Target_5_Delay));
                         UserData.Default.Calibration_5_Entralink += Settings.Default.Setting_Timer_PreciseCalibration ? temp : CalibrationHelper.ConvertToDelays(temp, (Consoles.ConsoleType)Settings.Default.Setting_Timer_Console);
                         break;
                     case GenerationModes.Five.EntralinkPlus:
@@ -456,10 +455,9 @@ namespace EonTimer
                         UserData.Default.Calibration_5_Basic += Settings.Default.Setting_Timer_PreciseCalibration ? temp : CalibrationHelper.ConvertToDelays(temp, (Consoles.ConsoleType)Settings.Default.Setting_Timer_Console);
                         temp = ((EntralinkTimer)monitor.Timer).Calibrate(SetInt(text_hit_5_delay.Text, UserData.Default.Target_5_Delay) - offsetAccounted);
 
-                        temp = ((EntralinkTimer)monitor.Timer).Calibrate(SetInt(text_hit_5_delay.Text, UserData.Default.Target_5_Delay));
                         UserData.Default.Calibration_5_Entralink += Settings.Default.Setting_Timer_PreciseCalibration ? temp : CalibrationHelper.ConvertToDelays(temp, (Consoles.ConsoleType)Settings.Default.Setting_Timer_Console);
-                        
-                        temp = ((EnhancedEntralinkTimer)monitor.Timer).Calibrate(SetInt(text_hit_5_frame.Text, UserData.Default.Calibration_5_Frame));
+                        temp = ((EnhancedEntralinkTimer)monitor.Timer).Calibrate(SetInt(text_hit_5_frame.Text, UserData.Default.Target_5_EntralinkFrame));
+
                         UserData.Default.Calibration_5_Frame += temp;
                         break;
                 }

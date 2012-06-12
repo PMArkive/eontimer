@@ -102,6 +102,7 @@
       <DependentUpon>UserSettings.settings</DependentUpon>
     </Compile>
     <Compile Include="Utilities\Helpers\CalibrationHelper.cs" />
+    <Compile Include="Utilities\Helpers\Logger.cs" />
     <Compile Include="Utilities\ITimeoutHandler.cs" />
     <Compile Include="Utilities\Reference\Actions.cs" />
     <Compile Include="Utilities\Helpers\GUIHelper.cs" />

@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Text;
 using EonTimer.Timers;
 using EonTimer.Utilities;
+using EonTimer.Utilities.Helpers;
+using System.Windows.Forms;
 
 namespace EonTimer.Handlers
 {
@@ -30,10 +32,11 @@ namespace EonTimer.Handlers
         public void NotifyStageStart(Int32 stage)
         {
             TimeSpan next = new TimeSpan(Interval.Ticks * (ActionCount - 1));
-            TimeSpan alt = timeMonitor.Timer.Stages[stage];
+            TimeSpan stageTime = timeMonitor.Timer.Stages[stage];
 
-            if (alt < next)
-                nextAction = new TimeSpan(0, 0, 0, 0, alt.Milliseconds / Interval.Milliseconds * Interval.Milliseconds); //keeps intervals even
+
+            if (stageTime < next && Interval.TotalMilliseconds != 0)
+                nextAction = new TimeSpan(0, 0, 0, 0, (Int32)stageTime.TotalMilliseconds / (Int32)Interval.TotalMilliseconds * (Int32)Interval.TotalMilliseconds); //keeps intervals even
             else
                 nextAction = next;
         }

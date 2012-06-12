@@ -144,5 +144,11 @@ namespace EonTimer
                 e.Handled = true;
         }
         #endregion
+
+        private void aboutBrowser_Navigating(object sender, WebBrowserNavigatingEventArgs e)
+        {
+            System.Diagnostics.Process.Start(e.Url.AbsoluteUri);
+            e.Cancel = true;
+        }
     }
 }
