@@ -80,6 +80,25 @@ namespace EonTimer
             settingsForm.FormClosing += new FormClosingEventHandler(this.OnSettingsFormClosing);
 
             customStages = new List<Int32>();
+
+            var ctrls = new List<Control>();
+            var g = CreateGraphics();
+            var conversionrate = 96 / g.DpiX ;
+            GetAllControls(this, ctrls);
+            foreach(var ctrl in ctrls)
+            {
+                ctrl.Font = new Font(ctrl.Font.FontFamily, (float)(ctrl.Font.Size * conversionrate));
+            }
+        }
+        private void GetAllControls(Control container, IList<Control> outList)
+        {
+            foreach (Control ctrl in container.Controls)
+            {
+                if (ctrl.Controls.Count == 0)
+                    outList.Add(ctrl);
+                else
+                    GetAllControls(ctrl, outList);
+            }
         }
         private void PrepareTimeMonitor()
         {
